@@ -1,6 +1,10 @@
 <template>
   <app-page>
     <h1>User</h1>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="labelOne" name="one">1111</el-tab-pane>
+      <el-tab-pane label="labelTwo" name="two">222</el-tab-pane>
+    </el-tabs>
     <svg id="table" />
   </app-page>
 </template>
@@ -10,6 +14,11 @@ import * as d3 from 'd3'
 
 export default {
   name: 'UserIndex',
+  data() {
+    return {
+      activeName: 'two'
+    }
+  },
   mounted() {
     const defs = d3.select('#table').append('defs')
     d3.select('#table').attr('height', '500px').attr('width', '500px')

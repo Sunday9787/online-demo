@@ -124,7 +124,10 @@ export default {
 
 .patient-tab-content {
   position: relative;
-  background-color: #fff;
-  @include transition;
+
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background');
+  }
 }
 </style>

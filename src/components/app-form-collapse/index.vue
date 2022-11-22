@@ -6,7 +6,7 @@
 
     <div class="app-form-collapse__action">
       <slot name="action" />
-      <el-button type="text" :icon="icon" @click="toggleCollapse()">{{ text }}</el-button>
+      <el-button type="text" size="small" :icon="icon" @click="toggleCollapse()">{{ text }}</el-button>
     </div>
   </el-row>
 </template>

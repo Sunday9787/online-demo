@@ -60,6 +60,14 @@ export default {
 }
 
 .app-patient-tools {
-  background-color: #fff;
+  padding: 5px 10px;
+  border-left-style: solid;
+  border-left-width: 2px;
+
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background');
+    border-left-color: theme('color-background-deep');
+  }
 }
 </style>

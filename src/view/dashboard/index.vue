@@ -2,24 +2,47 @@
   <app-page>
     <app-card>
       <app-form-collapse>
-        <el-form ref="form" inline :model="form" size="small" label-width="80px" @submit.native.prevent="search()">
-          <el-form-item label="姓名">
-            <el-input v-model="form.userName" />
-          </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="form.userName" />
-          </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="form.userName" />
-          </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="form.userName" />
-          </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="form.userName" />
-          </el-form-item>
-        </el-form>
-        <el-button slot="action" size="small" native-type="submit">搜索</el-button>
+        <app-form-tab v-model="activeName">
+          <app-form-tab-pane name="sample" title="样本管理">
+            <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+            </el-form>
+          </app-form-tab-pane>
+          <app-form-tab-pane name="statistics" title="样本统计">
+            <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+              <el-form-item label="姓名">
+                <el-input v-model="form.userName" />
+              </el-form-item>
+            </el-form>
+          </app-form-tab-pane>
+        </app-form-tab>
+        <el-button slot="action" size="small" @click="search()">搜索</el-button>
       </app-form-collapse>
     </app-card>
 
@@ -55,6 +78,7 @@ export default {
   mixins: [pageMixin({ immediate: false, request: getData })],
   data() {
     return {
+      activeName: 'sample',
       form: { length: 30, userName: '', mechanismId: null }
     }
   },
