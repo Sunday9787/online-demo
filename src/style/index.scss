@@ -1,0 +1,17 @@
+@import 'normalize.css/normalize.css';
+@import './element-ui';
+
+html,
+body,
+#app {
+   height: 100%;
+}
+
+body,
+#app {
+  overflow-x: hidden;
+}
+
+#app {
+  overflow-y: hidden;
+}
