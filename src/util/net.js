@@ -2,11 +2,16 @@ export function request(data) {
   console.log(data)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve({
+      const response = {
         data,
-        list: data,
-        totalCount: data.length
-      })
+        list: data
+      }
+
+      if (Array.isArray(data)) {
+        response.totalCount = data.length
+      }
+
+      resolve(response)
     }, 300)
   })
 }

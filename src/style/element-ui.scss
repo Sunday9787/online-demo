@@ -1,1 +1,113 @@
-@import 'element-ui/lib/theme-chalk/index.css'
+/* stylelint-disable selector-class-pattern */
+@import './element-variables';
+
+.el-form-item__label {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
+.el-input__inner {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background');
+    border-color: theme('color-border-light');
+
+    &:focus {
+      border-color: theme('color-primary');
+    }
+  }
+}
+
+/** el-table */
+.el-table {
+  border-radius: 6px;
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background-light');
+  }
+
+  tr {
+    @include themeify {
+      background-color: theme('color-background-light');
+    }
+  }
+
+  th.el-table__cell {
+    @include themed;
+    @include themeify {
+      background-color: theme('color-background-light');
+    }
+  }
+
+  &.el-table--striped {
+    td.el-table__cell {
+      @include themed;
+      @include themeify {
+        background-color: theme('color-background-light');
+      }
+    }
+  }
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.el-table th.el-table__cell.is-leaf,
+.el-table td.el-table__cell {
+  @include themeify {
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-light-gray');
+  }
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-light-gray');
+  }
+}
+
+.el-table::before, .el-table--group::after, .el-table--border::after {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-border-light');
+  }
+}
+
+/** el-table end */
+.el-dropdown-menu {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-dropdown-menu__item {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  @include themeify {
+    background-color: theme('color-background');
+  }
+}
+
+.el-loading-mask {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-90');
+  }
+}

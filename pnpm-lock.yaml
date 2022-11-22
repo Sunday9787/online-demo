@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/d3': ^7.4.0
   '@types/node': ^18.11.9
+  '@vitejs/plugin-legacy': ^2.3.1
   '@vitejs/plugin-vue2': ^2.0.1
   '@vue/eslint-config-prettier': ^7.0.0
   '@vue/eslint-config-standard': ^8.0.1
@@ -24,6 +25,7 @@ specifiers:
   stylelint-config-recess-order: ^3.0.0
   stylelint-config-recommended-vue: ^1.4.0
   stylelint-config-standard-scss: ^6.1.0
+  terser: ^5.15.1
   vite: ^3.2.3
   vite-plugin-html: ^3.2.0
   vue: 2.7.14
@@ -48,6 +50,7 @@ dependencies:
 devDependencies:
   '@types/d3': 7.4.0
   '@types/node': 18.11.9
+  '@vitejs/plugin-legacy': 2.3.1_terser@5.15.1+vite@3.2.3
   '@vitejs/plugin-vue2': 2.0.1_vite@3.2.3+vue@2.7.14
   '@vue/eslint-config-prettier': 7.0.0_mbd4zptqpjbepwpyh2zbtslqey
   '@vue/eslint-config-standard': 8.0.1_77pm4u3gzx5mk3tcxcz3qazody
@@ -62,7 +65,8 @@ devDependencies:
   stylelint-config-recess-order: 3.0.0_stylelint@14.15.0
   stylelint-config-recommended-vue: 1.4.0_qendsqix7hqecpnpx4fjs6qry4
   stylelint-config-standard-scss: 6.1.0_a37symlv4urgexnspmy4gyeh7i
-  vite: 3.2.3_ajklay5k626t46b6fyghkbup3i
+  terser: 5.15.1
+  vite: 3.2.3_x2n574kridmusg2gprk7yofwqm
   vite-plugin-html: 3.2.0_vite@3.2.3
   vue-template-compiler: 2.7.14
 
@@ -98,6 +102,11 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.20.2
+
+  /@babel/standalone/7.20.4:
+    resolution: {integrity: sha512-27bv4h47jbaFZ7+e7gT1VEo9PNL1ynxqUX6/BERLz1qxm/5gzpbcHX+47VnSeYHyEyGZkRznpSOd8zPBhiz6tw==}
+    engines: {node: '>=6.9.0'}
+    dev: true
 
   /@babel/types/7.20.2:
     resolution: {integrity: sha512-FnnvsNWgZCr232sqtXggapvlkk/tuwR/qhGzcmxI0GXLCjmPYQPzio2FbdlWuY6y1sHFfQKk+rRbUZ9VStQMog==}
@@ -442,6 +451,22 @@ packages:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
     dev: true
 
+  /@vitejs/plugin-legacy/2.3.1_terser@5.15.1+vite@3.2.3:
+    resolution: {integrity: sha512-J5KaGBlSt2tEYPVjM/C8dA6DkRzkFkbPe+Xb4IX5G+XOV5OGbVAfkMjKywdrkO3gGynO8S98i71Lmsff4cWkCQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      terser: ^5.4.0
+      vite: ^3.0.0
+    dependencies:
+      '@babel/standalone': 7.20.4
+      core-js: 3.26.1
+      magic-string: 0.26.7
+      regenerator-runtime: 0.13.11
+      systemjs: 6.13.0
+      terser: 5.15.1
+      vite: 3.2.3_x2n574kridmusg2gprk7yofwqm
+    dev: true
+
   /@vitejs/plugin-vue2/2.0.1_vite@3.2.3+vue@2.7.14:
     resolution: {integrity: sha512-4eFAypstsQoiR9NLZXJ6K3ZWmU2CMFNxGTjGfRdmimImXJe4eHVfMMizaOjfX6Y8HfFJ7u+L8oUg32MInAHZ+g==}
     engines: {node: ^14.18.0 || >= 16.0.0}
@@ -449,7 +474,7 @@ packages:
       vite: ^3.0.0
       vue: ^2.7.0-0
     dependencies:
-      vite: 3.2.3_ajklay5k626t46b6fyghkbup3i
+      vite: 3.2.3_x2n574kridmusg2gprk7yofwqm
       vue: 2.7.14
     dev: true
 
@@ -793,6 +818,11 @@ packages:
     deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
     requiresBuild: true
     dev: false
+
+  /core-js/3.26.1:
+    resolution: {integrity: sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA==}
+    requiresBuild: true
+    dev: true
 
   /cosmiconfig/7.1.0:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
@@ -2485,6 +2515,13 @@ packages:
       yallist: 4.0.0
     dev: true
 
+  /magic-string/0.26.7:
+    resolution: {integrity: sha512-hX9XH3ziStPoPhJxLq1syWuZMxbDvGNbVchfrdCtanC7D13888bMFow61x8axrx+GfHLtVeAx2kxL7tTGRl+Ow==}
+    engines: {node: '>=12'}
+    dependencies:
+      sourcemap-codec: 1.4.8
+    dev: true
+
   /map-obj/1.0.1:
     resolution: {integrity: sha512-7N/q3lyZ+LVCp7PzuxrJr4KMbBE2hW7BT7YNia330OFxIf4d3r5zVpicP2650l7CPN6RM9zOJRl3NGpqSiw3Eg==}
     engines: {node: '>=0.10.0'}
@@ -2922,6 +2959,10 @@ packages:
     resolution: {integrity: sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==}
     dev: false
 
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: true
+
   /regexp.prototype.flags/1.4.3:
     resolution: {integrity: sha512-fjggEOO3slI6Wvgjwflkc4NFRCTZAu5CnNfBd5qOMYhWdn67nJBBu34/TkD++eeFmd8C9r9jfXJ27+nSiRkSUA==}
     engines: {node: '>= 0.4'}
@@ -3095,6 +3136,10 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  /sourcemap-codec/1.4.8:
+    resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
+    dev: true
 
   /spdx-correct/3.1.1:
     resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}
@@ -3364,6 +3409,10 @@ packages:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
     dev: true
 
+  /systemjs/6.13.0:
+    resolution: {integrity: sha512-P3cgh2bpaPvAO2NE3uRp/n6hmk4xPX4DQf+UzTlCAycssKdqhp6hjw+ENWe+aUS7TogKRFtptMosTSFeC6R55g==}
+    dev: true
+
   /table/6.8.1:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}
     engines: {node: '>=10.0.0'}
@@ -3503,10 +3552,10 @@ packages:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 3.2.3_ajklay5k626t46b6fyghkbup3i
+      vite: 3.2.3_x2n574kridmusg2gprk7yofwqm
     dev: true
 
-  /vite/3.2.3_ajklay5k626t46b6fyghkbup3i:
+  /vite/3.2.3_x2n574kridmusg2gprk7yofwqm:
     resolution: {integrity: sha512-h8jl1TZ76eGs3o2dIBSsvXDLb1m/Ec1iej8ZMdz+PsaFUsftZeWe2CZOI3qogEsMNaywc17gu0q6cQDzh/weCQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3537,6 +3586,7 @@ packages:
       resolve: 1.22.1
       rollup: 2.79.1
       sass: 1.56.1
+      terser: 5.15.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

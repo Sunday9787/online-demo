@@ -1,20 +1,35 @@
 <template>
   <app-page>
-    <h1>Dashboard</h1>
-    <el-form ref="form" :model="form" label-width="80px" @submit.native.prevent="search()">
-      <el-form-item label="姓名">
-        <el-input v-model="form.userName" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" native-type="submit">搜索</el-button>
-      </el-form-item>
-    </el-form>
+    <app-card>
+      <app-form-collapse>
+        <el-form ref="form" inline :model="form" size="small" label-width="80px" @submit.native.prevent="search()">
+          <el-form-item label="姓名">
+            <el-input v-model="form.userName" />
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.userName" />
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.userName" />
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.userName" />
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.userName" />
+          </el-form-item>
+        </el-form>
+        <el-button slot="action" size="small" native-type="submit">搜索</el-button>
+      </app-form-collapse>
+    </app-card>
 
-    <el-table :data="table.data" v-loading="table.loading">
-      <el-table-column prop="date" label="日期" width="180" />
-      <el-table-column prop="name" label="姓名" width="180" />
-      <el-table-column prop="address" label="地址" />
-    </el-table>
+    <app-card flex>
+      <el-table ref="table" :data="table.data" v-loading="table.loading" height="100%" stripe>
+        <el-table-column prop="date" label="日期" width="180" />
+        <el-table-column prop="name" label="姓名" width="180" />
+        <el-table-column prop="address" label="地址" />
+      </el-table>
+    </app-card>
   </app-page>
 </template>
 

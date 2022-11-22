@@ -1,0 +1,57 @@
+/* stylelint-disable scss/dollar-variable-pattern */
+@use 'sass:color';
+
+$--color-primary-light: #3D8AFF;
+$--color-primary-dark: #3D8AFF;
+
+/** background */
+$--color-background-light: #fff;
+$--color-background-dark: #373737;
+$--color-background-deep-light: #f0f0f0;
+$--color-background-deep-dark: #212121;
+$--color-background-light-light: #fff;
+$--color-background-light-dark: #444;
+$--color-background-light-gray-light: #FAFAFA;
+$--color-background-light-gray-dark: #494949;
+$--color-background-90-light: rgba($--color-background-light, 90%);
+$--color-background-90-dark: rgba($--color-background-dark, 90%);
+$--color-background-second-light: #fff;
+$--color-background-second-dark: #424242;
+
+/** text */
+$--color-text-regular-light: #1f2d3d;
+$--color-text-regular-dark: #EAEAEA;
+
+/** border */
+$--color-border-light-light: #dfe4ed;
+$--color-border-light-dark: #555;
+
+/** border */
+$--table-border-light: 1px solid #dfe6ec;
+$--table-border-dark: 1px solid #dfe6ec;
+$themes: (
+  light: (
+    color-primary: $--color-primary-light,
+    color-background: $--color-background-light,
+    color-background-deep: $--color-background-deep-light,
+    color-background-light: $--color-background-light-light,
+    color-background-light-gray: $--color-background-light-gray-light,
+    color-background-90: $--color-background-90-light,
+    color-background-second: $--color-background-second-light,
+    color-text-regular: $--color-text-regular-light,
+    table-border: $--table-border-light,
+    color-border-light: $--color-border-light-light
+  ),
+  dark: (
+    color-primary: $--color-primary-dark,
+    color-background: $--color-background-dark,
+    color-background-deep: $--color-background-deep-dark,
+    color-background-light: $--color-background-light-dark,
+    color-background-light-gray: $--color-background-light-gray-dark,
+    color-background-90: $--color-background-90-dark,
+    color-background-second: $--color-background-second-dark,
+    color-text-regular: $--color-text-regular-dark,
+    table-border: $--table-border-dark,
+    color-border-light: $--color-border-light-dark
+  )
+);

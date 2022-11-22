@@ -17,11 +17,19 @@
       </el-container>
 
       <el-container>
-        <div v-for="(item, k) in page" :key="k">
-          <app-permission :power="item.power">
-            <el-button type="primary">{{ item.label }}</el-button>
-          </app-permission>
-        </div>
+        <app-permission :power="item.power" v-for="(item, k) in page" :key="k">
+          <el-button type="primary">{{ item.label }}</el-button>
+        </app-permission>
+      </el-container>
+
+      <el-container>
+        <el-switch
+          v-model="themeMode"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+          active-value="dark"
+          inactive-value="light"
+        />
       </el-container>
     </el-container>
   </el-header>
@@ -45,17 +53,30 @@ export default {
     return { page }
   },
   computed: {
-    ...mapState(['organization']),
+    themeMode: {
+      get() {
+        return this.theme
+      },
+      set(val) {
+        this.updateTheme(val)
+      }
+    },
+    ...mapState(['organization', 'theme']),
     ...mapGetters(['mechanismMap', 'currentMechanism'])
   },
   methods: {
-    ...mapMutations(['updateCurrentMechanism'])
+    ...mapMutations(['updateCurrentMechanism', 'updateTheme'])
   }
 }
 </script>
 
 <style lang="scss">
 .layout-header {
-  background-color: #fff;
+  display: flex;
+  align-items: center;
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background');
+  }
 }
 </style>

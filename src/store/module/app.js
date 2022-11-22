@@ -103,7 +103,8 @@ const module = {
         }
       ]
     },
-    dispatchedTransInOrgList: false
+    dispatchedTransInOrgList: false,
+    theme: 'light'
   },
   getters: {
     mechanismMap(state) {
@@ -132,6 +133,11 @@ const module = {
     },
     updateDispatchedTransInOrgList(state, payload) {
       state.dispatchedTransInOrgList = payload
+    },
+    updateTheme(state, payload) {
+      state.theme = payload
+      document.documentElement.dataset.theme = payload
+      localStorage.setItem('online_access_theme', payload)
     }
   },
   actions: {

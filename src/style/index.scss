@@ -1,5 +1,12 @@
 @import 'normalize.css/normalize.css';
 @import './element-ui';
+@import './common';
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
 
 html,
 body,
@@ -7,11 +14,55 @@ body,
    height: 100%;
 }
 
-body,
-#app {
-  overflow-x: hidden;
+body {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
 }
 
+body,
 #app {
-  overflow-y: hidden;
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+ul,
+li {
+  padding: 0;
+  list-style: none;
+}
+
+/* 滚动条整体粗细样式 */
+::-webkit-scrollbar {
+  /* 高宽分别对应横竖滚动条的尺寸 */
+  width: 8px;
+  height: 8px;
+}
+
+/* 滚动条里面小方块 */
+::-webkit-scrollbar-thumb {
+  /* 颜色 */
+
+  /* background:#b6b6b6!important; */
+
+  /* 线性渐变背景 */
+  background-image: linear-gradient(45deg, #ffbd61 25%,#ffbd61 25%, #f80 25%, #f80 50%,#ffbd61 50%, #ffbd61 75%, #f80 75%, #f80 100%)!important;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background: #EDEDED;
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgb(0 0 0 / 20%);
 }

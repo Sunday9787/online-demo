@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import dashboardRoute from './module/dashboardRoute'
 import organizationRoute from './module/organizationRoute'
+import consultationRoute from './module/consultationRoute'
 import userRoute from './module/userRoute'
 
 Vue.use(Router)
@@ -18,6 +19,7 @@ export default new Router({
     },
     dashboardRoute,
     organizationRoute,
+    consultationRoute,
     userRoute
   ]
 })

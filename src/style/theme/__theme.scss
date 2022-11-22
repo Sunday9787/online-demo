@@ -1,0 +1,14 @@
+/* stylelint-disable order/properties-order */
+@mixin themeify {
+  @each $theme, $map in $themes {
+    $theme-map: $map !global;
+
+    [data-theme=#{$theme}] & {
+      @content
+    }
+  }
+}
+
+@function theme($key) {
+  @return map-get($theme-map, $key);
+}

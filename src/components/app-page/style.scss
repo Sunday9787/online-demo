@@ -1,5 +1,5 @@
 .layout-view {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

@@ -5,8 +5,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   name: 'App',
-  setup() {}
+  created() {
+    const theme = localStorage.getItem('online_access_theme') || 'light'
+    this.updateTheme(theme)
+  },
+  methods: {
+    ...mapMutations('appModule', ['updateTheme'])
+  }
 }
 </script>
