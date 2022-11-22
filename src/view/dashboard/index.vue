@@ -24,20 +24,20 @@
           </app-form-tab-pane>
           <app-form-tab-pane name="statistics" title="样本统计">
             <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="电话">
+                <el-input v-model="form.userPhone" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="电话">
+                <el-input v-model="form.userPhone" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="电话">
+                <el-input v-model="form.userPhone" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="电话">
+                <el-input v-model="form.userPhone" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="电话">
+                <el-input v-model="form.userPhone" />
               </el-form-item>
             </el-form>
           </app-form-tab-pane>
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       activeName: 'sample',
-      form: { length: 30, userName: '', mechanismId: null }
+      form: { length: 30, userName: '', userPhone: '', mechanismId: null }
     }
   },
   computed: {
@@ -88,6 +88,11 @@ export default {
   created() {
     this.form.mechanismId = this.currentMechanism.mechanismId
     this.search()
+  },
+  methods: {
+    tabChange(tab, event) {
+      console.log(tab, event)
+    }
   }
 }
 </script>
