@@ -82,7 +82,7 @@
   }
 }
 
-/** el-table end */
+/** el-dropdown */
 .el-dropdown-menu {
   @include themed;
   @include themeify {
@@ -105,9 +105,27 @@
   }
 }
 
+/** el-loading */
 .el-loading-mask {
   @include themed;
   @include themeify {
     background-color: theme('color-background-90');
+  }
+}
+
+/** el-date */
+.el-date-editor .el-range-separator {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
+.el-date-editor .el-range-input {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background');
+    border-color: theme('color-border-light');
   }
 }

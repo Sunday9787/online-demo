@@ -7,6 +7,43 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+
+export function useSample() {
+  const form = reactive({
+    mechanismId: '',
+    /** 样本编号 */
+    patientNo: '',
+    /** 上传时间 */
+    startTime: '',
+    endTime: '',
+    /** 会诊状态 0 | 1 */
+    hasExpertPatient: 0,
+    /** 是否转交 0 | 1 */
+    hasTransferPatient: 0,
+    /** 转交状态 */
+    transferStatus: -1
+  })
+
+  const expertPatientOptions = Object.freeze([
+    { label: '全部', value: -1 },
+    { label: '是', value: 1 },
+    { label: '否', value: 0 }
+  ])
+
+  const transferPatientOptions = Object.freeze([
+    { label: '全部', value: -1 },
+    { label: '是', value: 1 },
+    { label: '否', value: 0 }
+  ])
+
+  return {
+    form,
+    expertPatientOptions,
+    transferPatientOptions
+  }
+}
+
 export default {
   name: 'dashboard-sample',
   inject: ['page'],

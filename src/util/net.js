@@ -1,5 +1,4 @@
 export function request(data) {
-  console.log(data)
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const response = {

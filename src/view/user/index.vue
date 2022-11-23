@@ -1,11 +1,13 @@
 <template>
   <app-page>
-    <h1>User</h1>
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="labelOne" name="one">1111</el-tab-pane>
-      <el-tab-pane label="labelTwo" name="two">222</el-tab-pane>
-    </el-tabs>
-    <svg id="table" />
+    <app-card>
+      <h1>User</h1>
+      <app-form-tab v-model="activeName">
+        <app-form-tab-pane title="labelOne" name="one"> 1111 </app-form-tab-pane>
+        <app-form-tab-pane title="labelTwo" name="two"> 222 </app-form-tab-pane>
+      </app-form-tab>
+      <svg id="table" />
+    </app-card>
   </app-page>
 </template>
 

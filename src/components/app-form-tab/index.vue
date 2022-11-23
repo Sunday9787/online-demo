@@ -68,6 +68,7 @@ export default {
       if (tab.disabled) return
       this.currentName = tabName
       this.$emit('input', tabName)
+      this.$emit('change', tabName)
       this.$emit('tab-click', tab, event)
     },
     calcPaneInstances(isForceUpdate = false) {
@@ -92,10 +93,10 @@ export default {
         const pane = this.$refs.pane
         const vm = this
         pane.forEach(function (item) {
-          vm.barStyle[item.id] = {
+          vm.$set(vm.barStyle, item.id, {
             width: item.offsetWidth,
             offset: item.offsetLeft
-          }
+          })
         })
       })
     }

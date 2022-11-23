@@ -1,82 +1,115 @@
 <template>
   <app-page>
     <app-card>
-      <app-form-tab v-model="activeName">
+      <app-form-tab v-model="activeName" @change="tabChange">
         <app-form-tab-pane name="sample" title="样本管理">
           <app-form-collapse>
-            <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+            <el-form ref="sample" inline :model="form" size="small" label-width="80px">
+              <el-form-item label="样本编号" prop="patientNo">
+                <el-input v-model="form.patientNo" @input="search()" />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="上传时间" prop="startTime">
+                <el-date-picker
+                  type="daterange"
+                  v-model="uploadTime"
+                  start-placeholde="开始日期"
+                  end-placeholde="结束日期"
+                  @change="search()"
+                />
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="会诊状态" prop="hasExpertPatient">
+                <el-select v-model="form.hasExpertPatient" default-first-option @change="search()">
+                  <el-option
+                    v-for="item in expertPatientOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
               </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
-              </el-form-item>
-              <el-form-item label="姓名">
-                <el-input v-model="form.userName" />
+              <el-form-item label="转交状态" prop="transferStatus">
+                <el-select v-model="form.transferStatus" default-first-option>
+                  <el-option
+                    v-for="item in transferPatientOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
               </el-form-item>
             </el-form>
-            <el-button slot="action" size="small" @click="search()">搜索</el-button>
+            <el-button slot="action" size="small" @click="resetForm('sample')">重置</el-button>
           </app-form-collapse>
         </app-form-tab-pane>
 
         <app-form-tab-pane name="statistics" title="样本统计">
           <app-form-collapse>
-            <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+            <el-form ref="statistics" inline :model="form" size="small" label-width="80px">
+              <el-form-item label="样本编号" prop="patientNo">
+                <el-input v-model="form.patientNo" @input="search()" />
               </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+              <el-form-item label="删除状态" prop="delFlag">
+                <el-select v-model="form.delFlag" default-first-option @change="search()">
+                  <el-option v-for="item in delFlagOptions" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
               </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
-              </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
-              </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+              <el-form-item label="提交时间" prop="submitDateStart">
+                <el-date-picker
+                  type="daterange"
+                  v-model="submitTime"
+                  start-placeholde="开始日期"
+                  end-placeholde="结束日期"
+                  @change="search()"
+                />
               </el-form-item>
             </el-form>
-            <el-button slot="action" size="small" @click="search()">搜索</el-button>
+            <el-button slot="action" size="small" @click="resetForm('statistics')">重置</el-button>
           </app-form-collapse>
         </app-form-tab-pane>
 
         <app-form-tab-pane name="report" title="报告报告统计">
           <app-form-collapse>
-            <el-form ref="form" inline :model="form" size="small" label-width="80px" @keyup.native.enter="search()">
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+            <el-form ref="report" inline :model="form" size="small" label-width="80px">
+              <el-form-item label="样本编号" prop="patientNo">
+                <el-input v-model="form.patientNo" @input="search()" />
               </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+              <el-form-item label="导出Lsi" prop="hasExportLis">
+                <el-select v-model="form.hasExportLis" default-first-option @change="search()">
+                  <el-option
+                    v-for="item in exportLisOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
               </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+              <el-form-item label="审核进度" prop="tabType">
+                <el-select v-model="form.tabType" default-first-option @change="search()">
+                  <el-option v-for="item in tabTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
               </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
-              </el-form-item>
-              <el-form-item label="电话">
-                <el-input v-model="form.userPhone" />
+              <el-form-item label="完成时间" prop="finishDateEndTime">
+                <el-date-picker
+                  type="daterange"
+                  v-model="finishTime"
+                  start-placeholde="开始日期"
+                  end-placeholde="结束日期"
+                  @change="search()"
+                />
               </el-form-item>
             </el-form>
-            <el-button slot="action" size="small" @click="search()">搜索</el-button>
+            <el-button slot="action" size="small" @click="resetForm('report')">重置</el-button>
           </app-form-collapse>
         </app-form-tab-pane>
       </app-form-tab>
     </app-card>
 
     <app-card flex>
-      <keep-alive>
-        <component :is="activeName" />
-      </keep-alive>
+      <transition name="fade-enter">
+        <keep-alive>
+          <component :is="activeName" />
+        </keep-alive>
+      </transition>
     </app-card>
   </app-page>
 </template>
@@ -87,14 +120,14 @@ import { mapGetters } from 'vuex'
 import { request } from '@/util/net'
 import pageMixin from '@/mixins/page'
 
-import sample from './components/sample.vue'
-import report from './components/report.vue'
-import statistics from './components/statistics.vue'
+import sample, { useSample } from './components/sample.vue'
+import report, { useReport } from './components/report.vue'
+import statistics, { useStatistics } from './components/statistics.vue'
 
 function getData(param) {
   console.log(param)
   return request(
-    Array.from({ length: param.length }, (v, k) => ({
+    Array.from({ length: param.length || 20 }, (v, k) => ({
       date: moment().format('YYYY-MM-DD'),
       name: '王小虎',
       address: `上海市普陀区金沙江路 151${k} 弄`
@@ -104,33 +137,67 @@ function getData(param) {
 
 export default {
   name: 'DashboardIndex',
-  mixins: [pageMixin({ immediate: false, request: getData })],
+  mixins: [
+    pageMixin({
+      immediate: false,
+      request: getData,
+      timeFieldMap: {
+        uploadTime: ['startTime', 'endTime'],
+        submitTime: ['submitDateStart', 'submitDateEnd'],
+        finishTime: ['finishDateEndTime', 'finishDateStartTime']
+      }
+    })
+  ],
   components: {
     sample,
     report,
     statistics
-  },
-  data() {
-    return {
-      activeName: 'sample',
-      form: { length: 30, userName: '', userPhone: '', mechanismId: null }
-    }
   },
   provide() {
     return {
       page: this
     }
   },
+  setup() {
+    const { form: sampleForm, expertPatientOptions, transferPatientOptions } = useSample()
+    const { form: reportForm, tabTypeOptions, exportLisOptions } = useReport()
+    const { form: statisticsForm, delFlagOptions } = useStatistics()
+    const formMap = {
+      sample: sampleForm,
+      statistics: statisticsForm,
+      report: reportForm
+    }
+
+    return {
+      formMap,
+      statisticsForm,
+      sampleForm,
+      reportForm,
+      expertPatientOptions,
+      transferPatientOptions,
+      delFlagOptions,
+      tabTypeOptions,
+      exportLisOptions
+    }
+  },
+  data() {
+    return {
+      activeName: 'sample'
+    }
+  },
   computed: {
-    ...mapGetters('appModule', ['currentMechanism'])
+    ...mapGetters('appModule', ['currentMechanism']),
+    form() {
+      return this.formMap[this.activeName]
+    }
   },
   created() {
     this.form.mechanismId = this.currentMechanism.mechanismId
     this.search()
   },
   methods: {
-    tabChange(tab, event) {
-      console.log(tab, event)
+    tabChange(tab) {
+      this.resetForm(tab)
     }
   }
 }
