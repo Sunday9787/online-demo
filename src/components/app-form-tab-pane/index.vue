@@ -21,9 +21,6 @@ export default {
     active() {
       return this.rootTabs.currentName === this.name
     }
-  },
-  mounted() {
-    console.log(this)
   }
 }
 </script>

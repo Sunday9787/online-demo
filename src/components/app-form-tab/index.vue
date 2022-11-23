@@ -2,18 +2,33 @@
   <div class="app-tabs">
     <div class="app-tabs__header">
       <section class="app-tabs-nav">
+        <div
+          class="app-tabs__active-bar"
+          :style="{
+            width: barStyle[currentName].width + 'px',
+            transform: `translateX(${barStyle[currentName].offset}px)`
+          }"
+          v-if="barStyle[currentName]"
+        />
+
         <a
           v-for="pane in panes"
           href="javascript:;"
           :key="pane.name"
+          :id="pane.name"
           class="app-tabs-nav__item"
+          ref="pane"
+          :class="{ active: currentName === pane.name }"
           @click="handleTabClick(pane, pane.name, $event)"
           >{{ pane.title }}</a
         >
       </section>
       <hr class="app-tabs__line" />
     </div>
-    <slot />
+
+    <div class="app-tabs__content">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -37,7 +52,8 @@ export default {
   data() {
     return {
       panes: [],
-      currentName: ''
+      currentName: '',
+      barStyle: {}
     }
   },
   created() {
@@ -45,6 +61,7 @@ export default {
   },
   mounted() {
     this.calcPaneInstances()
+    this.calcBarWidths()
   },
   methods: {
     handleTabClick(tab, tabName, event) {
@@ -55,21 +72,32 @@ export default {
     },
     calcPaneInstances(isForceUpdate = false) {
       if (this.$slots.default) {
+        /**
+         * 过滤仅 app-form-tab-pane 组件
+         */
         const paneSlots = this.$slots.default.filter(
           vnode =>
             vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'app-form-tab-pane'
         )
-        // update indeed
         const panes = paneSlots.map(({ componentInstance }) => componentInstance)
-        const panesChanged = !(
-          panes.length === this.panes.length && panes.every((pane, index) => pane === this.panes[index])
-        )
-        if (isForceUpdate || panesChanged) {
-          this.panes = panes
-        }
-      } else if (this.panes.length !== 0) {
-        this.panes = []
+
+        this.panes = panes
       }
+    },
+    calcBarWidths() {
+      this.$nextTick(function () {
+        /**
+         * @type {HTMLAnchorElement[]}
+         */
+        const pane = this.$refs.pane
+        const vm = this
+        pane.forEach(function (item) {
+          vm.barStyle[item.id] = {
+            width: item.offsetWidth,
+            offset: item.offsetLeft
+          }
+        })
+      })
     }
   }
 }
@@ -77,15 +105,24 @@ export default {
 
 <style lang="scss">
 .app-tabs-nav {
+  position: relative;
   display: flex;
-  padding: 10px 0;
+  height: 40px;
+  align-items: center;
 }
 
 .app-tabs-nav__item {
   display: block;
+  @include themed;
+
+  &.active {
+    @include themeify {
+      color: theme('color-primary');
+    }
+  }
 
   & + & {
-    margin-left: 10px;
+    margin-left: 16px;
   }
 }
 
@@ -96,12 +133,24 @@ export default {
 .app-tabs__line {
   height: 1px;
   border: none;
+  margin-top: 0;
+  margin-bottom: 10px;
   margin-left: -16px;
-  margin-right: -196px;
+  margin-right: -16px;
 
   @include themed;
   @include themeify {
     background-color: theme('color-border-light');
   }
+}
+
+.app-tabs__active-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: #409eff;
+  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 </style>

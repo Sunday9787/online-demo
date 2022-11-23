@@ -17,7 +17,7 @@ export default {
   props: {
     height: {
       type: Number,
-      default: 90
+      default: 40
     }
   },
   data() {
