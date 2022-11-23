@@ -9,11 +9,6 @@ module.exports = {
     es6: true,
     node: true
   },
-  globals: {
-    ipcRenderer: 'readable',
-    __env: 'readable',
-    __bl: 'readable'
-  },
   extends: ['plugin:vue/essential', '@vue/eslint-config-standard', '@vue/eslint-config-prettier'],
   plugins: ['prettier'],
   parserOptions: {

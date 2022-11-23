@@ -3,6 +3,11 @@ import { defineConfig } from 'vite'
 import vue2Plugin from '@vitejs/plugin-vue2'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import legacy from '@vitejs/plugin-legacy'
+import viteCompression from 'vite-plugin-compression'
+import { manualChunksPlugin } from 'vite-plugin-webpackchunkname'
+import cssnano from 'cssnano'
+
+const productionGzipExtensions = /\.(js|css|json|txt|html|ico)(\?.*)?$/i
 
 export default defineConfig({
   server: {
@@ -23,9 +28,19 @@ export default defineConfig({
     legacy({
       targets: ['chrome >= 52'],
       additionalLegacyPolyfills: ['regenerator-runtime/runtime']
+    }),
+    manualChunksPlugin(),
+    viteCompression({
+      filename: '[path][base].gz',
+      algorithm: 'gzip',
+      filter: productionGzipExtensions,
+      threshold: 0,
+      minRatio: 0.8
     })
   ],
   build: {
+    cssCodeSplit: true,
+    sourcemap: true,
     rollupOptions: {
       input: path.resolve('./index.html'),
       output: {
@@ -58,6 +73,10 @@ export default defineConfig({
     jsxFragment: 'Fragment'
   },
   css: {
+    devSourcemap: true,
+    postcss: {
+      plugins: [cssnano()]
+    },
     preprocessorOptions: {
       scss: {
         javascriptEnable: true,

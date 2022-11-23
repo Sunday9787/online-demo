@@ -16,6 +16,8 @@ declare namespace Page {
     immediate: boolean,
     /** 查询忽略字段 */
     ignoreField: string[]
+    /** 时间范围字段映射 */
+    timeFieldMap: Record<string, [string, string]>
   }
 }
 
