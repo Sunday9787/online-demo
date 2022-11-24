@@ -29,29 +29,3 @@ $--color-border-light-dark: #555;
 /** border */
 $--table-border-light: 1px solid #dfe6ec;
 $--table-border-dark: 1px solid #dfe6ec;
-$themes: (
-  light: (
-    color-primary: $--color-primary-light,
-    color-background: $--color-background-light,
-    color-background-deep: $--color-background-deep-light,
-    color-background-light: $--color-background-light-light,
-    color-background-light-gray: $--color-background-light-gray-light,
-    color-background-90: $--color-background-90-light,
-    color-background-second: $--color-background-second-light,
-    color-text-regular: $--color-text-regular-light,
-    table-border: $--table-border-light,
-    color-border-light: $--color-border-light-light
-  ),
-  dark: (
-    color-primary: $--color-primary-dark,
-    color-background: $--color-background-dark,
-    color-background-deep: $--color-background-deep-dark,
-    color-background-light: $--color-background-light-dark,
-    color-background-light-gray: $--color-background-light-gray-dark,
-    color-background-90: $--color-background-90-dark,
-    color-background-second: $--color-background-second-dark,
-    color-text-regular: $--color-text-regular-dark,
-    table-border: $--table-border-dark,
-    color-border-light: $--color-border-light-dark
-  )
-);

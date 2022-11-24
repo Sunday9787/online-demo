@@ -6,6 +6,9 @@ import legacy from '@vitejs/plugin-legacy'
 import viteCompression from 'vite-plugin-compression'
 import { manualChunksPlugin } from 'vite-plugin-webpackchunkname'
 import cssnano from 'cssnano'
+import themePlugin from './plugin/theme'
+
+console.log(path.resolve('./src/style/theme/__variables.scss'))
 
 const productionGzipExtensions = /\.(js|css|json|txt|html|ico)(\?.*)?$/i
 
@@ -36,6 +39,9 @@ export default defineConfig({
       filter: productionGzipExtensions,
       threshold: 0,
       minRatio: 0.8
+    }),
+    themePlugin({
+      variable: path.resolve('./src/style/theme/__variables.scss')
     })
   ],
   build: {
