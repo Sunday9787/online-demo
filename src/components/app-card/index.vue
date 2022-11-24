@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'app-card',
+  name: 'AppCard',
   props: {
     flex: {
       type: Boolean,

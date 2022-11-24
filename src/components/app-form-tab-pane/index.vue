@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'app-form-tab-pane',
+  name: 'AppFormTabPane',
   inject: ['rootTabs'],
   props: {
     disabled: Boolean,

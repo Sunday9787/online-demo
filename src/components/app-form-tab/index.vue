@@ -1,8 +1,8 @@
 <template>
   <div class="app-tabs">
     <div class="app-tabs__header">
-      <section class="app-tabs-nav">
-        <div
+      <ol class="app-tabs-nav">
+        <li
           class="app-tabs__active-bar"
           :style="{
             width: barStyle[currentName].width + 'px',
@@ -11,7 +11,7 @@
           v-if="barStyle[currentName]"
         />
 
-        <a
+        <li
           v-for="pane in panes"
           href="javascript:;"
           :key="pane.name"
@@ -20,9 +20,10 @@
           ref="pane"
           :class="{ active: currentName === pane.name }"
           @click="handleTabClick(pane, pane.name, $event)"
-          >{{ pane.title }}</a
         >
-      </section>
+          <a href="javascript:;">{{ pane.title }}</a>
+        </li>
+      </ol>
       <hr class="app-tabs__line" />
     </div>
 
@@ -37,7 +38,7 @@
  * @type {Vue.ComponentOptions<Vue>}
  */
 export default {
-  name: 'app-form-tab',
+  name: 'AppFormTab',
   props: {
     value: {
       type: String,
@@ -77,8 +78,7 @@ export default {
          * 过滤仅 app-form-tab-pane 组件
          */
         const paneSlots = this.$slots.default.filter(
-          vnode =>
-            vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'app-form-tab-pane'
+          vnode => vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'AppFormTabPane'
         )
         const panes = paneSlots.map(({ componentInstance }) => componentInstance)
 
@@ -108,6 +108,7 @@ export default {
 .app-tabs-nav {
   position: relative;
   display: flex;
+  padding: 0;
   height: 40px;
   align-items: center;
 }

@@ -17,7 +17,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'patient-item',
+  name: 'PatientItem',
   props: {
     local: {
       type: Boolean,

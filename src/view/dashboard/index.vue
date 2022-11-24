@@ -4,21 +4,21 @@
       <app-form-tab v-model="activeName" @change="tabChange">
         <app-form-tab-pane name="sample" title="样本管理">
           <app-form-collapse>
-            <el-form ref="sample" inline :model="form" size="small" label-width="80px">
+            <el-form ref="sample" inline :model="sampleForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="form.patientNo" @input="search()" />
+                <el-input v-model="sampleForm.patientNo" @input="search()" />
               </el-form-item>
               <el-form-item label="上传时间" prop="startTime">
                 <el-date-picker
                   type="daterange"
                   v-model="uploadTime"
-                  start-placeholde="开始日期"
-                  end-placeholde="结束日期"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
                   @change="search()"
                 />
               </el-form-item>
               <el-form-item label="会诊状态" prop="hasExpertPatient">
-                <el-select v-model="form.hasExpertPatient" default-first-option @change="search()">
+                <el-select v-model="sampleForm.hasExpertPatient" default-first-option @change="search()">
                   <el-option
                     v-for="item in expertPatientOptions"
                     :key="item.value"
@@ -28,7 +28,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="转交状态" prop="transferStatus">
-                <el-select v-model="form.transferStatus" default-first-option>
+                <el-select v-model="sampleForm.transferStatus" default-first-option>
                   <el-option
                     v-for="item in transferPatientOptions"
                     :key="item.value"
@@ -44,12 +44,12 @@
 
         <app-form-tab-pane name="statistics" title="样本统计">
           <app-form-collapse>
-            <el-form ref="statistics" inline :model="form" size="small" label-width="80px">
+            <el-form ref="statistics" inline :model="statisticsForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="form.patientNo" @input="search()" />
+                <el-input v-model="statisticsForm.patientNo" @input="search()" />
               </el-form-item>
               <el-form-item label="删除状态" prop="delFlag">
-                <el-select v-model="form.delFlag" default-first-option @change="search()">
+                <el-select v-model="statisticsForm.delFlag" default-first-option @change="search()">
                   <el-option v-for="item in delFlagOptions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -57,8 +57,8 @@
                 <el-date-picker
                   type="daterange"
                   v-model="submitTime"
-                  start-placeholde="开始日期"
-                  end-placeholde="结束日期"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
                   @change="search()"
                 />
               </el-form-item>
@@ -69,12 +69,12 @@
 
         <app-form-tab-pane name="report" title="报告报告统计">
           <app-form-collapse>
-            <el-form ref="report" inline :model="form" size="small" label-width="80px">
+            <el-form ref="report" inline :model="reportForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="form.patientNo" @input="search()" />
+                <el-input v-model="reportForm.patientNo" @input="search()" />
               </el-form-item>
               <el-form-item label="导出Lsi" prop="hasExportLis">
-                <el-select v-model="form.hasExportLis" default-first-option @change="search()">
+                <el-select v-model="reportForm.hasExportLis" default-first-option @change="search()">
                   <el-option
                     v-for="item in exportLisOptions"
                     :key="item.value"
@@ -84,7 +84,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="审核进度" prop="tabType">
-                <el-select v-model="form.tabType" default-first-option @change="search()">
+                <el-select v-model="reportForm.tabType" default-first-option @change="search()">
                   <el-option v-for="item in tabTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-form-item>
@@ -92,8 +92,8 @@
                 <el-date-picker
                   type="daterange"
                   v-model="finishTime"
-                  start-placeholde="开始日期"
-                  end-placeholde="结束日期"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
                   @change="search()"
                 />
               </el-form-item>

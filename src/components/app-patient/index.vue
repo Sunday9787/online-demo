@@ -22,7 +22,7 @@
 import PatientAside from './patient-aside.vue'
 
 export default {
-  name: 'app-patient',
+  name: 'AppPatient',
   components: { PatientAside },
   setup() {}
 }

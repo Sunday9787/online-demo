@@ -34,7 +34,7 @@ import { useTab } from '@/hooks/useTab'
 import patientItemFactory from './patient-item.vue'
 
 export default {
-  name: 'patient-aside',
+  name: 'PatientAside',
   components: {
     patientItemOne: patientItemFactory.extend({ name: 'patientItemOne' }),
     patientItemTwo: patientItemFactory.extend({ name: 'patientItemTwo' })

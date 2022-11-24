@@ -129,3 +129,61 @@
     border-color: theme('color-border-light');
   }
 }
+
+/** el-picker-panel */
+.el-picker-panel {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-date-range-picker__content.is-left {
+  @include themed;
+  @include themeify {
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-date-table th {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    border-color: theme('color-border-light');
+  }
+}
+
+/** el-popper */
+.el-popper[x-placement^=left] .popper__arrow {
+  border-left-color: theme('color-border-light');
+}
+
+.el-popper[x-placement^=right] .popper__arrow {
+  border-right-color: theme('color-border-light');
+}
+
+.el-popper[x-placement^=top] .popper__arrow {
+  border-top-color: theme('color-border-light');
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow {
+  border-bottom-color: theme('color-border-light');
+}
+
+.el-popper[x-placement^=left] .popper__arrow::after {
+  border-left-color: theme('color-background-second');
+}
+
+.el-popper[x-placement^=right] .popper__arrow::after {
+  border-right-color: theme('color-background-second');
+}
+
+.el-popper[x-placement^=top] .popper__arrow::after {
+  border-top-color: theme('color-background-second');
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  border-bottom-color: theme('color-background-second');
+}
