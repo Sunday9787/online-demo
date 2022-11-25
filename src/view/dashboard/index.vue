@@ -2,8 +2,8 @@
   <app-page>
     <app-card>
       <app-form-tab v-model="activeName" @change="tabChange">
-        <app-form-tab-pane name="sample" title="样本管理">
-          <app-form-collapse>
+        <app-form-tab-pane v-slot="{ visible }" name="sample" title="样本管理">
+          <app-form-collapse :visible="visible">
             <el-form ref="sample" inline :model="sampleForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
                 <el-input v-model="sampleForm.patientNo" @input="search()" />
@@ -42,8 +42,8 @@
           </app-form-collapse>
         </app-form-tab-pane>
 
-        <app-form-tab-pane name="statistics" title="样本统计">
-          <app-form-collapse>
+        <app-form-tab-pane v-slot="{ visible }" name="statistics" title="样本统计">
+          <app-form-collapse :visible="visible">
             <el-form ref="statistics" inline :model="statisticsForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
                 <el-input v-model="statisticsForm.patientNo" @input="search()" />
@@ -67,8 +67,8 @@
           </app-form-collapse>
         </app-form-tab-pane>
 
-        <app-form-tab-pane name="report" title="报告报告统计">
-          <app-form-collapse>
+        <app-form-tab-pane v-slot="{ visible }" name="report" title="报告报告统计">
+          <app-form-collapse :visible="visible">
             <el-form ref="report" inline :model="reportForm" size="small" label-width="80px">
               <el-form-item label="样本编号" prop="patientNo">
                 <el-input v-model="reportForm.patientNo" @input="search()" />

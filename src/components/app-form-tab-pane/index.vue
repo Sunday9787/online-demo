@@ -1,5 +1,7 @@
 <template>
-  <div class="app-form-tab-pane" v-show="active"><slot /></div>
+  <div class="app-form-tab-pane" v-show="active">
+    <slot :visible="active" />
+  </div>
 </template>
 
 <script>

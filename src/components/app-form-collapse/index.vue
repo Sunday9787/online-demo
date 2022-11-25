@@ -12,18 +12,43 @@
 </template>
 
 <script>
+import { getCurrentInstance, ref, onMounted, onBeforeUnmount } from 'vue'
+import _ from 'lodash-es'
+
+/**
+ * @param {number} height
+ */
+function useFormCollapse(height) {
+  const maxHeight = ref(height)
+  const open = ref(false)
+  const vm = getCurrentInstance().proxy
+  const resizeHandle = _.debounce(function (e) {
+    maxHeight.value = vm.$el.scrollHeight
+    if (e) open.value = false
+  })
+
+  onMounted(resizeHandle)
+  onBeforeUnmount(function () {
+    window.removeEventListener('resize', resizeHandle)
+  })
+
+  window.addEventListener('resize', resizeHandle)
+
+  return { maxHeight, open }
+}
+
 export default {
   name: 'AppFormCollapse',
   props: {
+    visible: Boolean,
     height: {
       type: Number,
-      default: 40
+      default: 32
     }
   },
-  data() {
-    return {
-      open: false
-    }
+  setup(props) {
+    const { maxHeight, open } = useFormCollapse(props.height)
+    return { maxHeight, open }
   },
   computed: {
     text() {
@@ -36,19 +61,18 @@ export default {
       return {
         height: this.open ? this.maxHeight + 'px' : this.height + 'px'
       }
-    },
-    maxHeight() {
-      if (this.$el) {
-        return this.$el.scrollHeight
-      }
-
-      return this.height
     }
   },
   methods: {
     toggleCollapse() {
       this.open = !this.open
       this.$emit('change', this.open)
+    }
+  },
+  watch: {
+    visible(val) {
+      if (this.maxHeight) return
+      if (val) window.dispatchEvent(new Event('resize'))
     }
   }
 }
