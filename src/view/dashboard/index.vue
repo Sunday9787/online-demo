@@ -104,13 +104,13 @@
       </app-form-tab>
     </app-card>
 
-    <app-card flex>
+    <app-data-view pagination>
       <transition name="fade-enter">
         <keep-alive>
           <component :is="activeName" />
         </keep-alive>
       </transition>
-    </app-card>
+    </app-data-view>
   </app-page>
 </template>
 

@@ -1,5 +1,55 @@
-/* stylelint-disable selector-class-pattern */
 @import './element-variables';
+
+/** el-button */
+.el-button {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background: theme('color-background');
+    border-color: theme('color-border-light');
+  }
+
+  &:focus,
+  &:hover {
+    @include themeify {
+      color: theme('color-primary');
+      background: mix(theme('color-background'), theme('color-primary'), 90%);
+      border-color: mix(theme('color-background'), theme('color-primary'), 70%);
+    }
+  }
+}
+
+.el-button--primary {
+  @include themeify {
+    color: #fff;
+    background: theme('color-primary');
+    border-color: theme('color-primary');
+
+    &:focus,
+    &:hover {
+      color: #fff;
+      background: lighten(theme('color-primary'), 10%);
+      border-color: lighten(theme('color-primary'), 10%);
+    }
+  }
+}
+
+.el-button--text {
+  @include themeify {
+    color: theme('color-primary');
+    background: transparent;
+    border-color: transparent;
+  }
+
+  &:focus,
+  &:hover {
+    @include themeify {
+      color: theme('color-primary');
+      background: transparent;
+      border-color: transparent;
+    }
+  }
+}
 
 .el-form-item__label {
   @include themed;
@@ -130,6 +180,13 @@
   }
 }
 
+.el-date-table td.in-range div,
+.el-date-table td.in-range div:hover {
+  @include themeify {
+    background: mix(theme('color-background'), theme('color-primary'), 95%);
+  }
+}
+
 /** el-picker-panel */
 .el-picker-panel {
   @include themed;
@@ -155,35 +212,92 @@
   }
 }
 
+/** el-select-dropdown */
+.el-select-dropdown {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-select-dropdown__item {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+
+    &.selected {
+      color: theme('color-primary');
+    }
+
+    &.hover,
+    &:hover {
+      background-color: theme('color-background');
+    }
+  }
+}
+
+.el-select:hover {
+  .el-input__inner {
+    @include themed;
+    @include themeify {
+      border-color: theme('color-primary');
+    }
+  }
+}
+
+/** el-pagination */
+.el-pagination__total {
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
 /** el-popper */
 .el-popper[x-placement^=left] .popper__arrow {
-  border-left-color: theme('color-border-light');
+  @include themeify {
+    border-left-color: theme('color-border-light');
+  }
 }
 
 .el-popper[x-placement^=right] .popper__arrow {
-  border-right-color: theme('color-border-light');
+  @include themeify {
+    border-right-color: theme('color-border-light');
+  }
 }
 
 .el-popper[x-placement^=top] .popper__arrow {
-  border-top-color: theme('color-border-light');
+  @include themeify {
+    border-top-color: theme('color-border-light');
+  }
 }
 
 .el-popper[x-placement^=bottom] .popper__arrow {
-  border-bottom-color: theme('color-border-light');
+  @include themeify {
+    border-bottom-color: theme('color-border-light');
+  }
 }
 
 .el-popper[x-placement^=left] .popper__arrow::after {
-  border-left-color: theme('color-background-second');
+  @include themeify {
+    border-left-color: theme('color-background-second');
+  }
 }
 
 .el-popper[x-placement^=right] .popper__arrow::after {
-  border-right-color: theme('color-background-second');
+  @include themeify {
+    border-right-color: theme('color-background-second');
+  }
 }
 
 .el-popper[x-placement^=top] .popper__arrow::after {
-  border-top-color: theme('color-background-second');
+  @include themeify {
+    border-top-color: theme('color-background-second');
+  }
 }
 
 .el-popper[x-placement^=bottom] .popper__arrow::after {
-  border-bottom-color: theme('color-background-second');
+  @include themeify {
+    border-bottom-color: theme('color-background-second');
+  }
 }

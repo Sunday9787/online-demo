@@ -6,14 +6,18 @@
 
     <div class="app-form-collapse__action">
       <slot name="action" />
-      <el-button type="text" size="small" :icon="icon" @click="toggleCollapse()">{{ text }}</el-button>
+      <transition name="fade">
+        <el-button type="text" size="small" :icon="icon" @click="toggleCollapse()" v-show="showToggleCollapse">{{
+          text
+        }}</el-button>
+      </transition>
     </div>
   </el-row>
 </template>
 
 <script>
 import { getCurrentInstance, ref, onMounted, onBeforeUnmount } from 'vue'
-import _ from 'lodash-es'
+import { debounce } from 'lodash-es'
 
 /**
  * @param {number} height
@@ -22,7 +26,7 @@ function useFormCollapse(height) {
   const maxHeight = ref(height)
   const open = ref(false)
   const vm = getCurrentInstance().proxy
-  const resizeHandle = _.debounce(function (e) {
+  const resizeHandle = debounce(function (e) {
     maxHeight.value = vm.$el.scrollHeight
     if (e) open.value = false
   })
@@ -43,7 +47,7 @@ export default {
     visible: Boolean,
     height: {
       type: Number,
-      default: 32
+      default: 51
     }
   },
   setup(props) {
@@ -61,6 +65,9 @@ export default {
       return {
         height: this.open ? this.maxHeight + 'px' : this.height + 'px'
       }
+    },
+    showToggleCollapse() {
+      return this.height < this.maxHeight
     }
   },
   methods: {
@@ -95,7 +102,6 @@ $width: 180px;
 .app-form-collapse__action {
   position: absolute;
   display: flex;
-  justify-content: center;
   align-items: flex-start;
   right: 0;
   height: 100%;
