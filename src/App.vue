@@ -5,16 +5,15 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { usePreferredColorScheme } from '@vueuse/core'
+import { useStore } from './hooks/useStore'
 
 export default {
   name: 'App',
-  created() {
-    const theme = localStorage.getItem('online_access_theme') || 'light'
-    this.updateTheme(theme)
-  },
-  methods: {
-    ...mapMutations('appModule', ['updateTheme'])
+  setup() {
+    const preferredColor = usePreferredColorScheme()
+    const store = useStore('appModule')
+    store.commit('updateTheme', preferredColor.value)
   }
 }
 </script>

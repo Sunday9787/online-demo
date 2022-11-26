@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^9.6.0",
     "d3": "^7.6.1",
     "element-ui": "2.15.10",
     "lodash-es": "^4.17.21",

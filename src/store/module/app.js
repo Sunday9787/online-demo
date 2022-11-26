@@ -1,6 +1,11 @@
 import { request } from '@/util/net'
 
 /**
+ * @type {Readonly<[string, string]>}
+ */
+const safePreferredColorScheme = ['light', 'dark']
+
+/**
  * @type {import('vuex').Module}
  */
 const module = {
@@ -135,9 +140,11 @@ const module = {
       state.dispatchedTransInOrgList = payload
     },
     updateTheme(state, payload) {
-      state.theme = payload
-      document.documentElement.dataset.theme = payload
-      localStorage.setItem('online_access_theme', payload)
+      if (safePreferredColorScheme.some(item => item === payload)) {
+        state.theme = payload
+        document.documentElement.dataset.theme = payload
+        localStorage.setItem('online_access_theme', payload)
+      }
     }
   },
   actions: {

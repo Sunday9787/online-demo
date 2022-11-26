@@ -7,9 +7,17 @@
     </template>
 
     <el-table ref="table" :data="page.table.data" v-loading="page.table.loading" height="100%" stripe>
-      <el-table-column prop="date" label="日期" width="180" />
-      <el-table-column prop="name" label="姓名" width="180" />
-      <el-table-column prop="address" label="地址" />
+      <template v-for="head in tableHead">
+        <el-table-column :key="head.prop" v-bind="head" v-if="head.on || !head.prop">
+          <app-table-widget
+            slot="header"
+            storage-key="dashboard-report"
+            :data="tableHead"
+            :text="head.label"
+            v-if="!head.prop"
+          />
+        </el-table-column>
+      </template>
     </el-table>
   </app-table-container>
 </template>
@@ -49,7 +57,44 @@ export function useReport() {
 export default {
   name: 'dashboard-report',
   inject: ['page'],
-  setup() {},
+  data() {
+    return {
+      tableHead: [
+        {
+          on: true,
+          fixed: true,
+          label: '日期',
+          prop: 'date',
+          width: '180'
+        },
+        {
+          on: true,
+          required: true,
+          label: '姓名',
+          prop: 'name',
+          width: '380'
+        },
+        {
+          on: true,
+          required: true,
+          label: '姓名名',
+          prop: 'named',
+          width: '380'
+        },
+        {
+          on: true,
+          label: '地址',
+          prop: 'address',
+          width: '380'
+        },
+        {
+          label: '设置',
+          fixed: 'right',
+          width: '150'
+        }
+      ]
+    }
+  },
   methods: {
     exposePDF() {
       console.log(this)

@@ -254,6 +254,14 @@
 }
 
 /** el-popper */
+.el-popover {
+  @include themeify {
+    color: theme('color-text-regular');
+    background: theme('color-background');
+    border-color: theme('color-border-light');
+  }
+}
+
 .el-popper[x-placement^=left] .popper__arrow {
   @include themeify {
     border-left-color: theme('color-border-light');
