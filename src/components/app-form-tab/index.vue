@@ -8,7 +8,7 @@
             width: barStyle[currentName].width + 'px',
             transform: `translateX(${barStyle[currentName].offset}px)`
           }"
-          v-if="barStyle[currentName]"
+          v-if="barStyle"
         />
 
         <li
@@ -17,7 +17,7 @@
           :key="pane.name"
           :id="pane.name"
           class="app-tabs-nav__item"
-          ref="pane"
+          ref="tabNav"
           :class="{ active: currentName === pane.name }"
           @click="handleTabClick(pane, pane.name, $event)"
         >
@@ -34,6 +34,50 @@
 </template>
 
 <script>
+import { onMounted, ref, useSlots, nextTick, getCurrentInstance } from 'vue'
+
+function useAppFormTab() {
+  const vm = getCurrentInstance().proxy
+  const slots = useSlots()
+  /**
+   * @type {import('vue').Ref<import('vue').VNode[]>}
+   */
+  const panes = ref([])
+  const barStyle = ref(null)
+
+  onMounted(function () {
+    if (slots.default) {
+      const paneSlots = slots.default().filter(function (vnode) {
+        return vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'AppFormTabPane'
+      })
+
+      const panesData = paneSlots.map(({ componentInstance }) => componentInstance)
+      panes.value = panesData
+    }
+  })
+
+  onMounted(function () {
+    nextTick(function () {
+      /**
+       * @type {HTMLAnchorElement[]}
+       */
+      const tabNav = vm.$refs.tabNav
+      const result = Object.create(null)
+
+      tabNav.forEach(function (item) {
+        result[item.id] = {
+          width: item.offsetWidth,
+          offset: item.offsetLeft
+        }
+      })
+
+      barStyle.value = result
+    })
+  })
+
+  return { panes, barStyle }
+}
+
 /**
  * @type {Vue.ComponentOptions<Vue>}
  */
@@ -50,19 +94,21 @@ export default {
       rootTabs: this
     }
   },
+  setup() {
+    const { panes, barStyle } = useAppFormTab()
+
+    return {
+      panes,
+      barStyle
+    }
+  },
   data() {
     return {
-      panes: [],
-      currentName: '',
-      barStyle: {}
+      currentName: ''
     }
   },
   created() {
     this.currentName = this.value
-  },
-  mounted() {
-    this.calcPaneInstances()
-    this.calcBarWidths()
   },
   methods: {
     handleTabClick(tab, tabName, event) {
@@ -71,34 +117,6 @@ export default {
       this.$emit('input', tabName)
       this.$emit('change', tabName)
       this.$emit('tab-click', tab, event)
-    },
-    calcPaneInstances(isForceUpdate = false) {
-      if (this.$slots.default) {
-        /**
-         * 过滤仅 app-form-tab-pane 组件
-         */
-        const paneSlots = this.$slots.default.filter(
-          vnode => vnode.tag && vnode.componentOptions && vnode.componentOptions.Ctor.options.name === 'AppFormTabPane'
-        )
-        const panes = paneSlots.map(({ componentInstance }) => componentInstance)
-
-        this.panes = panes
-      }
-    },
-    calcBarWidths() {
-      this.$nextTick(function () {
-        /**
-         * @type {HTMLAnchorElement[]}
-         */
-        const pane = this.$refs.pane
-        const vm = this
-        pane.forEach(function (item) {
-          vm.$set(vm.barStyle, item.id, {
-            width: item.offsetWidth,
-            offset: item.offsetLeft
-          })
-        })
-      })
     }
   }
 }

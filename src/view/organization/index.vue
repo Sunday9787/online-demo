@@ -9,7 +9,7 @@
     <app-card flex>
       <el-form ref="form" :model="form" label-width="80px" label-suffix=":">
         <el-form-item label="大小">
-          <el-input v-model="form.size" />
+          <el-input v-model="form.size" v-integer />
         </el-form-item>
 
         <el-form-item label="单位">

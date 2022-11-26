@@ -6,12 +6,14 @@ import router from './router'
 import App from './App.vue'
 
 import Components from './components'
+import Directive from './directive'
 
 import './router/permission'
 import './style/index.scss'
 
 Vue.use(ElementUI)
 Vue.use(Components)
+Vue.use(Directive)
 
 // eslint-disable-next-line no-new
 new Vue({

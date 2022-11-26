@@ -34,6 +34,21 @@
 </template>
 
 <script>
+import { getCurrentInstance, ref } from 'vue'
+
+function useAppTableWidget() {
+  const vm = getCurrentInstance().proxy
+  const tableRef = ref(null)
+  tableRef.value = vm.$parent
+
+  while (true) {
+    if (tableRef.value.doLayout) break
+    tableRef.value = tableRef.value.$parent
+  }
+
+  return { tableRef }
+}
+
 export default {
   name: 'AppTableWidget',
   props: {
@@ -55,19 +70,12 @@ export default {
       return this.data.filter(d => d.prop)
     }
   },
-  data() {
-    return {
-      tableRef: null
-    }
+  setup() {
+    const { tableRef } = useAppTableWidget()
+
+    return { tableRef }
   },
   created() {
-    this.tableRef = this.$parent
-
-    while (true) {
-      if (this.tableRef.doLayout) break
-      this.tableRef = this.tableRef.$parent
-    }
-
     this.initConfig()
   },
   methods: {
@@ -107,7 +115,10 @@ export default {
     updateConfig() {
       const data = JSON.stringify(this.showHead)
       localStorage.setItem(this.storageKey, data)
-      this.tableRef.doLayout && this.tableRef.doLayout()
+
+      this.$nextTick(function () {
+        this.tableRef.doLayout()
+      })
     }
   }
 }

@@ -31,3 +31,8 @@ declare class Page extends Vue {
 
   public search(current?: number | Event): void
 }
+
+interface Directive {
+  name: string
+  option: import('vue').DirectiveOptions
+}

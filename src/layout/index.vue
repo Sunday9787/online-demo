@@ -29,11 +29,6 @@ export default {
     LayoutHeader,
     LayoutSide
   },
-  setup() {
-    // return {
-    //   organization: appModule.state
-    // }
-  },
   computed: {
     ...mapGetters('appModule', ['currentMechanism']),
     mainStyle() {
