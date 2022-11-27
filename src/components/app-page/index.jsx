@@ -17,7 +17,7 @@ export default {
   },
   render(h) {
     return (
-      <div class='layout-view' v-loading={this.loading}>
+      <div class='app-page' v-loading={this.loading}>
         {this.$slots.default}
       </div>
     )

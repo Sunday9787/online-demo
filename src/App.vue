@@ -5,15 +5,35 @@
 </template>
 
 <script>
+import { watch } from 'vue'
 import { usePreferredColorScheme } from '@vueuse/core'
+import { useRoute } from 'vue-router/composables'
 import { useStore } from './hooks/useStore'
+
+/**
+ * @type {ReadonlyArray<string>}
+ */
+const themeWhiteList = ['/login']
 
 export default {
   name: 'App',
   setup() {
     const preferredColor = usePreferredColorScheme()
     const store = useStore('appModule')
-    store.commit('updateTheme', preferredColor.value)
+    const route = useRoute()
+
+    watch(
+      () => route.path,
+      function () {
+        if (store.state.theme.manual) return
+        const model = themeWhiteList.indexOf(route.path) < 0 ? preferredColor.value : 'light'
+
+        store.commit('updateTheme', {
+          manual: false,
+          model
+        })
+      }
+    )
   }
 }
 </script>

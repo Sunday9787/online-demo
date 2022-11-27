@@ -1,5 +1,5 @@
 <template>
-  <app-card flex>
+  <app-card flex1>
     <slot />
 
     <el-row type="flex" justify="end" class="app-pagination" v-if="pagination">

@@ -1,5 +1,5 @@
 <template functional>
-  <div class="app-card" :class="[data.staticClass, { flex1: props.flex }]">
+  <div class="app-card" :class="[data.staticClass, { flex1: props.flex1 }]">
     <slot />
   </div>
 </template>
@@ -8,7 +8,7 @@
 export default {
   name: 'AppCard',
   props: {
-    flex: {
+    flex1: {
       type: Boolean,
       default: false
     }

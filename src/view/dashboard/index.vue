@@ -116,7 +116,6 @@
 
 <script>
 import moment from 'moment'
-import { mapGetters } from 'vuex'
 import { request } from '@/util/net'
 import pageMixin from '@/mixins/page'
 
@@ -153,11 +152,6 @@ export default {
     report,
     statistics
   },
-  provide() {
-    return {
-      page: this
-    }
-  },
   setup() {
     const { form: sampleForm, expertPatientOptions, transferPatientOptions } = useSample()
     const { form: reportForm, tabTypeOptions, exportLisOptions } = useReport()
@@ -186,7 +180,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('appModule', ['currentMechanism']),
     form() {
       return this.formMap[this.activeName]
     }

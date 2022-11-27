@@ -1,3 +1,4 @@
+import { mapGetters } from 'vuex'
 import _ from 'lodash-es'
 
 /**
@@ -110,6 +111,11 @@ function page(opt) {
    * @type {Vue.ComponentOptions<Page>}
    */
   const mixin = {
+    provide() {
+      return {
+        page: this
+      }
+    },
     data() {
       return {
         pagination: {
@@ -125,7 +131,7 @@ function page(opt) {
         }
       }
     },
-    computed: pageHelpComputed(option.timeFieldMap),
+    computed: Object.assign(mapGetters('appModule', ['currentMechanism']), pageHelpComputed(option.timeFieldMap)),
     created() {
       if (option.immediate) {
         this.search()

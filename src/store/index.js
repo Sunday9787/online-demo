@@ -13,7 +13,7 @@ const store = new Vuex.Store({
   plugins: [
     createPersistedState({
       key: 'online_access',
-      paths: ['appModule.organization'],
+      paths: ['appModule.organization', 'appModule.theme'],
       storage: localStorage
     })
   ]

@@ -46,10 +46,7 @@ export default {
   position: relative;
 }
 
-.app-table-container + .app-pagination {
-  padding-top: 12px;
-}
-
+.app-table-container + .app-pagination,
 .app-table-button-group + .app-table__inner {
   padding-top: 12px;
 }

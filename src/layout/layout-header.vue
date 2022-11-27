@@ -55,10 +55,10 @@ export default {
   computed: {
     themeMode: {
       get() {
-        return this.theme
+        return this.theme.model
       },
-      set(val) {
-        this.updateTheme(val)
+      set(model) {
+        this.updateTheme({ model, manual: true })
       }
     },
     ...mapState(['organization', 'theme']),
