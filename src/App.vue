@@ -25,7 +25,15 @@ export default {
     watch(
       () => route.path,
       function () {
-        if (store.state.theme.manual) return
+        if (store.state.theme.manual) {
+          store.commit('updateTheme', {
+            manual: false,
+            model: store.state.theme.model
+          })
+
+          return
+        }
+
         const model = themeWhiteList.indexOf(route.path) < 0 ? preferredColor.value : 'light'
 
         store.commit('updateTheme', {
