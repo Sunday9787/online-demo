@@ -1,0 +1,55 @@
+.el-popover {
+  @include themeify {
+    color: theme('color-text-regular');
+    background: theme('color-background');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-popper[x-placement^=left] .popper__arrow {
+  @include themeify {
+    border-left-color: theme('color-border-light');
+  }
+}
+
+.el-popper[x-placement^=right] .popper__arrow {
+  @include themeify {
+    border-right-color: theme('color-border-light');
+  }
+}
+
+.el-popper[x-placement^=top] .popper__arrow {
+  @include themeify {
+    border-top-color: theme('color-border-light');
+  }
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow {
+  @include themeify {
+    border-bottom-color: theme('color-border-light');
+  }
+}
+
+.el-popper[x-placement^=left] .popper__arrow::after {
+  @include themeify {
+    border-left-color: theme('color-background-second');
+  }
+}
+
+.el-popper[x-placement^=right] .popper__arrow::after {
+  @include themeify {
+    border-right-color: theme('color-background-second');
+  }
+}
+
+.el-popper[x-placement^=top] .popper__arrow::after {
+  @include themeify {
+    border-top-color: theme('color-background-second');
+  }
+}
+
+.el-popper[x-placement^=bottom] .popper__arrow::after {
+  @include themeify {
+    border-bottom-color: theme('color-background-second');
+  }
+}

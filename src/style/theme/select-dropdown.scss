@@ -1,0 +1,23 @@
+.el-select-dropdown {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-select-dropdown__item {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+
+    &.selected {
+      color: theme('color-primary');
+    }
+
+    &.hover,
+    &:hover {
+      background-color: theme('color-primary-light-9');
+    }
+  }
+}

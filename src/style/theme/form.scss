@@ -1,0 +1,6 @@
+.el-form-item__label {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}

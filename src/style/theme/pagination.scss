@@ -1,0 +1,5 @@
+.el-pagination__total {
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}

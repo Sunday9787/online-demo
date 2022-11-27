@@ -1,0 +1,6 @@
+.el-loading-mask {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-9');
+  }
+}

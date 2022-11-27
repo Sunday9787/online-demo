@@ -1,0 +1,8 @@
+.el-select:hover {
+  .el-input__inner {
+    @include themed;
+    @include themeify {
+      border-color: theme('color-primary');
+    }
+  }
+}

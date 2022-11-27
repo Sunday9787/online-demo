@@ -1,0 +1,22 @@
+.el-date-editor .el-range-separator {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
+.el-date-editor .el-range-input {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-date-table td.in-range div,
+.el-date-table td.in-range div:hover {
+  @include themeify {
+    background: mix(theme('color-background'), theme('color-primary'), 95%);
+  }
+}

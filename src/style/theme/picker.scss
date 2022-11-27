@@ -1,0 +1,30 @@
+.el-picker-panel {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-date-range-picker__content.is-left {
+  @include themed;
+  @include themeify {
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-date-table th {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-picker-panel__icon-btn {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}

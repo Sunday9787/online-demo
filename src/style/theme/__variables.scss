@@ -3,6 +3,8 @@
 
 $--color-primary-light: #3D8AFF;
 $--color-primary-dark: #3D8AFF;
+$--color-white-light: #fff;
+$--color-white-dark: #373737;
 
 /** background */
 $--color-background-light: #fff;
@@ -13,8 +15,24 @@ $--color-background-light-light: #fff;
 $--color-background-light-dark: #444;
 $--color-background-light-gray-light: #FAFAFA;
 $--color-background-light-gray-dark: #494949;
-$--color-background-90-light: rgba($--color-background-light, 90%);
-$--color-background-90-dark: rgba($--color-background-dark, 90%);
+$--color-primary-light-1-light: mix($--color-white-light, $--color-primary-light, 10%);
+$--color-primary-light-1-dark: mix($--color-white-dark, $--color-primary-dark, 10%);
+$--color-primary-light-2-light: mix($--color-white-light, $--color-primary-light, 20%);
+$--color-primary-light-2-dark: mix($--color-white-dark, $--color-primary-dark, 20%);
+$--color-primary-light-3-light: mix($--color-white-light, $--color-primary-light, 30%);
+$--color-primary-light-3-dark: mix($--color-white-dark, $--color-primary-dark, 30%);
+$--color-primary-light-4-light: mix($--color-white-light, $--color-primary-light, 40%);
+$--color-primary-light-4-dark: mix($--color-white-dark, $--color-primary-dark, 40%);
+$--color-primary-light-5-light: mix($--color-white-light, $--color-primary-light, 50%);
+$--color-primary-light-5-dark: mix($--color-white-dark, $--color-primary-dark, 50%);
+$--color-primary-light-6-light: mix($--color-white-light, $--color-primary-light, 60%);
+$--color-primary-light-6-dark: mix($--color-white-dark, $--color-primary-dark, 60%);
+$--color-primary-light-7-light: mix($--color-white-light, $--color-primary-light, 70%);
+$--color-primary-light-7-dark: mix($--color-white-dark, $--color-primary-dark, 70%);
+$--color-primary-light-8-light: mix($--color-white-light, $--color-primary-light, 80%);
+$--color-primary-light-8-dark: mix($--color-white-dark, $--color-primary-dark, 80%);
+$--color-primary-light-9-light: mix($--color-white-light, $--color-primary-light, 90%);
+$--color-primary-light-9-dark: mix($--color-white-dark, $--color-primary-dark, 90%);
 $--color-background-second-light: #fff;
 $--color-background-second-dark: #424242;
 

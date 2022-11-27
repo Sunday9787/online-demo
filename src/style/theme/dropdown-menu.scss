@@ -1,0 +1,21 @@
+.el-dropdown-menu {
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-second');
+    border-color: theme('color-border-light');
+  }
+}
+
+.el-dropdown-menu__item {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+  }
+}
+
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  @include themeify {
+    background-color: theme('color-background');
+  }
+}

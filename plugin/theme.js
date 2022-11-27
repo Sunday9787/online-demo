@@ -1,33 +1,27 @@
 import fs from 'fs'
-import scssParser from 'scss-parser'
-import query from 'query-ast'
+import path from 'path'
+import glob from 'glob'
+import postcss from 'postcss'
 
-function parseAst(source) {
-  const data = fs.readFileSync(source, 'utf-8')
-  const ast = scssParser.parse(data)
-  const $ = query(ast)
+/**
+ * @param {string} sourcePath
+ */
+function parseAst(sourcePath) {
+  const source = fs.readFileSync(sourcePath, 'utf-8')
+  const root = postcss.parse(source)
 
   /**
    * @type {Record<string, {name: string, value: string}>[]}
    */
-  const response = $('declaration').map(function (item) {
-    const name = '$' + $(item).find('variable').first().value().trim()
+  const result = []
 
-    const value = (function () {
-      const hasFunction = $(item).find('value').has('function').length()
-      if (hasFunction) {
-        const functionType = $(item).find('value').has('function')
-        const identifierValue = functionType.find('identifier').value()
-        const argumentsValue = functionType.find('arguments').value()
-        return identifierValue + '(' + '$' + argumentsValue + ')'
-      }
-
-      return '#' + $(item).find('value').value().trim()
-    })()
-    return { name, value }
+  root.walkDecls(function (decl) {
+    if (decl.parent && decl.parent.type === 'root') {
+      result.push({ name: decl.prop, value: decl.value })
+    }
   })
 
-  return response
+  return result
 }
 
 /**
@@ -61,7 +55,17 @@ function transformVariable(data) {
       .join(',\n')
   }
 
+  /**
+   *
+   * @param {{name: string, value: string}[]} data
+   */
+  function variable(data) {
+    return data.map(item => `${item.name}: ${item.value};`).join('\n')
+  }
+
   return `
+    ${variable(data)}
+
     $themes: (
       light: (
         ${format(theme.light, 'light')}
@@ -75,11 +79,13 @@ function transformVariable(data) {
 
 /**
  * @param {object} option
- * @param {string} option.variable
+ * @param {string} option.path
+ * @param {string} option.pattern
  * @returns {import('vite').Plugin}
  */
 function theme(option) {
-  const scssVariable = parseAst(option.variable)
+  const scss = glob.sync(path.join(option.path, option.pattern))
+  const scssVariable = scss.flatMap(parseAst)
 
   return {
     name: 'theme-variable',

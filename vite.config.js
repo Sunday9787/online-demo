@@ -41,7 +41,8 @@ export default defineConfig({
       minRatio: 0.8
     }),
     themePlugin({
-      variable: path.resolve('./src/style/theme/__variables.scss')
+      path: path.resolve('./src/style/theme'),
+      pattern: '!(__element-ui|__theme|).scss'
     })
   ],
   build: {
@@ -88,7 +89,6 @@ export default defineConfig({
         javascriptEnable: true,
         additionalData: `
           @import "./src/style/__mixin.scss";
-          @import "./src/style/theme/__variables.scss";
           @import "./src/style/theme/__theme.scss";
         `
       }

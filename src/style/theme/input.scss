@@ -1,0 +1,12 @@
+.el-input__inner {
+  @include themed;
+  @include themeify {
+    color: theme('color-text-regular');
+    background-color: theme('color-background');
+    border-color: theme('color-border-light');
+
+    &:focus {
+      border-color: theme('color-primary');
+    }
+  }
+}
