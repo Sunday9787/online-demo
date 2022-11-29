@@ -2,7 +2,7 @@
   @include themed;
   @include themeify {
     color: theme('color-text-regular');
-    background: theme('color-background');
+    background-color: theme('color-background');
     border-color: theme('color-border-light');
   }
 
@@ -10,8 +10,8 @@
   &:hover {
     @include themeify {
       color: theme('color-primary');
-      border-color: theme('color-primary-light-7');
       background-color: theme('color-primary-light-9');
+      border-color: theme('color-primary-light-7');
     }
   }
 }
@@ -19,14 +19,14 @@
 .el-button--primary {
   @include themeify {
     color: #fff;
-    border-color: theme('color-primary');
     background-color: theme('color-primary');
+    border-color: theme('color-primary');
 
     &:focus,
     &:hover {
       color: #fff;
-      border-color: theme('color-primary-light-3');
       background-color: theme('color-primary-light-1');
+      border-color: theme('color-primary-light-3');
     }
   }
 }

@@ -45,3 +45,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+#app {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 1440px) {
+  #app {
+    width: 1440px;
+  }
+}
+</style>

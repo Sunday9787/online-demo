@@ -1,29 +1,35 @@
 <template>
   <el-container class="app-patient">
     <PatientAside />
-    <section class="app-patient-content">
-      <el-row>
-        <div class="app-patient-action__inner">
-          <div class="app-patient-action">
-            <el-button type="primary" size="small">完成病例分析</el-button>
-            <el-button type="primary" size="small">追加分析</el-button>
+
+    <el-container>
+      <hr class="app-patient__line" />
+
+      <el-container direction="vertical">
+        <el-row type="flex" justify="end" class="app-patient-tools">
+          <div class="app-patient-action__inner">
+            <div class="app-patient-action">
+              <el-button type="primary" size="small">完成病例分析</el-button>
+              <el-button type="primary" size="small">追加分析</el-button>
+            </div>
           </div>
-        </div>
-      </el-row>
+        </el-row>
 
-      <el-row type="flex" justify="end" class="app-patient-tools"> 工具栏 </el-row>
-
-      <div class="app-patient-list">列表区域</div>
-    </section>
+        <section class="patient-list-container">
+          <PatientList />
+        </section>
+      </el-container>
+    </el-container>
   </el-container>
 </template>
 
 <script>
 import PatientAside from './patient-aside.vue'
+import PatientList from './components/patient-list.vue'
 
 export default {
   name: 'AppPatient',
-  components: { PatientAside },
+  components: { PatientAside, PatientList },
   setup() {}
 }
 </script>
@@ -54,20 +60,33 @@ export default {
 }
 
 .app-patient-content {
-  display: flex;
-  flex-direction: column;
   flex: 1;
+}
+
+.app-patient__line {
+  width: 12px;
+  height: 100%;
+  border: none;
+  margin: 0;
+
+  @include themed;
+  @include themeify {
+    background-color: theme('color-background-deep');
+  }
 }
 
 .app-patient-tools {
   padding: 5px 10px;
-  border-left-style: solid;
-  border-left-width: 2px;
 
   @include themed;
   @include themeify {
     background-color: theme('color-background');
-    border-left-color: theme('color-background-deep');
   }
+}
+
+.patient-list-container {
+  height: calc(100% - 70px);
+  margin-top: 10px;
+  overflow-y: auto;
 }
 </style>

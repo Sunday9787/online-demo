@@ -1,5 +1,4 @@
 import fs from 'fs'
-import path from 'path'
 import glob from 'glob'
 import postcss from 'postcss'
 
@@ -79,12 +78,11 @@ function transformVariable(data) {
 
 /**
  * @param {object} option
- * @param {string} option.path
  * @param {string} option.pattern
  * @returns {import('vite').Plugin}
  */
 function theme(option) {
-  const scss = glob.sync(path.join(option.path, option.pattern))
+  const scss = glob.sync(option.pattern)
   const scssVariable = scss.flatMap(parseAst)
 
   return {

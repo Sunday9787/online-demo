@@ -42,7 +42,7 @@ export default defineConfig({
     }),
     themePlugin({
       path: path.resolve('./src/style/theme'),
-      pattern: '!(__element-ui|__theme|).scss'
+      pattern: './src/style/theme/!(__element-ui|__theme|).scss'
     })
   ],
   build: {
