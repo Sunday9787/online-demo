@@ -16,7 +16,8 @@
         </el-row>
 
         <section class="patient-list-container">
-          <PatientList />
+          <app-scale :scale.sync="scale" :max-scale="maxScale" />
+          <PatientList :scale="scale" />
         </section>
       </el-container>
     </el-container>
@@ -24,13 +25,21 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import PatientAside from './patient-aside.vue'
-import PatientList from './components/patient-list.vue'
+import PatientList, { maxScale } from './components/patient-list.vue'
 
 export default {
   name: 'AppPatient',
   components: { PatientAside, PatientList },
-  setup() {}
+  setup() {
+    const scale = ref(0)
+
+    return {
+      scale,
+      maxScale
+    }
+  }
 }
 </script>
 
@@ -85,6 +94,7 @@ export default {
 }
 
 .patient-list-container {
+  position: relative;
   height: calc(100% - 70px);
   margin-top: 10px;
   overflow-y: auto;

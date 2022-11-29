@@ -22,7 +22,7 @@ export default {
     const store = useStore('appModule')
     const route = useRoute()
 
-    watch(
+    const unWatch = watch(
       () => route.path,
       function () {
         if (store.state.theme.manual) {
@@ -31,6 +31,7 @@ export default {
             model: store.state.theme.model
           })
 
+          unWatch()
           return
         }
 
@@ -40,6 +41,8 @@ export default {
           manual: false,
           model
         })
+
+        unWatch()
       }
     )
   }
