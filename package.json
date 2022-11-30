@@ -12,6 +12,7 @@
     "d3": "^7.6.1",
     "element-ui": "2.15.10",
     "lodash-es": "^4.17.21",
+    "mockjs": "^1.1.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/d3": "^7.4.0",
     "@types/glob": "^8.0.0",
+    "@types/mockjs": "^1.0.7",
     "@types/node": "^18.11.9",
     "@vitejs/plugin-legacy": "^2.3.1",
     "@vitejs/plugin-vue2": "^2.0.1",

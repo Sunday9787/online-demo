@@ -95,8 +95,9 @@ export default {
 
 .patient-list-container {
   position: relative;
-  height: calc(100% - 70px);
+  display: flex;
+  flex: 1;
+  overflow: hidden;
   margin-top: 10px;
-  overflow-y: auto;
 }
 </style>
