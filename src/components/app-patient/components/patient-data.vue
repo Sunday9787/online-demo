@@ -11,9 +11,9 @@
       />
     </div>
 
-    <el-collapse-transition>
+    <app-collapse-transition>
       <section class="patient-data__desc" v-show="visible"> 666 </section>
-    </el-collapse-transition>
+    </app-collapse-transition>
   </section>
 </template>
 
@@ -45,10 +45,13 @@ export default {
 .patient-data__head {
   position: relative;
   display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 
   @include themed;
   @include themeify {
     background-color: theme('color-background');
+    border-bottom-color: theme('color-border-light');
   }
 }
 
@@ -70,12 +73,9 @@ export default {
 .patient-data__desc {
   height: 330px;
   min-width: 240px;
-  border-top-width: 1px;
-  border-top-style: solid;
 
   @include themed;
   @include themeify {
-    border-top-color: theme('color-border-light');
     background-color: theme('color-background');
   }
 }

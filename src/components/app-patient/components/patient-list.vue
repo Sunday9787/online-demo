@@ -67,6 +67,7 @@ export default {
 <style lang="scss">
 .patient-list {
   display: grid;
+  grid-auto-rows: max-content;
   gap: 10px;
   margin: 0;
   width: 100%;
