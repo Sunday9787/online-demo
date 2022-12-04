@@ -45,6 +45,7 @@ export default {
 .patient-data__head {
   position: relative;
   display: flex;
+  align-items: center;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
@@ -64,6 +65,8 @@ export default {
   display: block;
   width: 18px;
   height: 18px;
+  font-size: 20px;
+  color: var(--color-primary);
 
   &.toggle {
     transform: rotate(180deg);

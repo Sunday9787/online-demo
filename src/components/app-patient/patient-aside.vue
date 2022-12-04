@@ -25,10 +25,6 @@
     <div class="patient-tab-content flex1">
       <component :is="tabActive" :local="local" />
     </div>
-
-    <hr class="patient-aside-gap" />
-
-    <PatientData />
   </aside>
 </template>
 
@@ -36,14 +32,12 @@
 import { computed } from 'vue'
 import { useTab } from '@/hooks/useTab'
 import patientItemFactory from './patient-item.vue'
-import PatientData from './components/patient-data.vue'
 
 export default {
   name: 'PatientAside',
   components: {
     patientItemOne: patientItemFactory.extend({ name: 'patientItemOne' }),
-    patientItemTwo: patientItemFactory.extend({ name: 'patientItemTwo' }),
-    PatientData
+    patientItemTwo: patientItemFactory.extend({ name: 'patientItemTwo' })
   },
   setup() {
     const { tabActive, changeTab } = useTab('patient-item-one')
@@ -136,17 +130,6 @@ export default {
   @include themed;
   @include themeify {
     background-color: theme('color-background');
-  }
-}
-
-.patient-aside-gap {
-  height: 2px;
-  margin: 0;
-  border: none;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-deep');
   }
 }
 </style>

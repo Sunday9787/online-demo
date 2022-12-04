@@ -60,9 +60,10 @@ export default {
 
 <style lang="scss">
 .app-scale {
-  position: fixed;
+  position: absolute;
   z-index: 99;
   display: flex;
+  column-gap: 20px;
 }
 
 .app-scale__button {
@@ -72,10 +73,6 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-
-  & + & {
-    margin-left: 20px;
-  }
 
   @include themed;
   @include themeify {

@@ -6,6 +6,8 @@
       }}</li>
     </ul>
 
+    <PatientGap direction="vertical" />
+
     <el-container direction="vertical" class="patient-pane__inner">
       <div class="patient-pane__search">
         <el-input v-model="form.patientNo" placeholder="请输入病例号" />
@@ -16,16 +18,23 @@
           <li v-for="(item, k) in patientList.data" :key="k" class="patient-pane-list-item">{{ item.name }}</li>
         </ul>
       </el-container>
+
+      <PatientGap />
+
+      <PatientData />
     </el-container>
   </el-container>
 </template>
 
 <script>
 import Vue from 'vue'
+import PatientData from './components/patient-data.vue'
+import PatientGap from './components/patient-gap.vue'
 import * as mockData from '@/mock/patient'
 
 export default Vue.extend({
   name: 'PatientItem',
+  components: { PatientData, PatientGap },
   props: {
     local: {
       type: Boolean,
@@ -56,7 +65,7 @@ export default Vue.extend({
 
 .patient-pane-org {
   overflow-y: auto;
-  width: 60px;
+  width: 38px;
   height: 100%;
   margin: 0;
   padding: 0;

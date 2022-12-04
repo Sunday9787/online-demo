@@ -3,17 +3,10 @@
     <PatientAside />
 
     <el-container>
-      <hr class="app-patient__line" />
+      <PatientGap :gap="12" direction="vertical" />
 
       <el-container direction="vertical">
-        <el-row type="flex" justify="end" class="app-patient-tools">
-          <div class="app-patient-action__inner">
-            <div class="app-patient-action">
-              <el-button type="primary" size="small">完成病例分析</el-button>
-              <el-button type="primary" size="small">追加分析</el-button>
-            </div>
-          </div>
-        </el-row>
+        <PatientToolbar />
 
         <section class="patient-list-container">
           <app-scale :scale.sync="scale" :max-scale="maxScale" />
@@ -28,10 +21,12 @@
 import { ref } from 'vue'
 import PatientAside from './patient-aside.vue'
 import PatientList, { maxScale } from './components/patient-list.vue'
+import PatientToolbar from './components/patient-toolbar.vue'
+import PatientGap from './components/patient-gap.vue'
 
 export default {
   name: 'AppPatient',
-  components: { PatientAside, PatientList },
+  components: { PatientAside, PatientList, PatientToolbar, PatientGap },
   setup() {
     const scale = ref(0)
 
@@ -48,20 +43,9 @@ export default {
   height: 100%;
 }
 
-.app-patient-action__inner {
-  float: right;
-}
-
 .app-patient-action {
-  display: table-cell;
-  vertical-align: middle;
-  height: 50px;
-  text-align: right;
-  padding-right: 10px;
-
-  > .el-button {
-    vertical-align: middle;
-  }
+  display: flex;
+  align-items: center;
 }
 
 .app-patient-list {
@@ -81,15 +65,6 @@ export default {
   @include themed;
   @include themeify {
     background-color: theme('color-background-deep');
-  }
-}
-
-.app-patient-tools {
-  padding: 5px 10px;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
   }
 }
 

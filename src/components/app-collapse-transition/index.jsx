@@ -17,23 +17,20 @@ const event = {
    * @param {Function} done
    */
   enter(el, done) {
-    console.log(el, 'enter')
-
     setTimeout(() => {
-      console.log(el.dataset.scrollHeight, 'enter')
       el.style.height = el.dataset.scrollHeight
-      done()
+      setTimeout(() => {
+        done()
+      }, 400)
     }, 0)
   },
   /**
    * @param {HTMLElement} el
    */
   afterEnter(el) {
-    el.style.height = el.dataset.scrollHeight
-    el.style.overflow = 'hidden'
-    el.style.transitionProperty = 'height'
-    el.style.transitionTimingFunction = 'ease'
-    el.style.transitionDuration = '400ms'
+    el.style.transitionProperty = ''
+    el.style.transitionTimingFunction = ''
+    el.style.transitionDuration = ''
     console.log(el, 'afterEnter')
   },
   /**

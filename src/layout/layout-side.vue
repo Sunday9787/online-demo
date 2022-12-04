@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="200px" class="layout-aside">
+  <el-aside width="100px" class="layout-aside">
     <el-menu router :default-active="activeMenu" :style="{ minHeight: '100%', backgroundColor: 'inherit' }">
       <el-menu-item v-for="route in routes" :key="route.name" :index="route.path + '/index'">
         <i class="el-icon-document"></i>

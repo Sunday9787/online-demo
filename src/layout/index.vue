@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="height: inherit">
     <LayoutSide />
 
     <el-container direction="vertical" class="layout-main">
@@ -51,7 +51,7 @@ export default {
 }
 
 .layout-content {
-  height: calc(100vh - 60px);
+  flex: 1;
   overflow-y: auto;
 }
 </style>
