@@ -1,6 +1,10 @@
 .el-loading-mask {
-  @include themed;
-  @include themeify {
-    background-color: rgb(theme('color-background'), 90%);
+  background-color: var(--loading-mask-background);
+  @extend %themed;
+  @include theme-light {
+    --loading-mask-background: #{rgb($--color-background-light, 90%)};
+  }
+  @include theme-dark {
+    --loading-mask-background: #{rgb($--color-background-dark, 90%)};
   }
 }

@@ -58,10 +58,7 @@ export default {
 .patient-aside-gap {
   margin: 0;
   border: none;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-deep');
-  }
+  background-color: var(--color-background-deep);
+  @extend %themed;
 }
 </style>

@@ -12,3 +12,15 @@
 @function theme($key) {
   @return map-get($theme-map, $key);
 }
+
+@mixin theme-light {
+  [data-theme='light'] & {
+    @content;
+  }
+}
+
+@mixin theme-dark {
+  [data-theme='dark'] & {
+    @content
+  }
+}

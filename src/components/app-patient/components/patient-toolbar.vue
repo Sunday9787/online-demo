@@ -58,11 +58,8 @@ export default {
 <style lang="scss">
 .patient-toolbar {
   padding: 5px 10px;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 }
 
 .patient-toolbar-list {
@@ -83,12 +80,10 @@ export default {
 
 .glass-popover {
   padding-right: 4px;
+  background-color: var(--color-background-deep);
   @extend %glass-popover;
-  @include themed;
-
-  @include themed;
+  @extend %themed;
   @include themeify {
-    background-color: theme('color-background-deep');
     box-shadow: 0 0 2px 0 rgba(theme('color-background-deep'), 0.6);
   }
 }
@@ -107,10 +102,9 @@ export default {
   padding-right: 10px;
   height: 24px;
   cursor: default;
+  background-color: var(--color-background-deep);
   @extend .glass-label;
   @extend %glass-popover;
-
-  @include themed;
-  background-color: var(--color-background-deep);
+  @extend %themed;
 }
 </style>

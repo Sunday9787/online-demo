@@ -22,3 +22,11 @@
   transition-duration: $duration;
   transition-property: background-color, color, border-color;
 }
+
+%themed {
+  @include themed;
+}
+
+%ellipsis {
+  @include ellipsis;
+}

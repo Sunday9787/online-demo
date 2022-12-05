@@ -137,9 +137,7 @@ export default {
   user-select: none;
 
   &__reset {
-    @include themeify {
-      color: theme('color-primary');
-    }
+    color: var(--color-primary);
   }
 
   &__label {
@@ -171,10 +169,8 @@ export default {
     user-select: none;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-
-    @include themeify {
-      border-bottom-color: theme('color-border-light');
-    }
+    border-bottom-color: var(--color-border-light);
+    @extend %themed;
   }
 
   &__item {

@@ -130,20 +130,15 @@ export default {
   margin: 0;
   height: 40px;
   align-items: center;
+  column-gap: 16px;
 }
 
 .app-tabs-nav__item {
   display: block;
-  @include themed;
+  @extend %themed;
 
   &.active {
-    @include themeify {
-      color: theme('color-primary');
-    }
-  }
-
-  & + & {
-    margin-left: 16px;
+    color: var(--color-primary);
   }
 }
 
@@ -159,10 +154,8 @@ export default {
   margin-left: -16px;
   margin-right: -16px;
 
-  @include themed;
-  @include themeify {
-    background-color: theme('color-border-light');
-  }
+  @extend %themed;
+  background-color: var(--color-border-light);
 }
 
 .app-tabs__active-bar {
@@ -170,7 +163,7 @@ export default {
   bottom: 0;
   left: 0;
   height: 2px;
-  background-color: theme('color-primary');
+  background-color: var(--color-primary);
   z-index: 1;
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }

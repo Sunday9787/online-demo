@@ -1,8 +1,8 @@
 .el-menu-item {
+  @extend %themed;
+
   &:hover,
   &:focus {
-    @include themeify {
-      background-color: theme('color-primary-light-9');
-    }
+    background-color: var(--color-primary-light-9);
   }
 }

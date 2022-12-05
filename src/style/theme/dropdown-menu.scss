@@ -1,21 +1,15 @@
 .el-dropdown-menu {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-second');
-    border-color: theme('color-border-light');
-  }
+  color: var(--color-border-light);
+  background-color: var(--color-background-second);
+  @extend %themed;
 }
 
 .el-dropdown-menu__item {
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-  }
+  color: var(--color-text-regular);
+  @extend %themed;
 }
 
 .el-dropdown-menu__item:focus,
 .el-dropdown-menu__item:not(.is-disabled):hover {
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
 }

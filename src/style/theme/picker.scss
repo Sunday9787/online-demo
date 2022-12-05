@@ -1,30 +1,22 @@
 .el-picker-panel {
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-    background-color: theme('color-background-second');
-    border-color: theme('color-border-light');
-  }
+  color: var(--color-text-regular);
+  background-color: var(--color-background-second);
+  border-color: var(--color-border-light);
+  @extend %themed;
 }
 
 .el-date-range-picker__content.is-left {
-  @include themed;
-  @include themeify {
-    border-color: theme('color-border-light');
-  }
+  border-color: var(--color-border-light);
+  @extend %themed;
 }
 
 .el-date-table th {
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-    border-color: theme('color-border-light');
-  }
+  color: var(--color-text-regular);
+  border-color: var(--color-border-light);
+  @extend %themed;
 }
 
 .el-picker-panel__icon-btn {
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-  }
+  color: var(--color-text-regular);
+  @extend %themed;
 }

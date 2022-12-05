@@ -29,29 +29,21 @@ export default {
 
 <style lang="scss">
 .layout-aside {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 
   .el-menu {
-    @include themed;
-    @include themeify {
-      border-color: theme('color-background');
-    }
+    border-color: var(--color-background);
+    @extend %themed;
   }
 
   .el-menu-item {
-    @include themed;
-    @include themeify {
-      color: theme('color-text-regular');
-      border-color: theme('color-background');
-    }
+    color: var(--color-text-regular);
+    border-color: var(--color-background);
+    @extend %themed;
 
     &.is-active {
-      @include themeify {
-        color: theme('color-primary');
-      }
+      color: var(--color-primary);
     }
   }
 }

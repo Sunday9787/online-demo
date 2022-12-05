@@ -79,11 +79,9 @@ export default Vue.extend({
   height: 30px;
   cursor: pointer;
 
-  @include themed;
-  @include themeify {
-    &:hover {
-      background-color: theme('color-primary-light-9');
-    }
+  @extend %themed;
+  &:hover {
+    background-color: var(--color-primary-light-9);
   }
 }
 
@@ -110,11 +108,10 @@ export default Vue.extend({
   padding: 0 15px;
   height: 40px;
 
-  @include themed;
-  @include themeify {
-    &:hover {
-      background-color: theme('color-primary-light-9');
-    }
+  &:hover {
+    background-color: var(--color-primary-light-9);
   }
+
+  @extend %themed;
 }
 </style>

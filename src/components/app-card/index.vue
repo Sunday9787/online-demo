@@ -22,7 +22,7 @@ export default {
   padding: 16px;
   border-radius: 10px;
 
-  @include themed;
+  @extend %themed;
   @include themeify {
     background-color: theme('color-background');
   }

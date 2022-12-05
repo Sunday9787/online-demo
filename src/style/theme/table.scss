@@ -1,30 +1,23 @@
 .el-table {
+  color: var(--color-text-regular);
+  background-color: var(--color-background-light);
   border-radius: 6px;
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-    background-color: theme('color-background-light');
-  }
+  @extend %themed;
 
   tr {
-    @include themeify {
-      background-color: theme('color-background-light');
-    }
+    background-color: var(--color-background-light);
+    @extend %themed;
   }
 
   th.el-table__cell {
-    @include themed;
-    @include themeify {
-      background-color: theme('color-background-light');
-    }
+    background-color: var(--color-background-light);
+    @extend %themed;
   }
 
   &.el-table--striped {
     td.el-table__cell {
-      @include themed;
-      @include themeify {
-        background-color: theme('color-background-light');
-      }
+      background-color: var(--color-background-light);
+      @extend %themed;
     }
   }
 }
@@ -32,28 +25,21 @@
 /* stylelint-disable-next-line no-descending-specificity */
 .el-table th.el-table__cell.is-leaf,
 .el-table td.el-table__cell {
-  @include themeify {
-    border-color: theme('color-border-light');
-  }
+  border-color: var(--color-border-light);
+  @extend %themed;
 }
 
 .el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-light-gray');
-  }
+  background-color: var(--color-background-light-gray);
+  @extend %themed;
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-light-gray');
-  }
+  background-color: var(--color-background-light-gray);
+  @extend %themed;
 }
 
 .el-table::before, .el-table--group::after, .el-table--border::after {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-border-light');
-  }
+  background-color: var(--color-border-light);
+  @extend %themed;
 }

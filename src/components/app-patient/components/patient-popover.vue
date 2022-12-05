@@ -4,7 +4,7 @@
       <slot />
       <i @pointerdown.stop="toggle($event)" :class="['el-icon-caret-' + toggleIcon]" ref="iconRef" />
 
-      <ul class="patient-popover__content" v-show="visible">
+      <ul class="patient-popover__content" v-show="visible" @pointerdown.stop="noop">
         <slot name="content" />
       </ul>
     </div>
@@ -85,19 +85,16 @@ export default {
 <style lang="scss">
 .patient-popover {
   position: relative;
-  display: inline-block;
   z-index: 90;
+  display: inline-block;
   vertical-align: middle;
-  user-select: none;
   cursor: default;
 
   [class^='el-icon-'] {
     margin-left: 4px;
     font-size: 16px;
-    @include themed;
-    @include themeify {
-      color: theme('color-primary');
-    }
+    color: var(--color-primary);
+    @extend %themed;
   }
 }
 

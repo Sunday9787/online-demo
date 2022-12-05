@@ -47,3 +47,63 @@ $--color-border-light-dark: #555;
 /** table-border */
 $--table-border-light: 1px solid #dfe6ec;
 $--table-border-dark: 1px solid #dfe6ec;
+
+[data-theme="light"]:root {
+  --color-primary: #3D8AFF;
+  --color-white: #fff;
+
+  /** background */
+  --color-background: #fff;
+  --color-background-deep: #f0f0f0;
+  --color-background-light: #fff;
+  --color-background-light-gray: #FAFAFA;
+  --color-primary-light-1: #{$--color-primary-light-1-light};
+  --color-primary-light-2: #{$--color-primary-light-2-light};
+  --color-primary-light-3: #{$--color-primary-light-3-light};
+  --color-primary-light-4: #{$--color-primary-light-4-light};
+  --color-primary-light-5: #{$--color-primary-light-5-light};
+  --color-primary-light-6: #{$--color-primary-light-6-light};
+  --color-primary-light-7: #{$--color-primary-light-7-light};
+  --color-primary-light-8: #{$--color-primary-light-8-light};
+  --color-primary-light-9: #{$--color-primary-light-9-light};
+  --color-background-second: #fff;
+
+  /** text */
+  --color-text-regular: #1f2d3d;
+
+  /** border */
+  --color-border-light: #dfe4ed;
+
+  /** table-border */
+  --table-border: 1px solid #dfe6ec;
+}
+
+[data-theme="dark"]:root {
+  --color-primary: #3D8AFF;
+  --color-white: #373737;
+
+  /** background */
+  --color-background: #373737;
+  --color-background-deep: #212121;
+  --color-background-light: #444;
+  --color-background-light-gray: #494949;
+  --color-primary-light-1: #{$--color-primary-light-1-dark};
+  --color-primary-light-2: #{$--color-primary-light-2-dark};
+  --color-primary-light-3: #{$--color-primary-light-3-dark};
+  --color-primary-light-4: #{$--color-primary-light-4-dark};
+  --color-primary-light-5: #{$--color-primary-light-5-dark};
+  --color-primary-light-6: #{$--color-primary-light-6-dark};
+  --color-primary-light-7: #{$--color-primary-light-7-dark};
+  --color-primary-light-8: #{$--color-primary-light-8-dark};
+  --color-primary-light-9: #{$--color-primary-light-9-dark};
+  --color-background-second: #424242;
+
+  /** text */
+  --color-text-regular: #EAEAEA;
+
+  /** border */
+  --color-border-light: #555;
+
+  /** table-border */
+  --table-border: 1px solid #dfe6ec;
+}

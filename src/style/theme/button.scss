@@ -1,49 +1,39 @@
 .el-button {
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-    background-color: theme('color-background');
-    border-color: theme('color-border-light');
-  }
+  color: var(--color-text-regular);
+  background-color: var(--color-background);
+  border-color: var(--color-border-light);
+  @extend %themed;
 
   &:focus,
   &:hover {
-    @include themeify {
-      color: theme('color-primary');
-      background-color: theme('color-primary-light-9');
-      border-color: theme('color-primary-light-7');
-    }
+    color: var(--color-primary);
+    border-color: var(--color-primary-light-7);
+    background-color: var(--color-primary-light-9);
   }
 }
 
 .el-button--primary {
-  @include themeify {
-    color: #fff;
-    background-color: theme('color-primary');
-    border-color: theme('color-primary');
+  color: #fff;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
 
-    &:focus,
-    &:hover {
-      color: #fff;
-      background-color: theme('color-primary-light-1');
-      border-color: theme('color-primary-light-3');
-    }
+  &:focus,
+  &:hover {
+    color: #fff;
+    border-color: var(--color-primary-light-3);
+    background-color: var(--color-primary-light-1);
   }
 }
 
 .el-button--text {
-  @include themeify {
-    color: theme('color-primary');
-    background: transparent;
-    border-color: transparent;
-  }
+  color: var(--color-primary);
+  background: transparent;
+  border-color: transparent;
 
   &:focus,
   &:hover {
-    @include themeify {
-      color: theme('color-primary');
-      background: transparent;
-      border-color: transparent;
-    }
+    color: var(--color-primary);
+    background: transparent;
+    border-color: transparent;
   }
 }

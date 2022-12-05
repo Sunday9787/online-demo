@@ -76,11 +76,8 @@ export default {
 
 .patient-item {
   position: relative;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 }
 
 .patient-item__image {

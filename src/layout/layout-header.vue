@@ -74,9 +74,7 @@ export default {
 .layout-header {
   display: flex;
   align-items: center;
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 }
 </style>

@@ -3,12 +3,7 @@
     <div class="patient-data__head">
       <h4 class="patient-data__title">病例信息</h4>
 
-      <a
-        href="javascript:;"
-        class="el-icon-caret-bottom patient-data__toggle"
-        :class="{ toggle: visible }"
-        @click="toggle()"
-      />
+      <a href="javascript:;" :class="['el-icon-caret-' + toggleIcon]" @click="toggle()" />
     </div>
 
     <app-collapse-transition>
@@ -18,7 +13,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export default {
   name: 'PatientData',
@@ -27,10 +22,12 @@ export default {
     const toggle = function () {
       visible.value = !visible.value
     }
+    const toggleIcon = computed(() => (visible.value ? 'bottom' : 'top'))
 
     return {
       visible,
-      toggle
+      toggle,
+      toggleIcon
     }
   }
 }
@@ -48,11 +45,14 @@ export default {
   align-items: center;
   border-bottom-width: 1px;
   border-bottom-style: solid;
+  background-color: var(--color-background);
+  border-bottom-color: var(--color-border-light);
+  @extend %themed;
 
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-    border-bottom-color: theme('color-border-light');
+  [class^='el-icon-'] {
+    font-size: 20px;
+    @extend %themed;
+    color: var(--color-primary);
   }
 }
 
@@ -60,26 +60,10 @@ export default {
   flex: 1;
 }
 
-.patient-data__toggle {
-  transition-duration: 0.2s;
-  display: block;
-  width: 18px;
-  height: 18px;
-  font-size: 20px;
-  color: var(--color-primary);
-
-  &.toggle {
-    transform: rotate(180deg);
-  }
-}
-
 .patient-data__desc {
   height: 330px;
   min-width: 240px;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 }
 </style>

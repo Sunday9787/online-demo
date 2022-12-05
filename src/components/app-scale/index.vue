@@ -74,7 +74,7 @@ export default {
   height: 40px;
   border-radius: 50%;
 
-  @include themed;
+  @extend %themed;
   @include themeify {
     background-color: rgba(theme('color-primary'), 0.5);
 

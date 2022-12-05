@@ -20,16 +20,15 @@ body {
   font-size: 14px;
   font-weight: 500;
 
-  @include themed;
-  @include themeify {
-    color: theme('color-text-regular');
-  }
+  @extend %themed;
+  color: var(--color-text-regular);
 }
 
 
 a {
   color: inherit;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 img {

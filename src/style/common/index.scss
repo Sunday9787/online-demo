@@ -11,3 +11,7 @@
 .ellipsis {
   @include ellipsis;
 }
+
+.themed {
+  @include themed;
+}

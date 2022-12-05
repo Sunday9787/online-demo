@@ -44,10 +44,8 @@ export default {
 
 <style lang="scss">
 .layout-main {
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-deep');
-  }
+  background-color: var(--color-background-deep);
+  @extend %themed;
 }
 
 .layout-content {

@@ -117,7 +117,7 @@ export default {
     color: #fff;
 
     > i {
-      background: #3d8aff;
+      background: var(--color-primary);
     }
   }
 }
@@ -126,10 +126,7 @@ export default {
   overflow: hidden;
   position: relative;
   display: flex;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background');
-  }
+  background-color: var(--color-background);
+  @extend %themed;
 }
 </style>

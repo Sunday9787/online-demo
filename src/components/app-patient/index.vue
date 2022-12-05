@@ -61,11 +61,8 @@ export default {
   height: 100%;
   border: none;
   margin: 0;
-
-  @include themed;
-  @include themeify {
-    background-color: theme('color-background-deep');
-  }
+  background-color: var(--color-background-deep);
+  @extend %themed;
 }
 
 .patient-list-container {
