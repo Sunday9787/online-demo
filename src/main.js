@@ -5,6 +5,7 @@ import store from './store'
 import router from './router'
 import App from './App.vue'
 
+import Mixin from './mixins'
 import Components from './components'
 import Directive from './directive'
 
@@ -12,6 +13,7 @@ import './router/permission'
 import './style/index.scss'
 
 Vue.use(ElementUI)
+Vue.use(Mixin)
 Vue.use(Components)
 Vue.use(Directive)
 
