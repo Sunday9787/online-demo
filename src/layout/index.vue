@@ -21,7 +21,7 @@ export default {
   name: 'AppLayout',
   props: {
     offset: {
-      type: Boolean,
+      type: [Boolean, Array],
       default: true
     }
   },
@@ -32,6 +32,16 @@ export default {
   computed: {
     ...mapGetters('appModule', ['currentMechanism']),
     mainStyle() {
+      if (Array.isArray(this.offset)) {
+        const [y, x] = this.offset
+        return {
+          paddingLeft: x,
+          paddingRight: x,
+          paddingTop: y,
+          paddingBottom: y
+        }
+      }
+
       if (this.offset) {
         return { padding: '20px' }
       }

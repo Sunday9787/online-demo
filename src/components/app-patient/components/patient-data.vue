@@ -7,7 +7,13 @@
     </div>
 
     <app-collapse-transition>
-      <section class="patient-data__desc" v-show="visible"> 666 </section>
+      <section
+        class="patient-data__desc"
+        :class="{ 'has-org': hasOrg, 'has-advanced-search': hasAdvancedSearch }"
+        v-show="visible"
+      >
+        666
+      </section>
     </app-collapse-transition>
   </section>
 </template>
@@ -17,6 +23,16 @@ import { ref, computed } from 'vue'
 
 export default {
   name: 'PatientData',
+  props: {
+    hasAdvancedSearch: {
+      type: Boolean,
+      default: false
+    },
+    hasOrg: {
+      type: Boolean,
+      default: false
+    }
+  },
   setup() {
     const visible = ref(true)
     const toggle = function () {
@@ -62,8 +78,16 @@ export default {
 
 .patient-data__desc {
   height: 330px;
-  min-width: 240px;
+  width: 240px;
   background-color: var(--color-background);
   @extend %themed;
+
+  &.has-org {
+    width: calc(240px - 38px);
+  }
+
+  &.has-advanced-search {
+    width: 240px;
+  }
 }
 </style>

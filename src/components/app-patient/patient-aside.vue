@@ -61,7 +61,7 @@ export default {
 
 .patient-tab {
   position: relative;
-  width: 280px;
+  width: 240px;
   height: 50px;
 }
 

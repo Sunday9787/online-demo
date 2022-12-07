@@ -5,7 +5,7 @@
         <li v-for="(item, index) in glassSlide" :key="index" class="glass-cell">
           <label class="glass-label">{{ item.name }}：</label>
 
-          <PatientPopover popover-class="glass-popover" :width="50" :height="24" v-if="index === glassSlide.length - 1">
+          <PatientPopover popover-class="glass-popover" :width="60" :height="24" v-if="index === glassSlide.length - 1">
             <span>{{ item.value[0] }}</span>
             <PatientPopoverItem v-for="(value, id) in item.value" :key="id" slot="content">{{
               value
@@ -15,11 +15,11 @@
         </li>
       </ul>
 
-      <ul class="patient-toolbar-list">
-        <li v-for="(item, index) in glassSlide" :key="index" class="glass-cell">
+      <ul class="patient-toolbar-list column-2">
+        <li v-for="(item, index) in karyotype" :key="index" class="glass-cell">
           <label class="glass-label">{{ item.name }}：</label>
 
-          <PatientPopover popover-class="glass-popover" :width="50" :height="24" v-if="index === glassSlide.length - 1">
+          <PatientPopover popover-class="glass-popover" :width="60" :height="24" v-if="index === karyotype.length - 1">
             <span>{{ item.value[0] }}</span>
             <PatientPopoverItem v-for="(value, id) in item.value" :key="id" slot="content">{{
               value
@@ -42,14 +42,15 @@
 <script>
 import PatientPopover from './patient-popover.vue'
 import PatientPopoverItem from './patient-popover-item.vue'
-import { glassSlide } from '@/mock/patient'
+import { glassSlide, karyotype } from '@/mock/patient'
 
 export default {
   name: 'PatientToolbar',
   components: { PatientPopover, PatientPopoverItem },
   setup() {
     return {
-      glassSlide: glassSlide.data
+      glassSlide: glassSlide.data,
+      karyotype: karyotype.data
     }
   }
 }
@@ -70,6 +71,10 @@ export default {
   gap: 4px;
   margin: 0;
   font-size: 12px;
+
+  &.column-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 %glass-popover {
@@ -92,18 +97,23 @@ export default {
   position: relative;
 }
 
-.glass-label {
+%glass-label {
   display: inline-block;
   vertical-align: middle;
+}
+
+.glass-label {
   width: 50px;
+  @extend %glass-label;
 }
 
 .glass-value {
   padding-right: 10px;
   height: 24px;
+  width: 60px;
   cursor: default;
   background-color: var(--color-background-deep);
-  @extend .glass-label;
+  @extend %glass-label;
   @extend %glass-popover;
   @extend %themed;
 }

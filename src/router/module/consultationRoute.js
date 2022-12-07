@@ -10,7 +10,7 @@ const route = {
   meta: { title: '会诊' },
   component: Layout,
   props: {
-    offset: false
+    offset: ['12px', '16px']
   },
   children: [
     {

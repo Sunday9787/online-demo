@@ -37,3 +37,16 @@ export const glassSlide = Mock.mock({
     }
   ]
 })
+
+/**
+ * @type {{data: {name: string, id: number, value: number[]}[]}}
+ */
+export const karyotype = Mock.mock({
+  'data|4': [
+    {
+      name: '@ctitle(3)',
+      id: '@integer(1, 100)',
+      'value|1-10': ['@integer(1, 100)']
+    }
+  ]
+})

@@ -77,7 +77,8 @@ export default defineConfig({
   },
   esbuild: {
     jsxFactory: 'h',
-    jsxFragment: 'Fragment'
+    jsxFragment: 'Fragment',
+    pure: ['console.log']
   },
   css: {
     devSourcemap: true,

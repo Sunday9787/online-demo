@@ -14,14 +14,14 @@ const directionMap = {
    * @returns {[string, string]}
    */
   horizontal(gap) {
-    return ['100%', gap + 'px']
+    return ['100%', `${gap}px`, `0 0 ${gap}px`]
   },
   /**
    * @param {number} gap
    * @returns {[string, string]}
    */
   vertical(gap) {
-    return [gap + 'px', '100%']
+    return [`${gap}px`, '100%', `0 0 ${gap}px`]
   }
 }
 
@@ -47,9 +47,9 @@ export default {
     }
   },
   setup(props) {
-    const [width, height] = directionMap[props.direction](props.gap)
+    const [width, height, flex] = directionMap[props.direction](props.gap)
 
-    return { style: { width, height } }
+    return { style: { width, height, flex } }
   }
 }
 </script>

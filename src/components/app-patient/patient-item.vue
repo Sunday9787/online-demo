@@ -1,26 +1,69 @@
 <template>
   <el-form size="small" class="patient-pane">
-    <el-row v-show="advancedSearchVisible" class="patient-advanced-search">
-      <el-form-item prop="startTime">
-        <el-date-picker
-          v-model="dateTime"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        />
-      </el-form-item>
-    </el-row>
+    <app-collapse-transition :visible="advancedSearchVisible" :size="240" tag="section" direction="horizontal">
+      <el-row class="patient-advanced-search">
+        <h4 class="patient-advanced-search__title">病例筛选</h4>
+        <ul class="patient-advanced-search__items">
+          <li class="patient-advanced-search__item">
+            <div class="patient-advanced-search__label">排序</div>
 
-    <ul v-show="!local" class="patient-pane-org">
+            <ol class="patient-advanced-search__inner">
+              <li><el-button size="medium">导入时间：远-近</el-button></li>
+              <li><el-button size="medium">导入时间：近-远</el-button></li>
+              <li><el-button size="medium">病例号：A-Z</el-button></li>
+              <li><el-button size="medium">病例号：Z-A</el-button></li>
+            </ol>
+          </li>
+          <li class="patient-advanced-search__item">
+            <div class="patient-advanced-search__label">上传时间</div>
+
+            <ol class="patient-advanced-search__inner">
+              <li>
+                <el-form-item prop="startTime">
+                  <el-date-picker
+                    v-model="dateTime"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    style="width: 100%"
+                  />
+                </el-form-item>
+              </li>
+            </ol>
+          </li>
+          <li class="patient-advanced-search__item">
+            <div class="patient-advanced-search__label">报告状态</div>
+
+            <ol class="patient-advanced-search__inner">
+              <li><el-button size="medium">未出报告</el-button></li>
+              <li><el-button size="medium">已出报告</el-button></li>
+            </ol>
+          </li>
+          <li class="patient-advanced-search__item">
+            <div class="patient-advanced-search__label">复检状态</div>
+
+            <ol class="patient-advanced-search__inner">
+              <li><el-button size="medium">需复检</el-button></li>
+            </ol>
+          </li>
+        </ul>
+      </el-row>
+    </app-collapse-transition>
+
+    <ul v-show="!advancedSearchVisible && !local" class="patient-pane-org">
       <li v-for="(item, k) in organization.data" :key="k" class="patient-pane-org__item">
         {{ item.name | formatFirstName }}<span></span>
       </li>
     </ul>
 
-    <PatientGap direction="vertical" />
+    <PatientGap direction="vertical" v-if="advancedSearchVisible || !local" />
 
-    <el-container direction="vertical" class="patient-pane__inner">
+    <el-container
+      direction="vertical"
+      class="patient-pane__inner"
+      :class="{ 'has-org': !local, 'has-advanced-search': advancedSearchVisible }"
+    >
       <el-form-item prop="patientNo">
         <div class="patient-pane__search">
           <a class="el-icon-s-operation" href="javascript:;" @click="advancedSearchToggle()" />
@@ -45,7 +88,7 @@
 
       <PatientGap />
 
-      <PatientData />
+      <PatientData :hasOrg="!local" :hasAdvancedSearch="advancedSearchVisible" />
     </el-container>
   </el-form>
 </template>
@@ -139,12 +182,41 @@ export default Vue.extend({
 }
 
 .patient-pane__inner {
-  width: 260px;
+  width: 240px;
   padding-top: 20px;
+
+  &.has-org {
+    width: calc(240px - 38px);
+  }
+
+  &.has-advanced-search {
+    width: 240px;
+  }
 }
 
 .patient-advanced-search {
   padding-top: 20px;
+  width: 240px;
+}
+
+.patient-advanced-search__items {
+  margin: 0;
+  padding: 0 20px;
+}
+
+.patient-advanced-search__item {
+}
+
+.patient-advanced-search__label {
+  padding: 10px 0;
+}
+
+.patient-advanced-search__inner {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  row-gap: 8px;
 }
 
 .patient-pane__search {
