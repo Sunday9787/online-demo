@@ -19,9 +19,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   font-weight: 500;
-
-  @extend %themed;
   color: var(--color-text-regular);
+  @extend %themed;
 }
 
 

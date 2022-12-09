@@ -130,6 +130,12 @@ const module = {
       }
 
       return state.organization.mechanismList[0]
+    },
+    isDarkModel(state) {
+      return state.theme.model === 'dark'
+    },
+    isLightModel(state) {
+      return state.theme.model === 'light'
     }
   },
   mutations: {

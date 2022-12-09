@@ -13,6 +13,22 @@ export const patientList = Mock.mock({
 })
 
 /**
+ * @type {{data: Patient.List[]}}
+ */
+export const patients = Mock.mock({
+  'data|20-50': [
+    {
+      id: '@id',
+      patientName: '@cword(4,8)',
+      glassSlide: '@character(upper)@character(upper)@integer(1000, 9999)',
+      arrayedFig: '@image(600x600)',
+      countNum: '@integer(1,100)',
+      karyotypeExpression: '@word(1)@integer(10,20)/@integer(0,9)-@integer(100,200) @integer(300, 400)'
+    }
+  ]
+})
+
+/**
  * @type {{data: {name: string, id: number}[]}}
  */
 export const organization = Mock.mock({
@@ -29,7 +45,7 @@ export const organization = Mock.mock({
  * @type {{data: {name: string, id: number, value: number[]}[]}}
  */
 export const glassSlide = Mock.mock({
-  'data|5-8': [
+  'data|4': [
     {
       name: '@ctitle(3)',
       id: '@integer(1, 100)',

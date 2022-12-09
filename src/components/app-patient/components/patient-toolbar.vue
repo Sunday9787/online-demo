@@ -1,6 +1,6 @@
 <template>
   <el-row type="flex" class="patient-toolbar">
-    <el-row type="flex" style="column-gap: 4px">
+    <el-row type="flex">
       <ul class="patient-toolbar-list">
         <li v-for="(item, index) in glassSlide" :key="index" class="glass-cell">
           <label class="glass-label">{{ item.name }}：</label>
@@ -15,8 +15,26 @@
         </li>
       </ul>
 
-      <ul class="patient-toolbar-list column-2">
-        <li v-for="(item, index) in karyotype" :key="index" class="glass-cell">
+      <div class="toolbar-gap" />
+
+      <ul class="patient-toolbar-list">
+        <li v-for="(item, index) in glassSlide" :key="index" class="glass-cell">
+          <label class="glass-label">{{ item.name }}：</label>
+
+          <PatientPopover popover-class="glass-popover" :width="50" :height="24" v-if="index === glassSlide.length - 1">
+            <span>{{ item.value[0] }}</span>
+            <PatientPopoverItem v-for="(value, id) in item.value" :key="id" slot="content">{{
+              value
+            }}</PatientPopoverItem>
+          </PatientPopover>
+          <span class="glass-value" v-else>{{ item.value[0] }}个</span>
+        </li>
+      </ul>
+
+      <div class="toolbar-gap" />
+
+      <ul class="patient-toolbar-list">
+        <li v-for="(item, index) in glassSlide" :key="index" class="glass-cell">
           <label class="glass-label">{{ item.name }}：</label>
 
           <PatientPopover popover-class="glass-popover" :width="60" :height="24" v-if="index === karyotype.length - 1">
@@ -58,8 +76,15 @@ export default {
 
 <style lang="scss">
 .patient-toolbar {
-  padding: 5px 10px;
+  padding: 10px;
   background-color: var(--color-background);
+  @extend %themed;
+}
+
+.toolbar-gap {
+  margin: 12px 10px;
+  width: 2px;
+  background-color: var(--color-toolbar-gap);
   @extend %themed;
 }
 
@@ -67,7 +92,7 @@ export default {
   position: relative;
   display: grid;
   grid-template-rows: repeat(2, 24px);
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 4px;
   margin: 0;
   font-size: 12px;
