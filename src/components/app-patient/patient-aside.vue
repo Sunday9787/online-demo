@@ -61,7 +61,7 @@ export default {
 
 .patient-tab {
   position: relative;
-  width: 240px;
+  width: 264px;
   height: 50px;
 }
 
@@ -126,6 +126,7 @@ export default {
   overflow: hidden;
   position: relative;
   display: flex;
+  border-radius: 0 12px 12px 12px;
   background-color: var(--color-background);
   @extend %themed;
 }

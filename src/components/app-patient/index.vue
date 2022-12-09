@@ -2,9 +2,9 @@
   <el-container class="app-patient">
     <PatientAside />
 
-    <el-container>
-      <PatientGap :gap="12" direction="vertical" />
+    <PatientGap :gap="12" direction="vertical" />
 
+    <el-container>
       <el-container direction="vertical">
         <PatientToolbar />
 

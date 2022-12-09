@@ -51,44 +51,42 @@
       </el-row>
     </app-collapse-transition>
 
-    <ul v-show="!advancedSearchVisible && !local" class="patient-pane-org">
-      <li v-for="(item, k) in organization.data" :key="k" class="patient-pane-org__item">
-        {{ item.name | formatFirstName }}<span></span>
-      </li>
-    </ul>
-
-    <PatientGap direction="vertical" v-if="advancedSearchVisible || !local" />
-
-    <el-container
-      direction="vertical"
-      class="patient-pane__inner"
-      :class="{ 'has-org': !local, 'has-advanced-search': advancedSearchVisible }"
-    >
-      <el-form-item prop="patientNo">
-        <div class="patient-pane__search">
-          <a class="el-icon-s-operation" href="javascript:;" @click="advancedSearchToggle()" />
-          <el-input v-model="form.patientNo" placeholder="请输入病例号" />
-        </div>
-      </el-form-item>
-
-      <el-container class="patient-pane__content">
-        <ul class="patient-pane-list">
-          <li v-for="(item, k) in patientList.data" :key="k" class="patient-pane-list-item">
-            <i class="el-icon-s-order" />
-
-            <div class="patient-pane__name" :title="item.name">{{ item.name | formatFirstName }}</div>
-
-            <div class="patient-pane__status">
-              <i class="el-icon-info" />
-              <i class="el-icon-question" />
-            </div>
+    <el-container direction="vertical">
+      <el-container style="overflow: hidden">
+        <ul v-show="!advancedSearchVisible && !local" class="patient-pane-org">
+          <li v-for="(item, k) in organization.data" :key="k" class="patient-pane-org__item">
+            {{ item.name | formatFirstName }}<span></span>
           </li>
         </ul>
+
+        <el-container direction="vertical" class="patient-pane__inner">
+          <el-form-item prop="patientNo">
+            <div class="patient-pane__search">
+              <a class="el-icon-s-operation" href="javascript:;" @click="advancedSearchToggle()" />
+              <el-input v-model="form.patientNo" placeholder="请输入病例号" />
+            </div>
+          </el-form-item>
+
+          <el-container class="patient-pane__content">
+            <ul class="patient-pane-list">
+              <li v-for="(item, k) in patientList.data" :key="k" class="patient-pane-list-item">
+                <i class="el-icon-s-order" />
+
+                <div class="patient-pane__name" :title="item.name">{{ item.name | formatFirstName }}</div>
+
+                <div class="patient-pane__status">
+                  <i class="el-icon-info" />
+                  <i class="el-icon-question" />
+                </div>
+              </li>
+            </ul>
+          </el-container>
+        </el-container>
+
+        <PatientGap />
       </el-container>
 
-      <PatientGap />
-
-      <PatientData :hasOrg="!local" :hasAdvancedSearch="advancedSearchVisible" />
+      <PatientData />
     </el-container>
   </el-form>
 </template>
@@ -161,7 +159,7 @@ export default Vue.extend({
 
 .patient-pane-org {
   overflow-y: auto;
-  width: 38px;
+  width: 48px;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -171,7 +169,6 @@ export default Vue.extend({
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 15px;
   height: 30px;
   cursor: pointer;
 
@@ -182,21 +179,13 @@ export default Vue.extend({
 }
 
 .patient-pane__inner {
-  width: 240px;
   padding-top: 20px;
-
-  &.has-org {
-    width: calc(240px - 38px);
-  }
-
-  &.has-advanced-search {
-    width: 240px;
-  }
 }
 
 .patient-advanced-search {
   padding-top: 20px;
-  width: 240px;
+  height: 100%;
+  border-right: 2px solid var(--color-background-deep);
 }
 
 .patient-advanced-search__items {

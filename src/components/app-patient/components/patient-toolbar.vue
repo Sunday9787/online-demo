@@ -77,6 +77,7 @@ export default {
 <style lang="scss">
 .patient-toolbar {
   padding: 10px;
+  border-radius: 12px;
   background-color: var(--color-background);
   @extend %themed;
 }
