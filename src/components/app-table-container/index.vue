@@ -1,10 +1,10 @@
 <template>
-  <div class="app-table-container" :style="tableContainerStyle">
-    <el-row class="app-table-button-group" :style="{ height: groupHeight + 'px' }" v-if="$slots.action">
+  <div class="app-table-container">
+    <el-row class="app-table-button-group" v-if="$slots.action">
       <slot name="action" />
     </el-row>
 
-    <el-row class="app-table__inner" :style="innerStyle">
+    <el-row class="app-table__inner">
       <slot />
     </el-row>
   </div>
@@ -19,24 +19,6 @@ export default {
       type: Number,
       default: 32
     }
-  },
-  computed: {
-    innerStyle() {
-      if (this.$slots.action) {
-        return {
-          height: `calc(100% - (${this.groupHeight}px))`
-        }
-      }
-
-      return { height: '100%' }
-    },
-    tableContainerStyle() {
-      if (this.dataView.pagination) {
-        return { height: 'calc(100% - 44px)' }
-      }
-
-      return { height: '100%' }
-    }
   }
 }
 </script>
@@ -44,6 +26,15 @@ export default {
 <style lang="scss">
 .app-table-container {
   position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.app-table__inner {
+  overflow: hidden;
+  flex: 1;
 }
 
 .app-table-container + .app-pagination,

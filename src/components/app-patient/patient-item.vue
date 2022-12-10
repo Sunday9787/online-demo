@@ -83,7 +83,7 @@
           </el-container>
         </el-container>
 
-        <PatientGap />
+        <app-gap />
       </el-container>
 
       <PatientData />
@@ -95,7 +95,6 @@
 import Vue from 'vue'
 import { request } from '@/util/net'
 import PatientData from './components/patient-data.vue'
-import PatientGap from './components/patient-gap.vue'
 import * as mockData from '@/mock/patient'
 
 import pageMixin from '@/mixins/page'
@@ -121,7 +120,7 @@ export default Vue.extend({
       }
     })
   ],
-  components: { PatientData, PatientGap },
+  components: { PatientData },
   props: {
     local: {
       type: Boolean,

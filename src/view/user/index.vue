@@ -1,63 +1,46 @@
 <template>
-  <app-page>
-    <app-card>
-      <h1>User</h1>
-      <app-form-tab v-model="activeName">
-        <app-form-tab-pane title="labelOne" name="one"> 1111 </app-form-tab-pane>
-        <app-form-tab-pane title="labelTwo" name="two"> 222 </app-form-tab-pane>
-      </app-form-tab>
-      <svg id="table" />
-    </app-card>
+  <app-page direction="horizontal">
+    <app-page-aside title="机构管理" v-model="tabActive" :menu="menu" />
+
+    <app-gap direction="vertical" :gap="12" />
+
+    <component :is="tabActive" />
   </app-page>
 </template>
 
 <script>
-import * as d3 from 'd3'
+import { ref } from 'vue'
 
 export default {
   name: 'UserIndex',
-  data() {
-    return {
-      activeName: 'two'
-    }
+  components: {
+    info: () => import('./components/info.vue'),
+    member: () => import('./components/member.vue'),
+    wallet: () => import('./components/wallet.vue'),
+    reportTemplate: () => import('./components/reportTemplate.vue'),
+    globalSetting: () => import('./components/globalSetting.vue'),
+    operationLog: () => import('./components/operationLog.vue'),
+    transactionLog: () => import('./components/transactionLog.vue'),
+    autoUpload: () => import('./components/autoUpload.vue')
   },
-  mounted() {
-    const defs = d3.select('#table').append('defs')
-    d3.select('#table').attr('height', '500px').attr('width', '500px')
-    defs
-      .append('pattern')
-      .attr('id', 'smallGrid')
-      .attr('width', 10)
-      .attr('height', 10)
-      .attr('patternUnits', 'userSpaceOnUse')
-      .append('path')
-      .attr('d', 'M 10 0 L 0 0 L 0 10')
-      .attr('fill', 'none')
-      .attr('stroke-width', 1)
-      .attr('stroke', 'rgba(207, 207, 207, 0.3)')
-    const gridPattern = defs
-      .append('pattern')
-      .attr('id', 'grid')
-      .attr('width', 50)
-      .attr('height', 50)
-      .attr('patternUnits', 'userSpaceOnUse')
+  setup() {
+    const menu = [
+      { label: '机构信息', name: 'info' },
+      { label: '成员管理', name: 'member' },
+      { label: '机构信息', name: 'wallet' },
+      { label: '报告模板', name: 'reportTemplate' },
+      { label: '全局设置', name: 'globalSetting' },
+      { label: '操作日志', name: 'operationLog' },
+      { label: '交易日志', name: 'transactionLog' },
+      { label: '自动上传', name: 'autoUpload' }
+    ]
 
-    gridPattern.append('rect').attr('width', 50).attr('height', 50).attr('fill', 'url(#smallGrid)')
+    const tabActive = ref('info')
 
-    gridPattern
-      .append('path')
-      .attr('d', 'M 50 0 L 0 0 L 0 50')
-      .attr('fill', 'none')
-      .attr('stroke-width', 1)
-      .attr('stroke', 'rgba(186, 186, 186, 0.5)')
-
-    d3.select('#table').append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'url(#grid)')
-    d3.select('#table')
-      .append('path')
-      .attr('d', 'M 500 0 L 500 500 L 0 500')
-      .attr('fill', 'none')
-      .attr('stroke-width', 1)
-      .attr('stroke', 'rgba(186, 186, 186, 0.5)')
+    return {
+      menu,
+      tabActive
+    }
   }
 }
 </script>

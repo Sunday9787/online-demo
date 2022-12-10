@@ -105,11 +105,9 @@
     </app-card>
 
     <app-data-view pagination>
-      <transition name="fade-enter">
-        <keep-alive>
-          <component :is="activeName" />
-        </keep-alive>
-      </transition>
+      <keep-alive>
+        <component :is="activeName" />
+      </keep-alive>
     </app-data-view>
   </app-page>
 </template>

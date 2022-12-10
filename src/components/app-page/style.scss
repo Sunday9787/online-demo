@@ -1,5 +1,12 @@
 .app-page {
   display: flex;
-  flex-direction: column;
   height: 100%;
+
+  &.is-vertical {
+    flex-direction: column;
+  }
+
+  &.is-horizontal {
+    flex-direction: row;
+  }
 }

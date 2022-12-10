@@ -5,6 +5,12 @@ import './style.scss'
  */
 export default {
   name: 'AppPage',
+  props: {
+    direction: {
+      type: String,
+      default: 'vertical'
+    }
+  },
   data() {
     return {
       loading: true
@@ -17,7 +23,7 @@ export default {
   },
   render(h) {
     return (
-      <div class='app-page' v-loading={this.loading}>
+      <div class={['app-page', 'is-' + this.direction]} v-loading={this.loading}>
         {this.$slots.default}
       </div>
     )

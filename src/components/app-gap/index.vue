@@ -1,5 +1,5 @@
 <template>
-  <hr class="patient-aside-gap" :style="style" />
+  <hr class="app-gap" :style="style" />
 </template>
 
 <script>
@@ -29,7 +29,7 @@ const directionMap = {
  * @type {Vue.Component<Vue>}
  */
 export default {
-  name: 'PatientGap',
+  name: 'AppGap',
   props: {
     gap: {
       type: Number,
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss">
-.patient-aside-gap {
+.app-gap {
   margin: 0;
   border: none;
   background-color: var(--color-background-deep);

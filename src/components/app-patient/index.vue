@@ -2,7 +2,7 @@
   <el-container class="app-patient">
     <PatientAside />
 
-    <PatientGap :gap="12" direction="vertical" />
+    <app-gap :gap="12" direction="vertical" />
 
     <el-container>
       <el-container direction="vertical">
@@ -31,7 +31,6 @@ import PatientAside from './patient-aside.vue'
 import PatientGridModel, { maxScale } from './components/patient-grid-model.vue'
 import PatientListModel from './components/patient-list-model.vue'
 import PatientToolbar from './components/patient-toolbar.vue'
-import PatientGap from './components/patient-gap.vue'
 import PatientModelSwitch from './components/patient-model-switch.vue'
 
 import * as mockData from '@/mock/patient'
@@ -43,7 +42,6 @@ export default {
     PatientGridModel,
     PatientListModel,
     PatientToolbar,
-    PatientGap,
     PatientModelSwitch
   },
   setup() {
