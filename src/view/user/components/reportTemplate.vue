@@ -2,9 +2,9 @@
   <app-data-view pagination>
     <app-table-container>
       <template slot="action">
-        <el-button size="small" type="primary">导出病例</el-button>
-        <el-button size="small" type="primary">导出EXCEL</el-button>
-        <el-button size="small" type="primary">专家会诊</el-button>
+        <router-link to="/template/action?type=create">
+          <el-button size="small" type="primary">创建模板</el-button>
+        </router-link>
       </template>
 
       <el-table ref="table" :data="table.data" v-loading="table.loading" height="100%" stripe>

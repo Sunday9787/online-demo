@@ -5,6 +5,7 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import legacy from '@vitejs/plugin-legacy'
 import viteCompression from 'vite-plugin-compression'
 import { manualChunksPlugin } from 'vite-plugin-webpackchunkname'
+import vuePugPlugin from 'vue-pug-plugin'
 import cssnano from 'cssnano'
 import themePlugin from './plugin/theme'
 
@@ -22,7 +23,13 @@ export default defineConfig({
     }
   },
   plugins: [
-    vue2Plugin(),
+    vue2Plugin({
+      template: {
+        preprocessOptions: {
+          plugins: [vuePugPlugin]
+        }
+      }
+    }),
     createHtmlPlugin({
       minify: true,
       entry: '/src/main.js',

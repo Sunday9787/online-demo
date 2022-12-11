@@ -58,3 +58,11 @@ export function isInteger(value) {
 export function validMobile(str) {
   return /^1[3-9]\d{9}$/.test(str)
 }
+
+export function isMac() {
+  return /macintosh|mac os x/i.test(navigator.userAgent)
+}
+
+export function isWin() {
+  return /win/i.test(navigator.userAgent)
+}

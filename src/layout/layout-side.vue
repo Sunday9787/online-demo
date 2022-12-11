@@ -19,7 +19,7 @@ export default {
     const router = useRouter()
     const route = useRoute()
 
-    const routes = router.options.routes.filter(item => item.meta && item.meta.title)
+    const routes = router.options.routes.filter(item => item.meta && !item.meta.hidden)
     const activeMenu = computed(() => route.meta.activeMenu)
 
     return { routes, activeMenu }
