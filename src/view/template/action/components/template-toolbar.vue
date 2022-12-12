@@ -1,5 +1,8 @@
 <template lang="pug">
-  aside.template-toolbar
+  header.template-toolbar
+    el-button(primary) 清空画布
+    el-button(primary) 导入模板
+    el-button(primary) 模板属性
 </template>
 
 <script>
@@ -11,6 +14,6 @@ export default {
 
 <style lang="scss">
 .template-toolbar {
-  width: 250px;
+  position: relative;
 }
 </style>

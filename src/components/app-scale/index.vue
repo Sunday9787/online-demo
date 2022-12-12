@@ -20,13 +20,25 @@ export default {
       type: Object,
       default: () => ({ right: '20px', bottom: '20px' })
     },
+    step: {
+      type: Number,
+      default: 1
+    },
     scale: {
       type: Number,
       required: true
     },
+    miniScale: {
+      type: Number,
+      default: 1
+    },
     maxScale: {
       type: Number,
       default: 6
+    },
+    natural: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props) {
@@ -36,15 +48,31 @@ export default {
   },
   methods: {
     minus() {
+      if (this.natural) {
+        this._plus()
+        return
+      }
+
+      this._minus()
+    },
+    _minus() {
       if (this.currentScale < this.maxScale) {
-        this.currentScale += 1
+        this.currentScale += this.step
         this.$emit('update:scale', this.currentScale)
         this.$emit('change', this.currentScale)
       }
     },
     plus() {
-      if (this.currentScale >= 1) {
-        this.currentScale -= 1
+      if (this.natural) {
+        this._minus()
+        return
+      }
+
+      this._plus()
+    },
+    _plus() {
+      if (this.currentScale > this.miniScale) {
+        this.currentScale -= this.step
         this.$emit('update:scale', this.currentScale)
         this.$emit('change', this.currentScale)
       }

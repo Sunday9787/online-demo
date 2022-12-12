@@ -1,16 +1,16 @@
 <template lang="pug">
-  aside.template-aside
+  aside.template-property
 </template>
 
 <script>
 export default {
-  name: 'TemplateAside',
+  name: 'TemplateProperty',
   setup() {}
 }
 </script>
 
 <style lang="scss">
-.template-aside {
-  width: 326px;
+.template-property {
+  width: 242px;
 }
 </style>

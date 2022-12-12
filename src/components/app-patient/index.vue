@@ -14,7 +14,7 @@
         </el-row>
 
         <section class="patient-list-container">
-          <app-scale :scale.sync="scale" :max-scale="maxScale" v-show="isThumbnail" />
+          <app-scale :scale.sync="scale" :max-scale="maxScale" :mini-scale="0" :natural="false" v-show="isThumbnail" />
           <keep-alive>
             <PatientGridModel :data="patients" :scale="scale" v-if="isThumbnail" />
             <PatientListModel :data="patients" v-else />
