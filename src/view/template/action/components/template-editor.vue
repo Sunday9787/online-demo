@@ -1,89 +1,115 @@
 <template lang="pug">
   main.template-editor
-    div.template-stage(
-      tabindex="-1"
-      ref="stage"
-      :style="{ width: size.width + 'px', height: size.height + 'px', position: 'absolute', left: offsetPosition(x, boundingClientRect.x) + 'px', top: offsetPosition(y, boundingClientRect.y) + 'px' }"
-      @keydown.space.exact="keydownHandle"
-      @keyup.space.exact="keyupHandle"
-    )
-      TemplateSprite(:size="size", :scale="scale / 100")
-    app-scale(:scale.sync="scale", :max-scale="200", :mini-scale="20", :step="5")
+    section.template-canvas(ref="canvas")
+      div.template-stage(
+        tabindex="-1"
+        ref="stage"
+        :style="stageStyle"
+        @keydown.space.exact="spaceDownHandle"
+        @keyup.space.exact="spaceUpHandle")
+    app-scale(
+      :scale.sync="scale"
+      :max-scale="200"
+      :mini-scale="20"
+      :step="5")
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useDraggable } from '@vueuse/core'
 import { useSize } from '@/view/template/hooks/size'
 import { useStore } from '@/hooks/useStore'
-import { useBoundingClientRect } from '@/view/template/hooks/dom'
-import TemplateSprite from './template-sprite.vue'
 
 export default {
   name: 'TemplateEditor',
-  components: {
-    TemplateSprite
-  },
   setup() {
     const store = useStore('globalModule')
-    const { A4: size } = useSize()
-    const stage = ref(null)
-    const keyUp = ref(false)
-    const keyDown = ref(false)
-    const scale = ref(100)
-    const { boundingClientRect } = useBoundingClientRect(stage)
-    const { x, y } = useDraggable(stage, {
-      onStart(position, event) {
-        if (keyDown.value) {
-          console.log('onStart', position, event)
-          return
-        }
-
-        return false
-      },
-      onMove(position, event) {
-        console.log('onMove', position, event)
-      }
-    })
+    const { A5: size } = useSize()
 
     store.commit('updateSize', size)
-    console.log(store.state)
-
-    /**
-     * @param {KeyboardEvent} e
-     */
-    const keydownHandle = function (e) {
-      /** @type {HTMLDivElement} */
-      const target = e.target
-      target.style.cursor = 'grab'
-      keyUp.value = false
-      keyDown.value = true
+    return { size }
+  },
+  data() {
+    return {
+      /** 缩放比例 */
+      scale: 100,
+      /** 空格是否按下 */
+      spaceDown: false,
+      /** 相对父级偏移量 */
+      position: { x: 0, y: 0 },
+      /** 相对父级偏移量 */
+      stagePosition: null
     }
-
-    /**
-     * @param {KeyboardEvent} e
-     */
-    const keyupHandle = function (e) {
-      /** @type {HTMLDivElement} */
-      const target = e.target
-      target.style.cursor = 'grabbing'
-      keyUp.value = true
-      keyDown.value = false
-    }
-
-    /**
-     * @param {number} position
-     * @param {number} offset
-     */
-    const offsetPosition = function (position, offset) {
-      if (position) {
-        return position - offset
+  },
+  computed: {
+    stageStyle() {
+      return {
+        width: this.size.width + 'px',
+        height: this.size.height + 'px',
+        left: this.position.x + 'px',
+        top: this.position.y + 'px',
+        transformOrigin: 'center',
+        transform: `scale3d(${this.scale / 100}, ${this.scale / 100}, 1)`
       }
-
-      return 0
+    }
+  },
+  mounted() {
+    const context = this
+    /**
+     * @param {PointerEvent} e
+     */
+    const pointerdown = function (e) {
+      if (context.spaceDown) {
+        /**
+         * @type {HTMLDivElement}
+         */
+        const currentTarget = e.currentTarget
+        context.stagePosition = {
+          x: e.clientX - currentTarget.offsetLeft,
+          y: e.clientY - currentTarget.offsetTop
+        }
+      }
     }
 
-    return { size, scale, stage, x, y, keyupHandle, keydownHandle, boundingClientRect, offsetPosition }
+    /**
+     * @param {PointerEvent} e
+     */
+    const pointermove = function (e) {
+      if (context.stagePosition) {
+        context.position.x = e.clientX - context.stagePosition.x
+        context.position.y = e.clientY - context.stagePosition.y
+      }
+    }
+
+    /**
+     * @param {PointerEvent} e
+     */
+    const pointerup = function (e) {
+      context.stagePosition = null
+    }
+
+    this.$refs.stage.addEventListener('pointerdown', pointerdown)
+    window.addEventListener('pointermove', pointermove)
+    window.addEventListener('pointerup', pointerup)
+
+    this.$once('hook:beforeDestroy', function () {
+      context.$refs.stage.removeEventListener('pointerdown', pointerdown)
+      window.removeEventListener('pointermove', pointermove)
+      window.removeEventListener('pointerup', pointerup)
+    })
+
+    this.init()
+  },
+  methods: {
+    init() {
+      // 初始化 画布位置
+      this.position.x = (this.$refs.canvas.offsetWidth - this.size.width) / 2
+      this.position.y = (this.$refs.canvas.offsetHeight - this.size.height) / 2
+    },
+    spaceDownHandle() {
+      this.spaceDown = true
+    },
+    spaceUpHandle() {
+      this.spaceDown = false
+    }
   }
 }
 </script>
@@ -92,14 +118,25 @@ export default {
 .template-editor {
   overflow: hidden;
   position: relative;
-  display: flex;
-  justify-content: center;
   flex: 1;
 }
 
-.template-stage {
+.template-canvas {
   position: relative;
-  outline: none;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #f2f2f2;
+}
+
+.template-stage {
+  position: absolute;
+  outline: none;
+  background-color: #fff;
+  background-repeat: repeat;
+  background-image: url('@/view/template/action/image/sprite.svg');
 }
 </style>
