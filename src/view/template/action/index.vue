@@ -8,7 +8,9 @@
 </template>
 
 <script>
-import store from '@/view/template/store'
+import { provide } from 'vue'
+import { useStore } from '@/view/template/hooks/useStore'
+import { storeSymbol } from '@/view/template/constant'
 
 import TemplateAside from './components/template-aside.vue'
 import TemplateToolbar from './components/template-toolbar.vue'
@@ -23,7 +25,12 @@ export default {
     TemplateEditor,
     TemplateProperty
   },
-  store
+  setup() {
+    const store = useStore()
+
+    provide(storeSymbol, store)
+    return { store }
+  }
 }
 </script>
 

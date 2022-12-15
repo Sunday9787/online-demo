@@ -7,6 +7,11 @@
         :style="stageStyle"
         @keydown.space.exact="spaceDownHandle"
         @keyup.space.exact="spaceUpHandle")
+        component(
+          :is="item.component"
+          :key="k"
+          v-bind="item.props"
+          v-for="(item, k) in store.components")
     app-scale(
       :scale.sync="scale"
       :max-scale="200"
@@ -15,17 +20,18 @@
 </template>
 
 <script>
-import { useSize } from '@/view/template/hooks/size'
-import { useStore } from '@/hooks/useStore'
+import { inject } from 'vue'
+import { storeSymbol } from '@/view/template/constant'
 
 export default {
   name: 'TemplateEditor',
+  components: {
+    TemplateInput: () => import('./builtin/template-input.vue')
+  },
   setup() {
-    const store = useStore('globalModule')
-    const { A5: size } = useSize()
+    const store = inject(storeSymbol)
 
-    store.commit('updateSize', size)
-    return { size }
+    return { store }
   },
   data() {
     return {
@@ -42,8 +48,8 @@ export default {
   computed: {
     stageStyle() {
       return {
-        width: this.size.width + 'px',
-        height: this.size.height + 'px',
+        width: this.store.size.width + 'px',
+        height: this.store.size.height + 'px',
         left: this.position.x + 'px',
         top: this.position.y + 'px',
         transformOrigin: 'center',
@@ -101,14 +107,19 @@ export default {
   methods: {
     init() {
       // 初始化 画布位置
-      this.position.x = (this.$refs.canvas.offsetWidth - this.size.width) / 2
-      this.position.y = (this.$refs.canvas.offsetHeight - this.size.height) / 2
+      this.position.x = (this.$refs.canvas.offsetWidth - this.store.size.width) / 2
+      this.position.y = (this.$refs.canvas.offsetHeight - this.store.size.height) / 2
     },
     spaceDownHandle() {
       this.spaceDown = true
     },
     spaceUpHandle() {
       this.spaceDown = false
+    }
+  },
+  watch: {
+    'store.size'() {
+      this.init()
     }
   }
 }

@@ -3,9 +3,15 @@
 </template>
 
 <script>
+import { inject } from 'vue'
+import { storeSymbol } from '@/view/template/constant'
+
 export default {
   name: 'TemplateProperty',
-  setup() {}
+  setup() {
+    const store = inject(storeSymbol)
+    return { store }
+  }
 }
 </script>
 

@@ -1,0 +1,9 @@
+.el-dialog {
+  background-color: var(--color-background);
+  @extend %themed;
+}
+
+.el-dialog__title {
+  color: var(--color-text-regular);
+  @extend %themed;
+}
