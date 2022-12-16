@@ -48,11 +48,14 @@ export default {
   computed: {
     stageStyle() {
       return {
+        borderLeftWidth: this.store.padding.left + 'mm',
+        borderTopWidth: this.store.padding.top + 'mm',
+        borderRightWidth: this.store.padding.right + 'mm',
+        borderBottomWidth: this.store.padding.bottom + 'mm',
         width: this.store.size.width + 'px',
         height: this.store.size.height + 'px',
         left: this.position.x + 'px',
         top: this.position.y + 'px',
-        transformOrigin: 'center',
         transform: `scale3d(${this.scale / 100}, ${this.scale / 100}, 1)`
       }
     }
@@ -63,7 +66,7 @@ export default {
      * @param {PointerEvent} e
      */
     const pointerdown = function (e) {
-      if (context.spaceDown) {
+      if (context.spaceDown && e.button === 0) {
         /**
          * @type {HTMLDivElement}
          */
@@ -79,7 +82,7 @@ export default {
      * @param {PointerEvent} e
      */
     const pointermove = function (e) {
-      if (context.stagePosition) {
+      if (context.stagePosition && context.spaceDown) {
         context.position.x = e.clientX - context.stagePosition.x
         context.position.y = e.clientY - context.stagePosition.y
       }
@@ -92,17 +95,26 @@ export default {
       context.stagePosition = null
     }
 
+    /**
+     * @param {Event} e
+     */
+    const resize = function (e) {
+      context.init()
+    }
+
     this.$refs.stage.addEventListener('pointerdown', pointerdown)
     window.addEventListener('pointermove', pointermove)
     window.addEventListener('pointerup', pointerup)
+    window.addEventListener('resize', resize)
 
     this.$once('hook:beforeDestroy', function () {
       context.$refs.stage.removeEventListener('pointerdown', pointerdown)
       window.removeEventListener('pointermove', pointermove)
       window.removeEventListener('pointerup', pointerup)
+      window.removeEventListener('resize', resize)
     })
 
-    this.init()
+    window.dispatchEvent(new Event('resize'))
   },
   methods: {
     init() {
@@ -137,17 +149,16 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f2f2f2;
+  background-color: var(--color-background-light-gray);
 }
 
 .template-stage {
   position: absolute;
   outline: none;
-  background-color: #fff;
+  transform-origin: center;
   background-repeat: repeat;
   background-image: url('@/view/template/action/image/sprite.svg');
+  border: 0 solid #f2f2f2;
+  box-shadow: 0 0 8px 1px darken($color: #f2f2f2, $amount: 20%);
 }
 </style>

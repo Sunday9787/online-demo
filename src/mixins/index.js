@@ -1,3 +1,5 @@
+import { mixinForm } from './form'
+
 /**
  * @type {Vue.ComponentOptions<Vue>}
  */
@@ -13,6 +15,7 @@ const mixin = {
 const setup = {
   install(vue) {
     vue.mixin(mixin)
+    vue.mixin(mixinForm)
   }
 }
 

@@ -1,0 +1,6 @@
+.el-input-number__decrease,
+.el-input-number__increase {
+  color: var(--color-text-regular);
+  background-color: var(--color-background-light);
+  @extend %themed;
+}
