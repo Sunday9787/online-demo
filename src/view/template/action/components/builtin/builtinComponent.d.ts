@@ -4,7 +4,11 @@ declare namespace Template {
   }
 
   interface BuiltinComponent {
-    component: string
+    /** 组件id */
+    id: string
+    /** 组件名称 */
+    name: string
+    /** 组件类型 */
     type: 'input',
     props: {
       label: string

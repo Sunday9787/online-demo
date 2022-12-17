@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
+import { cloneDeep } from 'lodash-es'
 import { storeSymbol } from '@/view/template/constant'
 import { useBuiltinComponent } from './builtin'
 
@@ -19,12 +20,16 @@ export default {
   setup() {
     const { base } = useBuiltinComponent()
     const store = inject(storeSymbol)
+    const index = ref(0)
 
-    return { base, store }
+    return { base, store, index }
   },
   methods: {
     addComponent(item) {
-      this.store.components.push(item)
+      const component = cloneDeep(item)
+      component.id = 'component-' + this.index++
+
+      this.store.components.push(component)
     }
   }
 }

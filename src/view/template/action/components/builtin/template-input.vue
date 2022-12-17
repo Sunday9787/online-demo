@@ -36,7 +36,10 @@ export default {
   },
   computed: {
     containerStyle() {
-      return { color: this.property.color }
+      return {
+        color: this.property.color,
+        fontFamily: this.property.font
+      }
     },
     propertyStyle() {
       return {

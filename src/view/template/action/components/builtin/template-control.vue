@@ -1,49 +1,170 @@
 <template lang="pug">
   div.template-control(
-    ref="el"
     :class="{select}"
     :style="wrapperStyle"
     @pointerdown.stop="onPointerdown")
     div.template-control-mask
-    i.template-control-point.top-left(@pointerdown.stop="onControlPointerdown('top-left', $event)")
-    i.template-control-point.top-center(@pointerdown.stop="onControlPointerdown('top-center', $event)")
-    i.template-control-point.top-right(@pointerdown.stop="onControlPointerdown('top-right', $event)")
-    i.template-control-point.center-left(@pointerdown.stop="onControlPointerdown('center-left', $event)")
-    i.template-control-point.center-right(@pointerdown.stop="onControlPointerdown('center-right', $event)")
-    i.template-control-point.bottom-left(@pointerdown.stop="onControlPointerdown('bottom-left', $event)")
-    i.template-control-point.bottom-center(@pointerdown.stop="onControlPointerdown('bottom-center', $event)")
-    i.template-control-point.bottom-right(@pointerdown.stop="onControlPointerdown('bottom-right', $event)")
+    i.template-control-point.top-left(@pointerdown.stop="onControlPointerdown('topLeft', $event)")
+    i.template-control-point.top-center(@pointerdown.stop="onControlPointerdown('topCenter', $event)")
+    i.template-control-point.top-right(@pointerdown.stop="onControlPointerdown('topRight', $event)")
+    i.template-control-point.center-left(@pointerdown.stop="onControlPointerdown('centerLeft', $event)")
+    i.template-control-point.center-right(@pointerdown.stop="onControlPointerdown('centerRight', $event)")
+    i.template-control-point.bottom-left(@pointerdown.stop="onControlPointerdown('bottomLeft', $event)")
+    i.template-control-point.bottom-center(@pointerdown.stop="onControlPointerdown('bottomCenter', $event)")
+    i.template-control-point.bottom-right(@pointerdown.stop="onControlPointerdown('bottomRight', $event)")
     slot
 </template>
 
 <script>
-import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue'
+
+/**
+ * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
+ */
+const onPointeDownHandle = {
+  topLeft(e) {},
+  topCenter(e) {},
+  topRight(e) {},
+  centerLeft(e) {},
+  centerRight(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: this.$el.offsetWidth + rect.left,
+      y: this.$el.offsetHeight / 2 + rect.top
+    }
+  },
+  bottomLeft(e) {},
+  bottomCenter(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: this.$el.offsetWidth / 2 + rect.left,
+      y: this.$el.offsetHeight + rect.top
+    }
+  },
+  bottomRight(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: this.$el.offsetWidth + rect.left,
+      y: this.$el.offsetHeight + rect.top
+    }
+  }
+}
 
 /**
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
  */
 const onPointermoveHandle = {
-  'top-left': function (e) {},
-  'top-center': function (e) {},
-  'top-right': function (e) {},
-  'center-left': function (e) {},
-  'center-right': function (e) {
-    this.position.w = this.initSize.w + this.position.x + (e.pageX - this.stashPosition.x)
+  topLeft(e) {},
+  topCenter(e) {},
+  topRight(e) {},
+  centerLeft(e) {},
+  centerRight(e) {
+    if (this.stashPosition) {
+      let w = this.initSize.w + (e.pageX - this.stashPosition.x)
+
+      /**
+       * 左边限制
+       */
+      if (w <= this.miniSize.w) {
+        w = this.miniSize.w
+      }
+
+      /**
+       * 右边限制
+       */
+      if (this.$el.offsetLeft + w >= this.stageInstance.$el.clientWidth) {
+        w = this.stageInstance.$el.clientWidth - this.$el.offsetLeft
+      }
+
+      this.position.w = w
+    }
   },
-  'bottom-left': function (e) {},
-  'bottom-center': function (e) {},
-  'bottom-right': function (e) {}
+  bottomLeft(e) {},
+  bottomCenter(e) {
+    if (this.stashPosition) {
+      let h = this.initSize.h + (e.pageY - this.stashPosition.y)
+
+      /**
+       * 上边限制
+       */
+      if (h <= this.miniSize.h) {
+        h = this.miniSize.h
+      }
+
+      /**
+       * 下边限制
+       */
+      if (this.$el.offsetTop + h >= this.stageInstance.$el.clientHeight) {
+        h = this.stageInstance.$el.clientHeight - this.$el.offsetTop
+      }
+
+      this.position.h = h
+    }
+  },
+  bottomRight(e) {
+    let w = this.initSize.w + (e.pageX - this.stashPosition.x)
+    let h = this.initSize.h + (e.pageY - this.stashPosition.y)
+
+    /**
+     * 左边限制
+     */
+    if (w <= this.miniSize.w) {
+      w = this.miniSize.w
+    }
+
+    /**
+     * 上边限制
+     */
+    if (h <= this.miniSize.h) {
+      h = this.miniSize.h
+    }
+
+    /**
+     * 右边限制
+     */
+    if (this.$el.offsetLeft + w >= this.stageInstance.$el.clientWidth) {
+      w = this.stageInstance.$el.clientWidth - this.$el.offsetLeft
+    }
+
+    /**
+     * 下边限制
+     */
+    if (this.$el.offsetTop + h >= this.stageInstance.$el.clientHeight) {
+      h = this.stageInstance.$el.clientHeight - this.$el.offsetTop
+    }
+
+    this.position.w = w
+    this.position.h = h
+  }
 }
 
 export default {
   name: 'TemplateControl',
-  setup() {
+  inject: ['stageInstance'],
+  setup(props, context) {
     const vm = getCurrentInstance().proxy
     const select = ref(false)
+    /**
+     * 指针点击类型 - 控制方向类型/null
+     */
     const pointType = ref(null)
-    const position = reactive({ x: 0, y: 0, h: null, w: null })
+    /**
+     * 实际显示 定位 & 宽度
+     */
+    const position = reactive({ x: 0, y: 0, h: 0, w: 0 })
+    /**
+     * 暂存拖动位置 pageX/pageY
+     */
     const stashPosition = ref(null)
+    /**
+     * 初始控件大小
+     * 每次拖动后需更新此值
+     */
     const initSize = reactive({ w: 0, h: 0 })
+    /**
+     * 最小控件大小
+     */
+    const miniSize = reactive({ w: 0, h: 0 })
 
     /**
      * @param {PointerEvent} e
@@ -55,6 +176,7 @@ export default {
         x: e.pageX - vm.$el.offsetLeft,
         y: e.pageY - vm.$el.offsetTop
       }
+      context.emit('select', vm)
     }
 
     /**
@@ -67,15 +189,46 @@ export default {
           return
         }
 
-        position.x = e.pageX - stashPosition.value.x
-        position.y = e.pageY - stashPosition.value.y
+        let x = e.pageX - stashPosition.value.x
+        let y = e.pageY - stashPosition.value.y
+
+        /**
+         * 左边限制
+         */
+        if (x <= 0) x = 0
+
+        /**
+         * 上边限制
+         */
+        if (y <= 0) y = 0
+
+        /**
+         * 右边限制
+         */
+        if (x > vm.stageInstance.$el.clientWidth - initSize.w) {
+          x = vm.stageInstance.$el.clientWidth - initSize.w
+        }
+
+        /**
+         * 下边限制
+         */
+        if (y > vm.stageInstance.$el.clientHeight - initSize.h) {
+          y = vm.stageInstance.$el.clientHeight - initSize.h
+        }
+
+        position.x = x
+        position.y = y
       }
     }
 
+    /**
+     * @param {PointerEvent} e
+     */
     const onPointerup = function (e) {
       stashPosition.value = null
       pointType.value = null
       initSize.w = position.w
+      initSize.h = position.h
     }
 
     /**
@@ -86,21 +239,23 @@ export default {
     }
 
     onMounted(function () {
-      position.w = initSize.w = vm.$el.offsetWidth
-      position.h = initSize.h = vm.$el.offsetHeight
+      nextTick(function () {
+        position.w = initSize.w = miniSize.w = vm.$el.offsetWidth
+        position.h = initSize.h = miniSize.h = vm.$el.offsetHeight
+      })
 
-      document.body.addEventListener('pointerdown', onBodyPointerdown)
-      document.body.addEventListener('pointermove', onPointermove)
-      document.body.addEventListener('pointerup', onPointerup)
+      vm.stageInstance.$el.addEventListener('pointerdown', onBodyPointerdown)
+      vm.stageInstance.$el.addEventListener('pointermove', onPointermove)
+      vm.stageInstance.$el.addEventListener('pointerup', onPointerup)
     })
 
     onBeforeMount(function () {
-      document.body.removeEventListener('pointerdown', onBodyPointerdown)
-      document.body.removeEventListener('pointermove', onPointermove)
-      document.body.removeEventListener('pointerup', onPointerup)
+      vm.stageInstance.$el.removeEventListener('pointerdown', onBodyPointerdown)
+      vm.stageInstance.$el.removeEventListener('pointermove', onPointermove)
+      vm.stageInstance.$el.removeEventListener('pointerup', onPointerup)
     })
 
-    return { select, pointType, initSize, position, stashPosition, onPointerdown }
+    return { select, pointType, initSize, miniSize, position, stashPosition, onPointerdown }
   },
   computed: {
     wrapperStyle() {
@@ -118,12 +273,8 @@ export default {
      * @param {PointerEvent} e
      */
     onControlPointerdown(pointType, e) {
-      console.log(pointType, e.target)
       this.pointType = pointType
-      this.stashPosition = {
-        x: e.pageX - this.$el.offsetLeft,
-        y: e.pageY - this.$el.offsetTop
-      }
+      onPointeDownHandle[pointType].call(this, e)
     }
   }
 }
@@ -132,6 +283,7 @@ export default {
 <style lang="scss">
 .template-control {
   position: absolute;
+  user-select: none;
 
   &.select {
     .template-control-mask,
