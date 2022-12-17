@@ -10,7 +10,8 @@ export function useStore() {
     name: '',
     size: size.vertical,
     padding,
-    components: []
+    components: [],
+    currentComponent: null
   })
 
   return state

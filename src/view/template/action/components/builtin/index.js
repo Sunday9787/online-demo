@@ -1,3 +1,5 @@
+import { useLocation } from '@/view/template/hooks/useLocation'
+
 export function useBuiltinComponent() {
   /**
    * @type {Template.BuiltinComponent[]}
@@ -5,6 +7,7 @@ export function useBuiltinComponent() {
   const base = [
     {
       component: 'template-input',
+      type: 'input',
       props: {
         label: '病例名称',
         style: {
@@ -13,11 +16,28 @@ export function useBuiltinComponent() {
         property: {
           underline: false,
           color: '#333'
-        }
+        },
+        location: useLocation()
       }
     },
     {
       component: 'template-input',
+      type: 'input',
+      props: {
+        label: '产前编号',
+        style: {
+          width: '60px'
+        },
+        property: {
+          underline: false,
+          color: '#333'
+        },
+        location: useLocation()
+      }
+    },
+    {
+      component: 'template-input',
+      type: 'input',
       props: {
         label: '姓名',
         style: {
@@ -26,7 +46,8 @@ export function useBuiltinComponent() {
         property: {
           underline: false,
           color: '#333'
-        }
+        },
+        location: useLocation()
       }
     }
   ]

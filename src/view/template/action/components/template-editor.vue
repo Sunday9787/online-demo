@@ -7,11 +7,8 @@
         :style="stageStyle"
         @keydown.space.exact="spaceDownHandle"
         @keyup.space.exact="spaceUpHandle")
-        component(
-          :is="item.component"
-          :key="k"
-          v-bind="item.props"
-          v-for="(item, k) in store.components")
+        TemplateControl(v-for="(item, k) in store.components" :key="k")
+          component(:is="item.component" v-bind="item.props")
     app-scale(
       :scale.sync="scale"
       :max-scale="200"
@@ -26,7 +23,8 @@ import { storeSymbol } from '@/view/template/constant'
 export default {
   name: 'TemplateEditor',
   components: {
-    TemplateInput: () => import('./builtin/template-input.vue')
+    TemplateInput: () => import('./builtin/template-input.vue'),
+    TemplateControl: () => import('./builtin/template-control.vue')
   },
   setup() {
     const store = inject(storeSymbol)
@@ -82,7 +80,7 @@ export default {
      * @param {PointerEvent} e
      */
     const pointermove = function (e) {
-      if (context.stagePosition && context.spaceDown) {
+      if (context.spaceDown && context.stagePosition) {
         context.position.x = e.clientX - context.stagePosition.x
         context.position.y = e.clientY - context.stagePosition.y
       }

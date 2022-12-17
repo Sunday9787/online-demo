@@ -5,6 +5,7 @@ declare namespace Template {
 
   interface BuiltinComponent {
     component: string
+    type: 'input',
     props: {
       label: string
       style: import('vue/types/jsx').StyleValue

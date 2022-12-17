@@ -1,7 +1,7 @@
 <template lang="pug">
   div(v-if="isShape" :style="containerStyle")
     label(:for="id") {{ label }}
-    div(:id="id" :style="property")
+    div(:id="id" :style="propertyStyle")
 
   div(v-else :style="containerStyle")
     label(:for="id") {{ label }}
@@ -23,6 +23,10 @@ export default {
     property: {
       type: Object,
       required: true
+    },
+    location: {
+      type: Object,
+      required: true
     }
   },
   setup() {
@@ -33,6 +37,11 @@ export default {
   computed: {
     containerStyle() {
       return { color: this.property.color }
+    },
+    propertyStyle() {
+      return {
+        borderBottom: this.property.underline ?? '1px solid #333'
+      }
     },
     id() {
       return 'template-input-' + this._uid
