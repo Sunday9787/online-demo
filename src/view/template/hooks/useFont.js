@@ -6,7 +6,6 @@ export function useFont() {
     { label: '华文宋体', value: 'STSong' },
     { label: '宋体', value: 'STSongti-SC-Regular' },
     { label: '楷体', value: 'STKaitiSC-Regular' },
-    { label: '楷体-简', value: 'STKaitiSC-Regular' },
     { label: 'Arial', value: 'Arial' },
     { label: 'Tahoma', value: 'Tahoma' },
     { label: 'Helvetica', value: 'Helvetica' }

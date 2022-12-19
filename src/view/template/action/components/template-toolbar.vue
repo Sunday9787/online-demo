@@ -1,8 +1,9 @@
 <template lang="pug">
   header.template-toolbar
-    el-button(type="primary") 清空画布
-    el-button(type="primary") 导入模板
-    el-button(type="primary" @click="action(actionType.open)") 模板属性
+    div.flex1
+    el-button(type="primary" size="medium") 清空画布
+    el-button(type="primary" size="medium") 导入模板
+    el-button(type="primary" size="medium" @click="action(actionType.open)") 模板属性
 
     el-dialog(
       :visible.sync="dialog.visible"
@@ -13,14 +14,14 @@
       width="500px"
       @closed="resetForm('formRef')"
     )
-      el-form(:model="form" ref="formRef" action="javascript:;" label-suffix="：" label-width="100px")
+      el-form(:model="form" ref="formRef" action="javascript:;" size="medium" label-suffix="：" label-width="100px")
         el-form-item(label="模板名称" prop="name")
           el-input(v-model="form.name")
 
         el-form-item(label="尺寸" prop="size")
           el-radio-group(v-model="form.size")
-            el-radio(:label="size.A4") A4
-            el-radio(:label="size.A5") A5
+            el-radio(:label="size.A4.name") A4
+            el-radio(:label="size.A5.name") A5
 
         el-form-item(label="方向" prop="direction")
           el-radio-group(v-model="form.direction")
@@ -82,8 +83,8 @@
                   v-model="form.padding.right")
                 span 毫米
       el-row(slot="footer" type="flex" justify="end")
-        el-button(type="primary" @click="action(actionType.submit)") 确定
-        el-button(@click="action(actionType.close)") 取消
+        el-button(type="primary" size="small" @click="action(actionType.submit)") 确定
+        el-button(size="small" @click="action(actionType.close)") 取消
 </template>
 
 <script>
@@ -91,20 +92,19 @@ import { cloneDeep } from 'lodash-es'
 import { inject, reactive } from 'vue'
 import { storeSymbol } from '@/view/template/constant'
 import { useSize } from '@/view/template/hooks/useSize'
-import { usePadding } from '@/view/template/hooks/usePadding'
 import { useDialog } from '@/hooks/useDialog'
+import { usePadding } from '@/view/template/hooks/usePadding'
 
 export default {
   name: 'TemplateToolbar',
   setup() {
     const store = inject(storeSymbol)
     const size = useSize()
-    const padding = usePadding()
     const form = reactive({
       name: '',
-      size: size.A4,
-      direction: 'vertical',
-      padding
+      size: '',
+      direction: '',
+      padding: usePadding()
     })
 
     const {
@@ -112,9 +112,16 @@ export default {
       action,
       actionType
     } = useDialog({
+      open() {
+        form.name = store.name
+        form.size = store.size.name
+        form.direction = store.direction
+        form.padding = cloneDeep(store.padding)
+      },
       submit() {
         store.name = form.name
-        store.size = form.size[form.direction]
+        store.direction = form.direction
+        store.size.name = form.size
         store.padding = cloneDeep(form.padding)
         action('action:hidden')
       }
@@ -128,6 +135,8 @@ export default {
 <style lang="scss">
 .template-toolbar {
   position: relative;
+  display: flex;
+  padding: 8px 0;
 }
 
 .template-toolbar-padding {

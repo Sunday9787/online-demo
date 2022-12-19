@@ -3,6 +3,7 @@ import { reactive, readonly } from 'vue'
 /**
  * @param {object} options
  * @param {Function} options.submit
+ * @param {Function} options.open
  */
 export function useDialog(options) {
   const actionType = readonly({
@@ -23,6 +24,7 @@ export function useDialog(options) {
     switch (type) {
       case actionType.open:
         state.visible = true
+        options.open?.apply(null)
         break
       case actionType.close:
         state.visible = false

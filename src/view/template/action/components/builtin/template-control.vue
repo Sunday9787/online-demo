@@ -28,24 +28,28 @@ const onPointeDownHandle = {
   centerLeft(e) {},
   centerRight(e) {
     const rect = this.$el.getBoundingClientRect()
+    const scale = this.scale / 100
     this.stashPosition = {
-      x: this.$el.offsetWidth + rect.left,
-      y: this.$el.offsetHeight / 2 + rect.top
+      x: this.$el.offsetWidth * scale + rect.left,
+      y: (this.$el.offsetHeight / 2) * scale + rect.top
     }
   },
   bottomLeft(e) {},
   bottomCenter(e) {
     const rect = this.$el.getBoundingClientRect()
+    const scale = this.scale / 100
+
     this.stashPosition = {
-      x: this.$el.offsetWidth / 2 + rect.left,
-      y: this.$el.offsetHeight + rect.top
+      x: (this.$el.offsetWidth / 2) * scale + rect.left,
+      y: this.$el.offsetHeight * scale + rect.top
     }
   },
   bottomRight(e) {
     const rect = this.$el.getBoundingClientRect()
+    const scale = this.scale / 100
     this.stashPosition = {
-      x: this.$el.offsetWidth + rect.left,
-      y: this.$el.offsetHeight + rect.top
+      x: this.$el.offsetWidth * scale + rect.left,
+      y: this.$el.offsetHeight * scale + rect.top
     }
   }
 }
@@ -60,87 +64,96 @@ const onPointermoveHandle = {
   centerLeft(e) {},
   centerRight(e) {
     if (this.stashPosition) {
-      let w = this.initSize.w + (e.pageX - this.stashPosition.x)
+      const scale = this.scale / 100
+      let w = this.initSize.w * scale + (e.pageX - this.stashPosition.x)
 
       /**
        * 左边限制
        */
-      if (w <= this.miniSize.w) {
-        w = this.miniSize.w
+      if (w <= this.miniSize.w * scale) {
+        w = this.miniSize.w * scale
       }
 
       /**
        * 右边限制
        */
-      if (this.$el.offsetLeft + w >= this.stageInstance.$el.clientWidth) {
-        w = this.stageInstance.$el.clientWidth - this.$el.offsetLeft
+      if (this.$el.offsetLeft * scale + w >= this.stageInstance.$el.clientWidth * scale) {
+        w = (this.stageInstance.$el.clientWidth - this.$el.offsetLeft) * scale
       }
 
-      this.position.w = w
+      this.position.w = w / scale
     }
   },
   bottomLeft(e) {},
   bottomCenter(e) {
     if (this.stashPosition) {
-      let h = this.initSize.h + (e.pageY - this.stashPosition.y)
+      const scale = this.scale / 100
+      let h = this.initSize.h * scale + (e.pageY - this.stashPosition.y)
 
       /**
        * 上边限制
        */
-      if (h <= this.miniSize.h) {
-        h = this.miniSize.h
+      if (h <= this.miniSize.h * scale) {
+        h = this.miniSize.h * scale
       }
 
       /**
        * 下边限制
        */
-      if (this.$el.offsetTop + h >= this.stageInstance.$el.clientHeight) {
-        h = this.stageInstance.$el.clientHeight - this.$el.offsetTop
+      if (this.$el.offsetTop * scale + h >= this.stageInstance.$el.clientHeight * scale) {
+        h = this.stageInstance.$el.clientHeight * scale - this.$el.offsetTop * scale
       }
 
-      this.position.h = h
+      this.position.h = h / scale
     }
   },
   bottomRight(e) {
-    let w = this.initSize.w + (e.pageX - this.stashPosition.x)
-    let h = this.initSize.h + (e.pageY - this.stashPosition.y)
+    const scale = this.scale / 100
+    let w = this.initSize.w * scale + (e.pageX - this.stashPosition.x)
+    let h = this.initSize.h * scale + (e.pageY - this.stashPosition.y)
 
     /**
      * 左边限制
      */
-    if (w <= this.miniSize.w) {
-      w = this.miniSize.w
+    if (w <= this.miniSize.w * scale) {
+      w = this.miniSize.w * scale
     }
 
     /**
      * 上边限制
      */
-    if (h <= this.miniSize.h) {
-      h = this.miniSize.h
+    if (h <= this.miniSize.h * scale) {
+      h = this.miniSize.h * scale
     }
 
     /**
      * 右边限制
      */
-    if (this.$el.offsetLeft + w >= this.stageInstance.$el.clientWidth) {
-      w = this.stageInstance.$el.clientWidth - this.$el.offsetLeft
+    if (this.$el.offsetLeft * scale + w >= this.stageInstance.$el.clientWidth * scale) {
+      w = (this.stageInstance.$el.clientWidth - this.$el.offsetLeft) * scale
     }
 
     /**
      * 下边限制
      */
-    if (this.$el.offsetTop + h >= this.stageInstance.$el.clientHeight) {
-      h = this.stageInstance.$el.clientHeight - this.$el.offsetTop
+    if (this.$el.offsetTop * scale + h >= this.stageInstance.$el.clientHeight * scale) {
+      h = (this.stageInstance.$el.clientHeight - this.$el.offsetTop) * scale
     }
 
-    this.position.w = w
-    this.position.h = h
+    this.position.w = w / scale
+    this.position.h = h / scale
   }
 }
 
 export default {
   name: 'TemplateControl',
   inject: ['stageInstance'],
+  props: {
+    scale: {
+      type: Number,
+      default: 1
+    }
+  },
   setup(props, context) {
     const vm = getCurrentInstance().proxy
     const select = ref(false)
@@ -170,11 +183,13 @@ export default {
      * @param {PointerEvent} e
      */
     const onPointerdown = function (e) {
+      const scale = props.scale / 100
+
       select.value = true
       pointType.value = null
       stashPosition.value = {
-        x: e.pageX - vm.$el.offsetLeft,
-        y: e.pageY - vm.$el.offsetTop
+        x: e.pageX - vm.$el.offsetLeft * scale,
+        y: e.pageY - vm.$el.offsetTop * scale
       }
       context.emit('select', vm)
     }
@@ -184,6 +199,7 @@ export default {
      */
     const onPointermove = function (e) {
       if (stashPosition.value) {
+        const scale = props.scale / 100
         if (pointType.value) {
           onPointermoveHandle[pointType.value].call(vm, e)
           return
@@ -205,19 +221,19 @@ export default {
         /**
          * 右边限制
          */
-        if (x > vm.stageInstance.$el.clientWidth - initSize.w) {
-          x = vm.stageInstance.$el.clientWidth - initSize.w
+        if (x > (vm.stageInstance.$el.clientWidth - initSize.w) * scale) {
+          x = (vm.stageInstance.$el.clientWidth - initSize.w) * scale
         }
 
         /**
          * 下边限制
          */
-        if (y > vm.stageInstance.$el.clientHeight - initSize.h) {
-          y = vm.stageInstance.$el.clientHeight - initSize.h
+        if (y > (vm.stageInstance.$el.clientHeight - initSize.h) * scale) {
+          y = (vm.stageInstance.$el.clientHeight - initSize.h) * scale
         }
 
-        position.x = x
-        position.y = y
+        position.x = x / scale
+        position.y = y / scale
       }
     }
 
@@ -290,6 +306,10 @@ export default {
     .template-control-point {
       visibility: visible;
     }
+  }
+
+  &:active {
+    cursor: grab;
   }
 }
 

@@ -6,7 +6,11 @@
     @keydown.delete="deleteComponent"
     @keydown.space.exact="spaceDownHandle"
     @keyup.space.exact="spaceUpHandle")
-    TemplateControl(v-for="(component, k) in store.components" :key="component.id" @select="selectComponent(component, k)")
+    TemplateControl(
+      v-for="(component, k) in store.components"
+      :key="component.id"
+      :scale="scale"
+      @select="selectComponent(component, k)")
       component(:is="component.name" v-bind="component.props")
 </template>
 
@@ -124,9 +128,11 @@ export default {
       this.position.y = (this.editorInstance.$refs.canvas.offsetHeight - this.store.size.height) / 2
     },
     spaceDownHandle() {
+      this.$el.style.cursor = 'grab'
       this.spaceDown = true
     },
     spaceUpHandle() {
+      this.$el.style.cursor = 'default'
       this.spaceDown = false
     },
     /**
