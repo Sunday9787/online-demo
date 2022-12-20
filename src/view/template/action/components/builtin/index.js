@@ -1,5 +1,4 @@
-import { useFont } from '@/view/template/hooks/useFont'
-import { useLocation } from '@/view/template/hooks/useLocation'
+import { usePosition, useSize, useFont } from '@/view/template/hooks/useProperty'
 
 export function useBuiltinComponent() {
   const { font } = useFont()
@@ -19,7 +18,8 @@ export function useBuiltinComponent() {
           color: '#333',
           font: font.value
         },
-        location: useLocation()
+        position: usePosition(100, 100),
+        size: useSize()
       }
     },
     {
@@ -33,7 +33,8 @@ export function useBuiltinComponent() {
           color: '#333',
           font: font.value
         },
-        location: useLocation()
+        position: usePosition(120, 120),
+        size: useSize()
       }
     },
     {
@@ -47,7 +48,8 @@ export function useBuiltinComponent() {
           color: '#333',
           font: font.value
         },
-        location: useLocation()
+        position: usePosition(),
+        size: useSize()
       }
     }
   ]

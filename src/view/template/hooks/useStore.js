@@ -11,9 +11,11 @@ export function useStore() {
     direction: 'vertical',
     size: {
       name: size.A4.name,
+      /** @type {number} */
       get width() {
         return size[this.name][state.direction].width
       },
+      /** @type {number} */
       get height() {
         return size[this.name][state.direction].height
       }

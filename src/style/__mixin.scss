@@ -17,7 +17,6 @@
 }
 
 @mixin themed($duration: .1s) {
-  will-change: transition;
   transition-timing-function: ease-in;
   transition-duration: $duration;
   transition-property: background-color, color, border-color;

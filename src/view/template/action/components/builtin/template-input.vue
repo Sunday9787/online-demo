@@ -24,7 +24,7 @@ export default {
       type: Object,
       required: true
     },
-    location: {
+    position: {
       type: Object,
       required: true
     }

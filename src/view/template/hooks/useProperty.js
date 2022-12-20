@@ -1,3 +1,23 @@
+import { reactive } from 'vue'
+
+/**
+ * @param {number} [x]
+ * @param {number} [y]
+ */
+export function usePosition(x = 0, y = 0) {
+  const state = reactive({ x, y })
+  return state
+}
+
+/**
+ * @param {number} [w]
+ * @param {number} [h]
+ */
+export function useSize(w = 0, h = 0) {
+  const state = reactive({ w, h })
+  return state
+}
+
 export function useFont() {
   const fonts = [
     { label: '微软雅黑', value: 'Microsoft YaHei' },

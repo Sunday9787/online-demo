@@ -83,20 +83,25 @@ export default {
   align-items: center;
   height: 38px;
   padding-left: 20px;
+  border-radius: 8px 0 8px 8px;
   @extend %themed;
 
+  &::after {
+    position: absolute;
+    right: 0;
+    top: -5px;
+    content: '';
+    border-bottom: 5px solid transparent;
+    border-right: 7px solid transparent;
+    @extend %themed;
+  }
+
   &.current {
-    border-radius: 8px 0 8px 8px;
     color: var(--color-text-regular-current);
     background-color: var(--color-primary);
 
     &::after {
-      position: absolute;
-      right: 0;
-      top: -5px;
-      content: '';
-      border-bottom: 5px solid #1e64ce;
-      border-right: 7px solid transparent;
+      border-bottom-color: #1e64ce;
     }
   }
 }

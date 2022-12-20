@@ -1,6 +1,6 @@
 <template lang="pug">
   div.template-control(
-    :class="{select}"
+    :class="{visible}"
     :style="wrapperStyle"
     @pointerdown.stop="onPointerdown")
     div.template-control-mask
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
 /**
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
@@ -81,7 +81,8 @@ const onPointermoveHandle = {
         w = (this.stageInstance.$el.clientWidth - this.$el.offsetLeft) * scale
       }
 
-      this.position.w = w / scale
+      this.data.w = w / scale
+      this.$emit('update:size', { w: this.data.w, h: this.data.h })
     }
   },
   bottomLeft(e) {},
@@ -104,7 +105,8 @@ const onPointermoveHandle = {
         h = this.stageInstance.$el.clientHeight * scale - this.$el.offsetTop * scale
       }
 
-      this.position.h = h / scale
+      this.data.h = h / scale
+      this.$emit('update:size', { w: this.data.w, h: this.data.h })
     }
   },
   bottomRight(e) {
@@ -140,8 +142,9 @@ const onPointermoveHandle = {
       h = (this.stageInstance.$el.clientHeight - this.$el.offsetTop) * scale
     }
 
-    this.position.w = w / scale
-    this.position.h = h / scale
+    this.data.w = w / scale
+    this.data.h = h / scale
+    this.$emit('update:size', { w: this.data.w, h: this.data.h })
   }
 }
 
@@ -152,11 +155,19 @@ export default {
     scale: {
       type: Number,
       default: 1
+    },
+    position: {
+      type: Object,
+      required: true
+    },
+    size: {
+      type: Object,
+      required: true
     }
   },
   setup(props, context) {
     const vm = getCurrentInstance().proxy
-    const select = ref(false)
+    const visible = ref(false)
     /**
      * 指针点击类型 - 控制方向类型/null
      */
@@ -164,7 +175,7 @@ export default {
     /**
      * 实际显示 定位 & 宽度
      */
-    const position = reactive({ x: 0, y: 0, h: 0, w: 0 })
+    const data = reactive({ x: props.position.x, y: props.position.y, h: props.size.h, w: props.size.w })
     /**
      * 暂存拖动位置 pageX/pageY
      */
@@ -184,8 +195,9 @@ export default {
      */
     const onPointerdown = function (e) {
       const scale = props.scale / 100
+      vm.$el.style.cursor = 'grab'
 
-      select.value = true
+      visible.value = true
       pointType.value = null
       stashPosition.value = {
         x: e.pageX - vm.$el.offsetLeft * scale,
@@ -232,8 +244,10 @@ export default {
           y = (vm.stageInstance.$el.clientHeight - initSize.h) * scale
         }
 
-        position.x = x / scale
-        position.y = y / scale
+        data.x = x / scale
+        data.y = y / scale
+
+        context.emit('update:position', { x: data.x, y: data.y })
       }
     }
 
@@ -241,45 +255,47 @@ export default {
      * @param {PointerEvent} e
      */
     const onPointerup = function (e) {
+      vm.$el.style.cursor = 'default'
       stashPosition.value = null
       pointType.value = null
-      initSize.w = position.w
-      initSize.h = position.h
+      initSize.w = data.w
+      initSize.h = data.h
     }
 
     /**
      * @param {PointerEvent} e
      */
     const onBodyPointerdown = function (e) {
-      select.value = false
+      visible.value = false
     }
 
     onMounted(function () {
       nextTick(function () {
-        position.w = initSize.w = miniSize.w = vm.$el.offsetWidth
-        position.h = initSize.h = miniSize.h = vm.$el.offsetHeight
+        data.w = initSize.w = miniSize.w = vm.$el.offsetWidth
+        data.h = initSize.h = miniSize.h = vm.$el.offsetHeight
+        context.emit('update:size', { w: data.w, h: data.h })
       })
 
-      vm.stageInstance.$el.addEventListener('pointerdown', onBodyPointerdown)
+      window.addEventListener('pointerdown', onBodyPointerdown)
       vm.stageInstance.$el.addEventListener('pointermove', onPointermove)
       vm.stageInstance.$el.addEventListener('pointerup', onPointerup)
     })
 
-    onBeforeMount(function () {
-      vm.stageInstance.$el.removeEventListener('pointerdown', onBodyPointerdown)
+    onBeforeUnmount(function () {
+      window.removeEventListener('pointerdown', onBodyPointerdown)
       vm.stageInstance.$el.removeEventListener('pointermove', onPointermove)
       vm.stageInstance.$el.removeEventListener('pointerup', onPointerup)
     })
 
-    return { select, pointType, initSize, miniSize, position, stashPosition, onPointerdown }
+    return { visible, pointType, initSize, miniSize, data, stashPosition, onPointerdown }
   },
   computed: {
     wrapperStyle() {
       return {
-        left: this.position.x + 'px',
-        top: this.position.y + 'px',
-        width: this.position.w ? this.position.w + 'px' : 'auto',
-        height: this.position.h ? this.position.h + 'px' : 'auto'
+        left: this.data.x + 'px',
+        top: this.data.y + 'px',
+        width: this.data.w ? this.data.w + 'px' : 'auto',
+        height: this.data.h ? this.data.h + 'px' : 'auto'
       }
     }
   },
@@ -292,6 +308,22 @@ export default {
       this.pointType = pointType
       onPointeDownHandle[pointType].call(this, e)
     }
+  },
+  watch: {
+    position: {
+      deep: true,
+      handler(val) {
+        this.data.x = val.x
+        this.data.y = val.y
+      }
+    },
+    size: {
+      deep: true,
+      handler(val) {
+        this.data.w = val.w
+        this.data.h = val.h
+      }
+    }
   }
 }
 </script>
@@ -301,38 +333,37 @@ export default {
   position: absolute;
   user-select: none;
 
-  &.select {
+  &.visible {
     .template-control-mask,
     .template-control-point {
-      visibility: visible;
+      border-color: var(--color-primary);
     }
-  }
 
-  &:active {
-    cursor: grab;
+    .template-control-point {
+      background-color: #fff;
+    }
   }
 }
 
 .template-control-mask,
 .template-control-point {
-  visibility: hidden;
+  border: 1px solid transparent;
 }
 
 .template-control-mask {
   position: absolute;
+  z-index: 1;
   height: 100%;
   width: 100%;
-  border: 1px solid var(--color-primary);
 }
 
 .template-control-point {
   position: absolute;
+  z-index: 2;
   display: block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid var(--color-primary);
 
   &.top-left {
     left: 0;

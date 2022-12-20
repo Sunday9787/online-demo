@@ -6,12 +6,20 @@
     @keydown.delete="deleteComponent"
     @keydown.space.exact="spaceDownHandle"
     @keyup.space.exact="spaceUpHandle")
+    TemplateAuxiliaryLine
+    TemplateAuxiliaryLine(direction="vertical")
     TemplateControl(
       v-for="(component, k) in store.components"
       :key="component.id"
       :scale="scale"
+      :position.sync="component.props.position"
+      :size.sync="component.props.size"
       @select="selectComponent(component, k)")
-      component(:is="component.name" v-bind="component.props")
+      component(
+        :is="component.name"
+        :label="component.props.label"
+        :property="component.props.property"
+        :position="component.props.position")
 </template>
 
 <script>
@@ -22,7 +30,8 @@ export default {
   name: 'TemplateStage',
   components: {
     TemplateInput: () => import('./builtin/template-input.vue'),
-    TemplateControl: () => import('./builtin/template-control.vue')
+    TemplateControl: () => import('./builtin/template-control.vue'),
+    TemplateAuxiliaryLine: () => import('./builtin/template-auxiliary-line.vue')
   },
   props: {
     scale: {
@@ -122,10 +131,15 @@ export default {
     window.dispatchEvent(new Event('resize'))
   },
   methods: {
+    /**
+     * 初始化 画布位置
+     */
     init() {
-      // 初始化 画布位置
-      this.position.x = (this.editorInstance.$refs.canvas.offsetWidth - this.store.size.width) / 2
-      this.position.y = (this.editorInstance.$refs.canvas.offsetHeight - this.store.size.height) / 2
+      const x = (this.editorInstance.$refs.canvas.offsetWidth - this.store.size.width) / 2
+      const y = (this.editorInstance.$refs.canvas.offsetHeight - this.store.size.height) / 2
+
+      this.position.x = x
+      this.position.y = y
     },
     spaceDownHandle() {
       this.$el.style.cursor = 'grab'
@@ -157,8 +171,11 @@ export default {
     }
   },
   watch: {
-    'store.size'() {
-      this.init()
+    'store.size': {
+      handler(val) {
+        window.dispatchEvent(new Event('resize'))
+      },
+      deep: true
     }
   }
 }
