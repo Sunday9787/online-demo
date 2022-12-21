@@ -1,9 +1,16 @@
 <template lang="pug">
   header.template-toolbar
     div.flex1
-    el-button(type="primary" size="medium") 清空画布
-    el-button(type="primary" size="medium") 导入模板
-    el-button(type="primary" size="medium" @click="action(actionType.open)") 模板属性
+    el-button(type="primary" size="small")
+      i.el-icon-back
+      | &nbsp;撤销
+
+    el-button(type="primary" size="small")
+      | 恢复&nbsp;
+      i.el-icon-right
+    el-button(type="primary" size="small" @click="stageClear()") 清空画布
+    el-button(type="primary" size="small") 导入模板
+    el-button(type="primary" size="small" @click="action(actionType.open)") 模板属性
 
     el-dialog(
       :visible.sync="dialog.visible"
@@ -128,15 +135,23 @@ export default {
     })
 
     return { store, size, form, dialog, action, actionType }
+  },
+  methods: {
+    stageClear() {
+      this.store.components.splice(0)
+      this.store.currentComponent = null
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .template-toolbar {
+  z-index: 1;
   position: relative;
   display: flex;
   padding: 8px 0;
+  box-shadow: 0 0 8px 1px #bfbfbf;
 }
 
 .template-toolbar-padding {

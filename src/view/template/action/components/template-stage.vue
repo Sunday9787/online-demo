@@ -6,6 +6,7 @@
     @keydown.delete="deleteComponent"
     @keydown.space.exact="spaceDownHandle"
     @keyup.space.exact="spaceUpHandle")
+    TemplateArea(:scale="scale")
     TemplateAuxiliaryLine
     TemplateAuxiliaryLine(direction="vertical")
     TemplateControl(
@@ -25,13 +26,15 @@
 <script>
 import { inject } from 'vue'
 import { storeSymbol } from '@/view/template/constant'
+import eventBus from '@/util/eventBus'
 
 export default {
   name: 'TemplateStage',
   components: {
     TemplateInput: () => import('./builtin/template-input.vue'),
     TemplateControl: () => import('./builtin/template-control.vue'),
-    TemplateAuxiliaryLine: () => import('./builtin/template-auxiliary-line.vue')
+    TemplateAuxiliaryLine: () => import('./builtin/template-auxiliary-line.vue'),
+    TemplateArea: () => import('./builtin/template-area.vue')
   },
   props: {
     scale: {
@@ -171,9 +174,25 @@ export default {
     }
   },
   watch: {
+    scale(val) {
+      eventBus.$emit('template-stage:scale:change', val)
+    },
+    position: {
+      handler(val) {
+        eventBus.$emit('template-stage:position:change', val)
+      },
+      deep: true
+    },
     'store.size': {
       handler(val) {
         window.dispatchEvent(new Event('resize'))
+        eventBus.$emit('template-stage:size:change', val)
+      },
+      deep: true
+    },
+    'store.padding': {
+      handler(val) {
+        eventBus.$emit('template-stage:padding:change', val)
       },
       deep: true
     }
