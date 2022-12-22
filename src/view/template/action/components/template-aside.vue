@@ -5,14 +5,17 @@
       ol.template-component-group
         li.template-component-item(
           v-for="(item, k) in base"
-          @pointerdown="addComponent(item)"
-          :key="k") {{item.props.label}}
+          :key="k"
+          draggable
+          @dragstart="dragstartHandle($event, item)"
+          @dragend="dragendHandle($event)"
+          @drag="dragHandle($event)") {{item.props.label}}
 </template>
 
 <script>
-import { inject, ref } from 'vue'
-import { cloneDeep } from 'lodash-es'
-import { storeSymbol } from '@/view/template/constant'
+import { inject, onBeforeUnmount, ref } from 'vue'
+import eventBus from '@/util/eventBus'
+import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useBuiltinComponent } from './builtin'
 
 export default {
@@ -22,14 +25,39 @@ export default {
     const store = inject(storeSymbol)
     const index = ref(0)
 
+    const addComponent = function (component) {
+      component.id = 'component-' + index.value++
+      store.components.push(component)
+    }
+
+    eventBus.$on(templateChannel['stage:component:add'], addComponent)
+    onBeforeUnmount(function () {
+      eventBus.$off(templateChannel['stage:component:add'], addComponent)
+    })
+
     return { base, store, index }
   },
   methods: {
-    addComponent(item) {
-      const component = cloneDeep(item)
-      component.id = 'component-' + this.index++
-
-      this.store.components.push(component)
+    /**
+     * @param {DragEvent} e
+     */
+    dragHandle(e) {
+      console.log('正在拖拉')
+    },
+    /**
+     * @param {DragEvent} e
+     */
+    dragstartHandle(e, data) {
+      console.log('开始拖拽')
+      e.dataTransfer.dropEffect = 'move'
+      e.dataTransfer.setData('application/json', JSON.stringify(data))
+    },
+    /**
+     * @param {DragEvent} e
+     */
+    dragendHandle(e) {
+      console.log('结束拖拽')
+      e.dataTransfer.clearData()
     }
   }
 }
@@ -64,7 +92,6 @@ export default {
 }
 
 .template-component-item {
-  cursor: pointer;
   text-align: center;
   font-size: 12px;
   padding: 6px;

@@ -5,7 +5,9 @@
     @pointerdown="unSelectComponent"
     @keydown.delete="deleteComponent"
     @keydown.space.exact="spaceDownHandle"
-    @keyup.space.exact="spaceUpHandle")
+    @keyup.space.exact="spaceUpHandle"
+    @drop="dropHandle"
+    @dragover.prevent="noop")
     TemplateArea(:scale="scale")
     TemplateAuxiliaryLine
     TemplateAuxiliaryLine(direction="vertical")
@@ -25,7 +27,7 @@
 
 <script>
 import { inject } from 'vue'
-import { storeSymbol } from '@/view/template/constant'
+import { storeSymbol, templateChannel } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -153,6 +155,17 @@ export default {
       this.spaceDown = false
     },
     /**
+     * @param {DragEvent} e
+     */
+    dropHandle(e) {
+      const response = e.dataTransfer.getData('application/json')
+      /**
+       * @type {Template.BuiltinComponent}
+       */
+      const data = JSON.parse(response)
+      eventBus.$emit(templateChannel['stage:component:add'], data)
+    },
+    /**
      * @param {object} component
      * @param {number} index
      */
@@ -175,24 +188,24 @@ export default {
   },
   watch: {
     scale(val) {
-      eventBus.$emit('template-stage:scale:change', val)
+      eventBus.$emit(templateChannel['stage:scale:change'], val)
     },
     position: {
       handler(val) {
-        eventBus.$emit('template-stage:position:change', val)
+        eventBus.$emit(templateChannel['stage:position:change'], val)
       },
       deep: true
     },
     'store.size': {
       handler(val) {
         window.dispatchEvent(new Event('resize'))
-        eventBus.$emit('template-stage:size:change', val)
+        eventBus.$emit(templateChannel['stage:size:change'], val)
       },
       deep: true
     },
     'store.padding': {
       handler(val) {
-        eventBus.$emit('template-stage:padding:change', val)
+        eventBus.$emit(templateChannel['stage:padding:change'], val)
       },
       deep: true
     }

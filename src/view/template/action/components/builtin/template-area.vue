@@ -9,6 +9,7 @@
 
 <script>
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { templateChannel } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -70,11 +71,11 @@ export default {
     }
 
     onMounted(function () {
-      eventBus.$on('template-stage:position:change', stageChangeHandle)
-      eventBus.$on('template-stage:padding:change', stageChangeHandle)
-      eventBus.$on('template-stage:size:change', stageChangeHandle)
-      eventBus.$on('template-stage:scale:change', stageChangeHandle)
-      eventBus.$emit('template-stage:size:change')
+      eventBus.$on(templateChannel['stage:position:change'], stageChangeHandle)
+      eventBus.$on(templateChannel['stage:padding:change'], stageChangeHandle)
+      eventBus.$on(templateChannel['stage:size:change'], stageChangeHandle)
+      eventBus.$on(templateChannel['stage:scale:change'], stageChangeHandle)
+      eventBus.$emit(templateChannel['stage:size:change'])
 
       vm.stageInstance.$el.addEventListener('pointerdown', pointerdown)
       vm.stageInstance.$el.addEventListener('pointermove', pointermove)
@@ -82,10 +83,10 @@ export default {
     })
 
     onBeforeUnmount(function () {
-      eventBus.$off('template-stage:position:change', stageChangeHandle)
-      eventBus.$off('template-stage:padding:change', stageChangeHandle)
-      eventBus.$off('template-stage:size:change', stageChangeHandle)
-      eventBus.$off('template-stage:scale:change', stageChangeHandle)
+      eventBus.$off(templateChannel['stage:position:change'], stageChangeHandle)
+      eventBus.$off(templateChannel['stage:padding:change'], stageChangeHandle)
+      eventBus.$off(templateChannel['stage:size:change'], stageChangeHandle)
+      eventBus.$off(templateChannel['stage:scale:change'], stageChangeHandle)
 
       vm.stageInstance.$el.removeEventListener('pointerdown', pointerdown)
       vm.stageInstance.$el.removeEventListener('pointermove', pointermove)

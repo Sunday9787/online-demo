@@ -1,11 +1,9 @@
-import { reactive } from 'vue'
-
 /**
  * @param {number} [x]
  * @param {number} [y]
  */
 export function usePosition(x = 0, y = 0) {
-  const state = reactive({ x, y })
+  const state = { x, y }
   return state
 }
 
@@ -14,7 +12,7 @@ export function usePosition(x = 0, y = 0) {
  * @param {number} [h]
  */
 export function useSize(w = 0, h = 0) {
-  const state = reactive({ w, h })
+  const state = { w, h }
   return state
 }
 
