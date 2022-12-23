@@ -10,6 +10,7 @@
 <script>
 import { provide } from 'vue'
 import { useStore } from '@/view/template/hooks/useStore'
+import { useRecord } from '@/view/template/hooks/useRecord'
 import { storeSymbol } from '@/view/template/constant'
 
 import TemplateAside from './components/template-aside.vue'
@@ -29,6 +30,8 @@ export default {
     const store = useStore()
 
     provide(storeSymbol, store)
+    useRecord(store)
+
     return { store }
   }
 }

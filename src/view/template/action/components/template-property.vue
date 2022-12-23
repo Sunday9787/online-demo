@@ -58,13 +58,19 @@ import { useFont } from '@/view/template/hooks/useProperty'
 export default {
   name: 'TemplateProperty',
   setup() {
+    /**
+     * @type {Template.Store}
+     */
     const store = inject(storeSymbol)
     const { fonts } = useFont()
+    /**
+     * @type {import('vue').Ref<Template.BuiltinComponent>}
+     */
     const currentComponent = computed(() => store.currentComponent)
 
     const current = computed(() => {
       if (currentComponent.value) {
-        return currentComponent.value.component.props
+        return currentComponent.value.props
       }
 
       return null

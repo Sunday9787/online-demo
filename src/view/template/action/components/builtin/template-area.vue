@@ -71,11 +71,11 @@ export default {
     }
 
     onMounted(function () {
-      eventBus.$on(templateChannel['stage:position:change'], stageChangeHandle)
-      eventBus.$on(templateChannel['stage:padding:change'], stageChangeHandle)
-      eventBus.$on(templateChannel['stage:size:change'], stageChangeHandle)
-      eventBus.$on(templateChannel['stage:scale:change'], stageChangeHandle)
-      eventBus.$emit(templateChannel['stage:size:change'])
+      eventBus.$on(templateChannel.stagePositionChange, stageChangeHandle)
+      eventBus.$on(templateChannel.stagePaddingChange, stageChangeHandle)
+      eventBus.$on(templateChannel.stageSizeChange, stageChangeHandle)
+      eventBus.$on(templateChannel.stageScaleChange, stageChangeHandle)
+      eventBus.$emit(templateChannel.stageSizeChange)
 
       vm.stageInstance.$el.addEventListener('pointerdown', pointerdown)
       vm.stageInstance.$el.addEventListener('pointermove', pointermove)
@@ -83,10 +83,10 @@ export default {
     })
 
     onBeforeUnmount(function () {
-      eventBus.$off(templateChannel['stage:position:change'], stageChangeHandle)
-      eventBus.$off(templateChannel['stage:padding:change'], stageChangeHandle)
-      eventBus.$off(templateChannel['stage:size:change'], stageChangeHandle)
-      eventBus.$off(templateChannel['stage:scale:change'], stageChangeHandle)
+      eventBus.$off(templateChannel.stagePositionChange, stageChangeHandle)
+      eventBus.$off(templateChannel.stagePaddingChange, stageChangeHandle)
+      eventBus.$off(templateChannel.stageSizeChange, stageChangeHandle)
+      eventBus.$off(templateChannel.stageScaleChange, stageChangeHandle)
 
       vm.stageInstance.$el.removeEventListener('pointerdown', pointerdown)
       vm.stageInstance.$el.removeEventListener('pointermove', pointermove)

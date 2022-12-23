@@ -21,7 +21,23 @@ export function useStore() {
       }
     },
     padding,
-    components: [],
+    /**
+     * @type {Map<string, Template.BuiltinComponent>}
+     */
+    components: new Map(),
+    /**
+     * 历史记录
+     * @type {Template.BuiltinComponentRecord[]}
+     */
+    record: [],
+    /**
+     * 恢复队列
+     * @type {Template.BuiltinComponentRecord[]}
+     */
+    restore: [],
+    /**
+     * @type {Template.CurrentComponent|null}
+     */
     currentComponent: null
   })
 

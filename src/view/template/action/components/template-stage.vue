@@ -12,12 +12,14 @@
     TemplateAuxiliaryLine
     TemplateAuxiliaryLine(direction="vertical")
     TemplateControl(
-      v-for="(component, k) in store.components"
+      v-for="[key, component] of componentsData"
       :key="component.id"
       :scale="scale"
       :position.sync="component.props.position"
       :size.sync="component.props.size"
-      @select="selectComponent(component, k)")
+      @sizeChange="componentSizeChange(component)"
+      @positionChange="componentPositionChange(component)"
+      @select="selectComponent(component)")
       component(
         :is="component.name"
         :label="component.props.label"
@@ -26,8 +28,8 @@
 </template>
 
 <script>
-import { inject } from 'vue'
-import { storeSymbol, templateChannel } from '@/view/template/constant'
+import { inject, ref, watch } from 'vue'
+import { storeSymbol, templateChannel, componentRecordType } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -51,8 +53,29 @@ export default {
     }
   },
   setup() {
+    /**
+     * @type {Template.Store}
+     */
     const store = inject(storeSymbol)
-    return { store }
+    /**
+     * @type {import('vue').Ref<Template.BuiltinComponent[]>}
+     */
+    const componentsData = ref([])
+
+    /**
+     * 因为 vue 并不会响应 Map 数据
+     * 所以 hack 监听 相关联的数据变化 重新 渲染
+     * @see https://github.com/vuejs/vue/issues/2410#issuecomment-318487855
+     */
+    watch(
+      [() => store.record, () => store.restore],
+      function (val, oldVal) {
+        componentsData.value = Array.from(store.components)
+      },
+      { deep: true }
+    )
+
+    return { store, componentsData }
   },
   data() {
     return {
@@ -163,49 +186,72 @@ export default {
        * @type {Template.BuiltinComponent}
        */
       const data = JSON.parse(response)
-      eventBus.$emit(templateChannel['stage:component:add'], data)
+      eventBus.$emit(templateChannel.stageComponentAdd, data)
     },
     /**
      * @param {object} component
-     * @param {number} index
      */
-    selectComponent(component, index) {
-      this.store.currentComponent = { component, index }
+    selectComponent(component) {
+      this.store.currentComponent = component
     },
     unSelectComponent() {
       this.store.currentComponent = null
+    },
+    /**
+     * @param {Template.BuiltinComponent}
+     * @param {number} index
+     */
+    componentSizeChange() {
+      eventBus.$emit(
+        templateChannel.componentPropertySizeChange,
+        componentRecordType.componentPropertySizeChange,
+        this.store.currentComponent
+      )
+    },
+    /**
+     * @param {Template.BuiltinComponent}
+     * @param {number} index
+     */
+    componentPositionChange(component, index) {
+      eventBus.$emit(
+        templateChannel.componentPropertyPositionChange,
+        componentRecordType.componentPropertyPositionChange,
+        this.store.currentComponent
+      )
     },
     /**
      * @param {KeyboardEvent} e
      */
     deleteComponent(e) {
       if (this.store.currentComponent) {
-        const { index } = this.store.currentComponent
-        this.store.components.splice(index, 1)
+        const component = this.store.currentComponent
+
         this.store.currentComponent = null
+        this.store.components.delete(component.key)
+        eventBus.$emit(templateChannel.componentDel, componentRecordType.componentDel, component)
       }
     }
   },
   watch: {
     scale(val) {
-      eventBus.$emit(templateChannel['stage:scale:change'], val)
+      eventBus.$emit(templateChannel.stageScaleChange, val)
     },
     position: {
       handler(val) {
-        eventBus.$emit(templateChannel['stage:position:change'], val)
+        eventBus.$emit(templateChannel.stagePositionChange, val)
       },
       deep: true
     },
     'store.size': {
       handler(val) {
         window.dispatchEvent(new Event('resize'))
-        eventBus.$emit(templateChannel['stage:size:change'], val)
+        eventBus.$emit(templateChannel.stageSizeChange, val)
       },
       deep: true
     },
     'store.padding': {
       handler(val) {
-        eventBus.$emit(templateChannel['stage:padding:change'], val)
+        eventBus.$emit(templateChannel.stagePaddingChange, val)
       },
       deep: true
     }

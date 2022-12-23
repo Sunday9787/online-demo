@@ -1,11 +1,11 @@
 <template lang="pug">
   header.template-toolbar
     div.flex1
-    el-button(type="primary" size="small")
+    el-button(type="primary" size="small" @click="undo()")
       i.el-icon-back
       | &nbsp;撤销
 
-    el-button(type="primary" size="small")
+    el-button(type="primary" size="small" @click="restore()")
       | 恢复&nbsp;
       i.el-icon-right
     el-button(type="primary" size="small" @click="stageClear()") 清空画布
@@ -98,6 +98,7 @@
 import { cloneDeep } from 'lodash-es'
 import { inject, reactive } from 'vue'
 import { storeSymbol } from '@/view/template/constant'
+import { createId } from '@/view/template/utils'
 import { useSize } from '@/view/template/hooks/useSize'
 import { useDialog } from '@/hooks/useDialog'
 import { usePadding } from '@/view/template/hooks/usePadding'
@@ -105,6 +106,9 @@ import { usePadding } from '@/view/template/hooks/usePadding'
 export default {
   name: 'TemplateToolbar',
   setup() {
+    /**
+     * @type {Template.Store}
+     */
     const store = inject(storeSymbol)
     const size = useSize()
     const form = reactive({
@@ -138,8 +142,80 @@ export default {
   },
   methods: {
     stageClear() {
-      this.store.components.splice(0)
+      this.store.components.clear()
       this.store.currentComponent = null
+    },
+    undo() {
+      const popRecord = this.store.record.pop()
+
+      if (popRecord) {
+        switch (popRecord.type) {
+          case 'component:add':
+            this.store.components.delete(popRecord.record.key)
+            this.store.currentComponent = null
+            break
+          case 'component:del':
+            this.store.components.set(popRecord.record.key, popRecord.record)
+            this.store.currentComponent = null
+            break
+          case 'component:property:position:change':
+          case 'component:property:font:change':
+          case 'component:property:size:change':
+            this.store.restore.push(cloneDeep(popRecord))
+            if (this.store.record.length) {
+              const record = this.store.record[this.store.record.length - 1].record
+
+              if (this.store.components.has(record.key)) {
+                /**
+                 * @type {Template.BuiltinComponent}
+                 */
+                const component = cloneDeep(record)
+                component.id = createId(record.key)
+
+                this.store.components.set(component.key, component)
+                console.log('撤销更改', 'key', component.key, '新id', component.id, '旧id', record.id)
+              }
+            }
+            break
+        }
+      }
+    },
+    restore() {
+      if (this.store.restore.length) {
+        console.log('restore')
+        const popRecord = this.store.restore.pop()
+
+        if (popRecord) {
+          switch (popRecord.type) {
+            case 'component:add':
+              this.store.components.delete(popRecord.record.key)
+              this.store.currentComponent = null
+              break
+            case 'component:del':
+              this.store.components.set(popRecord.record.key, popRecord.record)
+              this.store.currentComponent = null
+              break
+            case 'component:property:position:change':
+            case 'component:property:font:change':
+            case 'component:property:size:change':
+              ;(function (context) {
+                const record = popRecord.record
+
+                if (context.store.components.has(record.key)) {
+                  /**
+                   * @type {Template.BuiltinComponent}
+                   */
+                  const component = cloneDeep(record)
+                  component.id = createId(record.key)
+
+                  context.store.components.set(component.key, component)
+                  console.log('恢复更改', 'key', component.key, '新id', component.id, '旧id', record.id)
+                }
+              })(this)
+              break
+          }
+        }
+      }
     }
   }
 }
