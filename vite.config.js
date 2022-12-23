@@ -7,6 +7,7 @@ import viteCompression from 'vite-plugin-compression'
 import { manualChunksPlugin } from 'vite-plugin-webpackchunkname'
 import vuePugPlugin from 'vue-pug-plugin'
 import cssnano from 'cssnano'
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split'
 import themePlugin from './plugin/theme'
 
 console.log(path.resolve('./src/style/theme/__variables.scss'))
@@ -47,6 +48,15 @@ export default defineConfig({
       threshold: 0,
       minRatio: 0.8
     }),
+    chunkSplitPlugin({
+      customSplitting: {
+        vendor: [/src\/(mixins|directive)/, 'vue', 'vue-router', 'vuex', 'vuex-persistedstate'],
+        components: [/src\/(components|layout)/],
+        libs: ['moment', 'lodash-es', 'number-precision', 'nprogress', 'normalize.css', 'd3', '@vueuse/core'],
+        'element-ui': ['element-ui'],
+        utils: [/src\/(util)/]
+      }
+    }),
     themePlugin({
       path: path.resolve('./src/style/theme'),
       pattern: './src/style/theme/!(__element-ui|__theme|).scss'
@@ -58,11 +68,6 @@ export default defineConfig({
     rollupOptions: {
       input: path.resolve('./index.html'),
       output: {
-        manualChunks: {
-          vendor: ['vue', 'vuex', 'vue-router'],
-          element: ['element-ui'],
-          lodash: ['lodash-es']
-        },
         assetFileNames: assetInfo => {
           const info = assetInfo.name.split('.')
           let extType = info[info.length - 1]
