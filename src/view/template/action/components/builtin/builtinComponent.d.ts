@@ -15,6 +15,7 @@ declare namespace Template {
     /** 组件id */
     id: string
     key: number
+    visible: boolean
     /** 组件名称 */
     name: string
     /** 组件类型 */

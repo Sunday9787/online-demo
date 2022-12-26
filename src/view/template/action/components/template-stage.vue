@@ -13,6 +13,7 @@
     TemplateAuxiliaryLine(direction="vertical")
     TemplateControl(
       v-for="[key, component] of componentsData"
+      v-model="component.visible"
       :key="component.id"
       :scale="scale"
       :position.sync="component.props.position"

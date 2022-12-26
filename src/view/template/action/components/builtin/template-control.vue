@@ -17,6 +17,7 @@
 
 <script>
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { useControl } from './controlManage'
 
 /**
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
@@ -166,11 +167,16 @@ export default {
     size: {
       type: Object,
       required: true
+    },
+    value: {
+      type: Boolean,
+      required: true
     }
   },
   setup(props, context) {
     const vm = getCurrentInstance().proxy
-    const visible = ref(false)
+    const visible = ref(props.value)
+    const { multiple } = useControl()
     /**
      * 指针点击类型 - 控制方向类型/null
      */
@@ -206,7 +212,9 @@ export default {
         x: e.pageX - vm.$el.offsetLeft * scale,
         y: e.pageY - vm.$el.offsetTop * scale
       }
+
       context.emit('select', vm)
+      context.emit('input', visible.value)
     }
 
     /**
@@ -271,6 +279,7 @@ export default {
      */
     const onBodyPointerdown = function (e) {
       visible.value = false
+      context.emit('input', visible.value)
     }
 
     onMounted(function () {
@@ -291,7 +300,7 @@ export default {
       vm.stageInstance.$el.removeEventListener('pointerup', onPointerup)
     })
 
-    return { visible, pointType, initSize, miniSize, data, stashPosition, onPointerdown }
+    return { visible, multiple, pointType, initSize, miniSize, data, stashPosition, onPointerdown }
   },
   computed: {
     wrapperStyle() {
@@ -314,6 +323,9 @@ export default {
     }
   },
   watch: {
+    value(val) {
+      this.visible = val
+    },
     position: {
       deep: true,
       handler(val) {

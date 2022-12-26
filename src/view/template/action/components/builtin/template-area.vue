@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
-import { templateChannel } from '@/view/template/constant'
+import { getCurrentInstance, inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { templateChannel, storeSymbol } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -23,6 +23,10 @@ export default {
   },
   setup(props) {
     const vm = getCurrentInstance().proxy
+    /**
+     * @type {Template.Store}
+     */
+    const store = inject(storeSymbol)
     const stagePosition = ref(null)
     const rect = reactive({ w: 0, h: 0, x: 0, y: 0 })
 
@@ -52,6 +56,21 @@ export default {
 
         rect.w = w
         rect.h = h
+
+        store.components.forEach(function (item) {
+          const component = store.components.get(item.key)
+
+          if (
+            item.props.position.x >= rect.x &&
+            item.props.position.x <= rect.x + rect.w &&
+            item.props.position.y >= rect.y &&
+            item.props.position.y <= rect.y + rect.h
+          ) {
+            component.visible = true
+          } else {
+            component.visible = false
+          }
+        })
       }
     }
 

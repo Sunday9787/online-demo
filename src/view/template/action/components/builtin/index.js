@@ -11,6 +11,7 @@ export function useBuiltinComponent() {
       id: 0,
       name: 'template-input',
       type: 'input',
+      visible: false,
       props: {
         label: '病例名称',
         property: {
@@ -26,6 +27,7 @@ export function useBuiltinComponent() {
       id: 0,
       name: 'template-input',
       type: 'input',
+      visible: false,
       props: {
         label: '产前编号',
         property: {
@@ -41,6 +43,7 @@ export function useBuiltinComponent() {
       id: 0,
       name: 'template-input',
       type: 'input',
+      visible: false,
       props: {
         label: '姓名',
         property: {
