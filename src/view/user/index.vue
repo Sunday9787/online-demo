@@ -21,7 +21,8 @@ export default {
     globalSetting: () => import('./components/globalSetting.vue'),
     operationLog: () => import('./components/operationLog.vue'),
     transactionLog: () => import('./components/transactionLog.vue'),
-    autoUpload: () => import('./components/autoUpload.vue')
+    autoUpload: () => import('./components/autoUpload.vue'),
+    drag: () => import('./components/drag.vue')
   },
   setup() {
     const menu = [
@@ -32,7 +33,8 @@ export default {
       { label: '全局设置', name: 'globalSetting' },
       { label: '操作日志', name: 'operationLog' },
       { label: '交易日志', name: 'transactionLog' },
-      { label: '自动上传', name: 'autoUpload' }
+      { label: '自动上传', name: 'autoUpload' },
+      { label: 'drag', name: 'drag' }
     ]
 
     const tabActive = ref('info')
