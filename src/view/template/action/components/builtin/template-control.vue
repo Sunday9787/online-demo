@@ -84,7 +84,7 @@ const onPointermoveHandle = {
 
       this.data.w = w / scale
       this.$emit('update:size', { w: this.data.w, h: this.data.h })
-      this.$emit('sizeChange', { w: this.data.w, h: this.data.h })
+      this.$emit('resize', { w: this.data.w, h: this.data.h })
     }
   },
   bottomLeft(e) {},
@@ -109,7 +109,7 @@ const onPointermoveHandle = {
 
       this.data.h = h / scale
       this.$emit('update:size', { w: this.data.w, h: this.data.h })
-      this.$emit('sizeChange', { w: this.data.w, h: this.data.h })
+      this.$emit('resize', { w: this.data.w, h: this.data.h })
     }
   },
   bottomRight(e) {
@@ -148,7 +148,7 @@ const onPointermoveHandle = {
     this.data.w = w / scale
     this.data.h = h / scale
     this.$emit('update:size', { w: this.data.w, h: this.data.h })
-    this.$emit('sizeChange', { w: this.data.w, h: this.data.h })
+    this.$emit('resize', { w: this.data.w, h: this.data.h })
   }
 }
 
@@ -259,7 +259,7 @@ export default {
         data.y = y / scale
 
         context.emit('update:position', { x: data.x, y: data.y })
-        context.emit('positionChange', { x: data.x, y: data.y })
+        context.emit('move', { x: data.x, y: data.y })
       }
     }
 
@@ -272,6 +272,7 @@ export default {
       pointType.value = null
       initSize.w = data.w
       initSize.h = data.h
+      context.emit('end')
     }
 
     /**

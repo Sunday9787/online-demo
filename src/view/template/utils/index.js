@@ -14,5 +14,6 @@ export const recordNameMap = {
   'component:del': '删除组件',
   'component:property:font:change': '组件字体修改',
   'component:property:position:change': '组件位置修改',
-  'component:property:size:change': '组件字体大小修改'
+  'component:property:position:change:end': '组件位置修改结束',
+  'component:property:size:change': '组件大小修改'
 }

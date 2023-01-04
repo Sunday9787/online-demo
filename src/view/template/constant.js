@@ -18,6 +18,7 @@ export const templateChannel = readonly({
   /** 组件删除 */
   componentDel: 'editor-component:del',
   componentPropertyPositionChange: 'editor-component:property:position:change',
+  componentPropertyPositionChangeEnd: 'editor-component:property:position:change:end',
   componentPropertyFontChange: 'editor-component:property:font:change',
   componentPropertySizeChange: 'editor-component:property:size:change'
 })
@@ -26,6 +27,7 @@ export const componentRecordType = readonly({
   componentAdd: 'component:add',
   componentDel: 'component:del',
   componentPropertyPositionChange: 'component:property:position:change',
+  componentPropertyPositionChangeEnd: 'component:property:position:change:end',
   componentPropertyFontChange: 'component:property:font:change',
   componentPropertySizeChange: 'component:property:size:change'
 })

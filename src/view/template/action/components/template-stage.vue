@@ -9,8 +9,11 @@
     @drop="dropHandle"
     @dragover.prevent="noop")
     TemplateArea(:scale="scale")
-    TemplateAuxiliaryLine
-    TemplateAuxiliaryLine(direction="vertical")
+    TemplateMarkLine(v-for="(item) in markLine"
+      :key="item.type"
+      :position="item.position"
+      :direction="item.direction"
+      :visible="item.visible")
     TemplateControl(
       v-for="[key, component] of componentsData"
       v-model="component.visible"
@@ -18,8 +21,9 @@
       :scale="scale"
       :position.sync="component.props.position"
       :size.sync="component.props.size"
-      @sizeChange="componentSizeChange(component)"
-      @positionChange="componentPositionChange(component)"
+      @resize="componentResize(store.currentComponent)"
+      @move="componentMove(store.currentComponent)"
+      @end="componentMoveEnd(store.currentComponent)"
       @select="selectComponent(component)")
       component(
         :is="component.name"
@@ -31,14 +35,17 @@
 <script>
 import { inject, ref, watch } from 'vue'
 import { storeSymbol, templateChannel, componentRecordType } from '@/view/template/constant'
+import { useMarkLine } from '@/view/template/hooks/useMarkLine'
+import { recordMixin } from '@/view/template/hooks/useRecord'
 import eventBus from '@/util/eventBus'
 
 export default {
   name: 'TemplateStage',
+  mixins: [recordMixin],
   components: {
     TemplateInput: () => import('./builtin/template-input.vue'),
     TemplateControl: () => import('./builtin/template-control.vue'),
-    TemplateAuxiliaryLine: () => import('./builtin/template-auxiliary-line.vue'),
+    TemplateMarkLine: () => import('./builtin/template-mark-line.vue'),
     TemplateArea: () => import('./builtin/template-area.vue')
   },
   props: {
@@ -62,6 +69,7 @@ export default {
      * @type {import('vue').Ref<Template.BuiltinComponent[]>}
      */
     const componentsData = ref([])
+    const { markLine } = useMarkLine()
 
     /**
      * 因为 vue 并不会响应 Map 数据
@@ -76,7 +84,7 @@ export default {
       { deep: true }
     )
 
-    return { store, componentsData }
+    return { store, componentsData, markLine }
   },
   data() {
     return {
@@ -197,28 +205,6 @@ export default {
     },
     unSelectComponent() {
       this.store.currentComponent = null
-    },
-    /**
-     * @param {Template.BuiltinComponent}
-     * @param {number} index
-     */
-    componentSizeChange() {
-      eventBus.$emit(
-        templateChannel.componentPropertySizeChange,
-        componentRecordType.componentPropertySizeChange,
-        this.store.currentComponent
-      )
-    },
-    /**
-     * @param {Template.BuiltinComponent}
-     * @param {number} index
-     */
-    componentPositionChange(component, index) {
-      eventBus.$emit(
-        templateChannel.componentPropertyPositionChange,
-        componentRecordType.componentPropertyPositionChange,
-        this.store.currentComponent
-      )
     },
     /**
      * @param {KeyboardEvent} e

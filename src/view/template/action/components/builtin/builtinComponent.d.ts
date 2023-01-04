@@ -4,6 +4,7 @@ declare namespace Template {
     'component:add' |
     'component:del' |
     'component:property:position:change' |
+    'component:property:position:change:end' |
     'component:property:font:change' |
     'component:property:size:change'
 
@@ -28,6 +29,10 @@ declare namespace Template {
         x: number
         y: number
       }
+      size: {
+        w: number
+        h: number
+      }
     }
   }
 
@@ -41,6 +46,15 @@ declare namespace Template {
     bottom: number
     left: number
     right: number
+  }
+
+  interface Rect {
+    top: number
+    bottom: number
+    left: number
+    right: number
+    width: number
+    height: number
   }
 
   interface Size {

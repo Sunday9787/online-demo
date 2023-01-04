@@ -3,7 +3,7 @@
     el-row
       h1 字体
       section
-        el-select(v-model="current.property.font")
+        el-select(v-model="current.property.font" @change="componentFontChange(currentComponent)")
           el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
     section.template-property-container
       div.template-property-item
@@ -18,7 +18,8 @@
               :min="0"
               :precision="1"
               :controls="false"
-              v-model="current.position.x")
+              v-model="current.position.x"
+              @change="componentPositionChange(currentComponent)")
             span X
           li.template-property-list-item
             el-input-number.flex1(
@@ -26,7 +27,8 @@
               :min="0"
               :precision="1"
               :controls="false"
-              v-model="current.position.y")
+              v-model="current.position.y"
+              @change="componentPositionChange(currentComponent)")
             span Y
       div.template-property-item
         label 大小
@@ -37,7 +39,8 @@
               :min="0"
               :precision="1"
               :controls="false"
-              v-model="current.size.w")
+              v-model="current.size.w"
+              @change="componentSizeChange(currentComponent)")
             span W
           li.template-property-list-item
             el-input-number.flex1(
@@ -45,7 +48,8 @@
               :min="0"
               :precision="1"
               :controls="false"
-              v-model="current.size.h")
+              v-model="current.size.h"
+              @change="componentSizeChange(currentComponent)")
             span H
   aside.template-property(key="2" v-else)
 </template>
@@ -54,9 +58,11 @@
 import { computed, inject } from 'vue'
 import { storeSymbol } from '@/view/template/constant'
 import { useFont } from '@/view/template/hooks/useProperty'
+import { recordMixin } from '@/view/template/hooks/useRecord'
 
 export default {
   name: 'TemplateProperty',
+  mixins: [recordMixin],
   setup() {
     /**
      * @type {Template.Store}
