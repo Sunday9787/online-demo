@@ -6,6 +6,9 @@ export function useStore() {
   const size = useSize()
   const padding = usePadding()
 
+  /**
+   * @type {Template.Store}
+   */
   const state = reactive({
     name: '',
     direction: 'vertical',
@@ -26,6 +29,10 @@ export function useStore() {
      */
     components: new Map(),
     /**
+     * @type {Template.BuiltinComponent[]}
+     */
+    componentsData: [],
+    /**
      * 历史记录
      * @type {Template.BuiltinComponentRecord[]}
      */
@@ -36,7 +43,7 @@ export function useStore() {
      */
     restore: [],
     /**
-     * @type {Template.CurrentComponent|null}
+     * @type {Template.BuiltinComponent|null}
      */
     currentComponent: null
   })

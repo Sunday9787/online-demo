@@ -17,7 +17,7 @@
 
 <script>
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
-import { useControl } from './controlManage'
+import { useControl } from '@/view/template/hooks/controlManage'
 
 /**
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
@@ -215,6 +215,7 @@ export default {
 
       context.emit('select', vm)
       context.emit('input', visible.value)
+      context.emit('moveStart', { x: data.x, y: data.y })
     }
 
     /**
@@ -267,12 +268,16 @@ export default {
      * @param {PointerEvent} e
      */
     const onPointerup = function (e) {
-      vm.$el.style.cursor = 'default'
-      stashPosition.value = null
-      pointType.value = null
-      initSize.w = data.w
-      initSize.h = data.h
-      context.emit('end')
+      if (stashPosition.value) {
+        vm.$el.style.cursor = 'default'
+        stashPosition.value = null
+        pointType.value = null
+        initSize.w = data.w
+        initSize.h = data.h
+
+        context.emit('moveEnd')
+        context.emit('resizeEnd')
+      }
     }
 
     /**
@@ -301,7 +306,16 @@ export default {
       vm.stageInstance.$el.removeEventListener('pointerup', onPointerup)
     })
 
-    return { visible, multiple, pointType, initSize, miniSize, data, stashPosition, onPointerdown }
+    return {
+      visible,
+      multiple,
+      pointType,
+      initSize,
+      miniSize,
+      data,
+      stashPosition,
+      onPointerdown
+    }
   },
   computed: {
     wrapperStyle() {
@@ -320,7 +334,8 @@ export default {
      */
     onControlPointerdown(pointType, e) {
       this.pointType = pointType
-      onPointeDownHandle[pointType].call(this, e)
+      onPointeDownHandle[pointType].apply(this, [e])
+      this.$emit('resizeStart', { w: this.data.w, h: this.data.h })
     }
   },
   watch: {

@@ -90,7 +90,7 @@ export default {
     }
 
     onMounted(function () {
-      eventBus.$on(templateChannel.stagePositionChange, stageChangeHandle)
+      eventBus.$on(templateChannel.stageMove, stageChangeHandle)
       eventBus.$on(templateChannel.stagePaddingChange, stageChangeHandle)
       eventBus.$on(templateChannel.stageSizeChange, stageChangeHandle)
       eventBus.$on(templateChannel.stageScaleChange, stageChangeHandle)
@@ -102,7 +102,7 @@ export default {
     })
 
     onBeforeUnmount(function () {
-      eventBus.$off(templateChannel.stagePositionChange, stageChangeHandle)
+      eventBus.$off(templateChannel.stageMove, stageChangeHandle)
       eventBus.$off(templateChannel.stagePaddingChange, stageChangeHandle)
       eventBus.$off(templateChannel.stageSizeChange, stageChangeHandle)
       eventBus.$off(templateChannel.stageScaleChange, stageChangeHandle)

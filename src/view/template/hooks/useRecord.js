@@ -1,94 +1,121 @@
-import { onBeforeUnmount } from 'vue'
-import { cloneDeep } from 'lodash-es'
-import { templateChannel, componentRecordType } from '@/view/template/constant'
-import { recordNameMap } from '@/view/template/utils'
+import { onBeforeUnmount, onMounted } from 'vue'
+import { recordChannel, recordTypeMap } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
+import { cloneDeep } from 'lodash-es'
 
 /**
- * @type {Vue.ComponentOptions<import('vue').VueConstructor>}
+ * @param {Template.BuiltinComponentRecordType} type
+ * @param {Template.BuiltinComponent} component
  */
-export const recordMixin = {
-  methods: {
-    /**
-     * @param {Template.BuiltinComponent} currentComponent
-     */
-    componentFontChange(currentComponent) {
-      eventBus.$emit(
-        templateChannel.componentPropertyFontChange,
-        componentRecordType.componentPropertyFontChange,
-        currentComponent
-      )
-    },
-    /**
-     * @param {Template.BuiltinComponent} currentComponent
-     */
-    componentResize(currentComponent) {
-      eventBus.$emit(
-        templateChannel.componentPropertySizeChange,
-        componentRecordType.componentPropertySizeChange,
-        currentComponent
-      )
-    },
-    /**
-     * @param {Template.BuiltinComponent} currentComponent
-     */
-    componentMove(currentComponent) {
-      eventBus.$emit(
-        templateChannel.componentPropertyPositionChange,
-        componentRecordType.componentPropertyPositionChange,
-        currentComponent
-      )
-    },
-    /**
-     * @param {Template.BuiltinComponent} currentComponent
-     */
-    componentMoveEnd(currentComponent) {
-      eventBus.$emit(
-        templateChannel.componentPropertyPositionChangeEnd,
-        componentRecordType.componentPropertyPositionChangeEnd,
-        currentComponent
-      )
+function createRecord(type, component) {
+  /**
+   * @type {Template.BuiltinComponentRecord}
+   */
+  const data = Object.create(null)
+  data.type = type
+  data.component = cloneDeep(component)
+
+  return data
+}
+
+/**
+ * @this {Template.Store}
+ * @param {Template.BuiltinComponentRecordType} type
+ * @param {Template.BuiltinComponent} component
+ * @param {boolean} [record] 是否记录
+ */
+function recordHandle(type, component, record = true) {
+  if (component) {
+    const recordData = createRecord(type, component)
+
+    console.group('record')
+    console.info('事件', recordTypeMap[type])
+    console.info('组件id', component.id)
+    console.info('组件key', component.key)
+    console.info('组件props', component.props)
+    console.groupEnd()
+
+    if (record && this.record.length <= 20) {
+      this.record.push(recordData)
     }
+
+    return
   }
+
+  console.group('record')
+  console.info('事件', recordTypeMap[type])
+  console.groupEnd()
 }
 
 /**
  * @param {Template.Store} store
  */
 export function useRecord(store) {
+  let move = false
+  let resize = false
+
   /**
-   * @param {Template.BuiltinComponentRecordType} type
-   * @param {Template.BuiltinComponent} currentComponent
+   * @param {Template.Event} e
    */
-  const componentChange = function (type, currentComponent) {
-    if (currentComponent) {
-      /**
-       * @type {Template.BuiltinComponentRecord}
-       */
-      const record = { type, record: cloneDeep(currentComponent) }
-      console.group('record')
-      console.info('事件', recordNameMap[type])
-      console.info('组件id', currentComponent.id)
-      console.info('组件key', currentComponent.key)
-      console.info('组件props', currentComponent.props)
-      console.groupEnd()
-      store.record.push(record)
+  const componentChange = function (e) {
+    switch (e.type) {
+      case 'component:add':
+      case 'component:del':
+      case 'component:font:change':
+        recordHandle.apply(store, [e.type, e.detail])
+        break
+      case 'component:resize:start':
+        resize = true
+        break
+      case 'component:resize':
+        recordHandle.apply(store, [e.type, e.detail, false])
+        break
+      case 'component:resize:end':
+        if (e.target === 'property') {
+          recordHandle.apply(store, [e.type, e.detail])
+        } else if (resize) {
+          resize = false
+          recordHandle.apply(store, [e.type, e.detail])
+        }
+        break
+      case 'component:move:start':
+        recordHandle.apply(store, [e.type, e.detail, false])
+        break
+      case 'component:move':
+        move = true
+        break
+      case 'component:move:end':
+        if (e.target === 'property') {
+          recordHandle.apply(store, [e.type, e.detail])
+        } else if (move) {
+          move = false
+          recordHandle.apply(store, [e.type, e.detail])
+        }
     }
   }
 
-  eventBus.$on(templateChannel.componentAdd, componentChange)
-  eventBus.$on(templateChannel.componentDel, componentChange)
-  eventBus.$on(templateChannel.componentPropertyPositionChange, componentChange)
-  eventBus.$on(templateChannel.componentPropertyPositionChangeEnd, componentChange)
-  eventBus.$on(templateChannel.componentPropertyFontChange, componentChange)
-  eventBus.$on(templateChannel.componentPropertySizeChange, componentChange)
+  onMounted(function () {
+    eventBus.$on(recordChannel.componentAdd, componentChange)
+    eventBus.$on(recordChannel.componentDel, componentChange)
+    eventBus.$on(recordChannel.componentMoveStart, componentChange)
+    eventBus.$on(recordChannel.componentMove, componentChange)
+    eventBus.$on(recordChannel.componentMoveEnd, componentChange)
+    eventBus.$on(recordChannel.componentFontChange, componentChange)
+    eventBus.$on(recordChannel.componentResizeStart, componentChange)
+    eventBus.$on(recordChannel.componentResize, componentChange)
+    eventBus.$on(recordChannel.componentResizeEnd, componentChange)
+  })
 
   onBeforeUnmount(function () {
-    eventBus.$off(templateChannel.componentAdd, componentChange)
-    eventBus.$off(templateChannel.componentDel, componentChange)
-    eventBus.$off(templateChannel.componentPropertyPositionChange, componentChange)
-    eventBus.$off(templateChannel.componentPropertyPositionChangeEnd, componentChange)
-    eventBus.$off(templateChannel.componentPropertyFontChange, componentChange)
-    eventBus.$off(templateChannel.componentPropertySizeChange, componentChange)
+    eventBus.$off(recordChannel.componentAdd, componentChange)
+    eventBus.$off(recordChannel.componentDel, componentChange)
+    eventBus.$off(recordChannel.componentMoveStart, componentChange)
+    eventBus.$off(recordChannel.componentMove, componentChange)
+    eventBus.$off(recordChannel.componentMoveEnd, componentChange)
+    eventBus.$off(recordChannel.componentFontChange, componentChange)
+    eventBus.$off(recordChannel.componentSizeChange, componentChange)
+    eventBus.$off(recordChannel.componentResizeStart, componentChange)
+    eventBus.$off(recordChannel.componentResize, componentChange)
+    eventBus.$off(recordChannel.componentResizeEnd, componentChange)
   })
 }

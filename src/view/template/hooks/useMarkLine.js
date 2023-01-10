@@ -1,4 +1,4 @@
-import { inject, onBeforeUnmount, ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
@@ -110,15 +110,14 @@ export function useMarkLine() {
   ])
 
   /**
-   * @param {Template.BuiltinComponentRecordType} type
-   * @param {Template.BuiltinComponent} component
+   * @param {Template.Event} e
    */
-  const moveHandle = function (type, component) {
-    const currentRect = getRect(component)
+  const moveHandle = function (e) {
+    const currentRect = getRect(e.detail)
 
     // eslint-disable-next-line no-labels
     components: for (const [key, item] of store.components) {
-      if (key === component.key) continue
+      if (key === e.detail.key) continue
 
       const rect = getRect(item)
 
@@ -133,7 +132,7 @@ export function useMarkLine() {
   }
 
   /**
-   * @param {Template.BuiltinComponentRecordType} type
+   * @param {Template.BuiltinComponentType} type
    * @param {Template.BuiltinComponent} component
    */
   const moveEndHandle = function (type, component) {
@@ -142,11 +141,14 @@ export function useMarkLine() {
     })
   }
 
-  eventBus.$on(templateChannel.componentPropertyPositionChange, moveHandle)
-  eventBus.$on(templateChannel.componentPropertyPositionChangeEnd, moveEndHandle)
+  onMounted(function () {
+    eventBus.$on(templateChannel.componentMove, moveHandle)
+    eventBus.$on(templateChannel.componentMoveEnd, moveEndHandle)
+  })
+
   onBeforeUnmount(function () {
-    eventBus.$off(templateChannel.componentPropertyPositionChange, moveHandle)
-    eventBus.$off(templateChannel.componentPropertyPositionChangeEnd, moveEndHandle)
+    eventBus.$off(templateChannel.componentMove, moveHandle)
+    eventBus.$off(templateChannel.componentMoveEnd, moveEndHandle)
   })
 
   return { markLine }

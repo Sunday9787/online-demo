@@ -19,7 +19,7 @@
               :precision="1"
               :controls="false"
               v-model="current.position.x"
-              @change="componentPositionChange(currentComponent)")
+              @change="componentMove(currentComponent)")
             span X
           li.template-property-list-item
             el-input-number.flex1(
@@ -28,7 +28,7 @@
               :precision="1"
               :controls="false"
               v-model="current.position.y"
-              @change="componentPositionChange(currentComponent)")
+              @change="componentMove(currentComponent)")
             span Y
       div.template-property-item
         label 大小
@@ -56,13 +56,13 @@
 
 <script>
 import { computed, inject } from 'vue'
-import { storeSymbol } from '@/view/template/constant'
+import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useFont } from '@/view/template/hooks/useProperty'
-import { recordMixin } from '@/view/template/hooks/useRecord'
+import { TemplateEvent } from '@/view/template/utils'
+import eventBus from '@/util/eventBus'
 
 export default {
   name: 'TemplateProperty',
-  mixins: [recordMixin],
   setup() {
     /**
      * @type {Template.Store}
@@ -83,6 +83,29 @@ export default {
     })
 
     return { currentComponent, fonts, current }
+  },
+  methods: {
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    componentMove(component) {
+      const event = new TemplateEvent(templateChannel.componentMoveEnd, { detail: component, target: 'property' })
+      eventBus.$emit(templateChannel.componentMoveEnd, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    componentSizeChange(component) {
+      const event = new TemplateEvent(templateChannel.componentResizeEnd, { detail: component, target: 'property' })
+      eventBus.$emit(templateChannel.componentResizeEnd, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    componentFontChange(component) {
+      const event = new TemplateEvent(templateChannel.componentFontChange, { detail: component, target: 'property' })
+      eventBus.$emit(templateChannel.componentFontChange, event)
+    }
   }
 }
 </script>

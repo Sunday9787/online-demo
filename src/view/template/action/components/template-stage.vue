@@ -8,6 +8,7 @@
     @keyup.space.exact="spaceUpHandle"
     @drop="dropHandle"
     @dragover.prevent="noop")
+    TemplateContextmenu(:scale="scale")
     TemplateArea(:scale="scale")
     TemplateMarkLine(v-for="(item) in markLine"
       :key="item.type"
@@ -15,15 +16,18 @@
       :direction="item.direction"
       :visible="item.visible")
     TemplateControl(
-      v-for="[key, component] of componentsData"
+      v-for="[key, component] of store.componentsData"
       v-model="component.visible"
       :key="component.id"
       :scale="scale"
       :position.sync="component.props.position"
       :size.sync="component.props.size"
-      @resize="componentResize(store.currentComponent)"
-      @move="componentMove(store.currentComponent)"
-      @end="componentMoveEnd(store.currentComponent)"
+      @moveStart="moveStart(component)"
+      @move="move(component)"
+      @moveEnd="moveEnd(component)"
+      @resizeStart="resizeStart(component)"
+      @resize="resize(component)"
+      @resizeEnd="resizeEnd(component)"
       @select="selectComponent(component)")
       component(
         :is="component.name"
@@ -33,20 +37,20 @@
 </template>
 
 <script>
-import { inject, ref, watch } from 'vue'
-import { storeSymbol, templateChannel, componentRecordType } from '@/view/template/constant'
+import { inject, ref } from 'vue'
+import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useMarkLine } from '@/view/template/hooks/useMarkLine'
-import { recordMixin } from '@/view/template/hooks/useRecord'
+import { TemplateEvent } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
 export default {
   name: 'TemplateStage',
-  mixins: [recordMixin],
   components: {
     TemplateInput: () => import('./builtin/template-input.vue'),
-    TemplateControl: () => import('./builtin/template-control.vue'),
-    TemplateMarkLine: () => import('./builtin/template-mark-line.vue'),
-    TemplateArea: () => import('./builtin/template-area.vue')
+    TemplateControl: () => import('./template-control.vue'),
+    TemplateMarkLine: () => import('./template-mark-line.vue'),
+    TemplateArea: () => import('./template-area.vue'),
+    TemplateContextmenu: () => import('./template-contextmenu.vue')
   },
   props: {
     scale: {
@@ -65,26 +69,10 @@ export default {
      * @type {Template.Store}
      */
     const store = inject(storeSymbol)
-    /**
-     * @type {import('vue').Ref<Template.BuiltinComponent[]>}
-     */
-    const componentsData = ref([])
+    const componentsGroupData = ref([])
     const { markLine } = useMarkLine()
 
-    /**
-     * 因为 vue 并不会响应 Map 数据
-     * 所以 hack 监听 相关联的数据变化 重新 渲染
-     * @see https://github.com/vuejs/vue/issues/2410#issuecomment-318487855
-     */
-    watch(
-      [() => store.record, () => store.restore],
-      function (val, oldVal) {
-        componentsData.value = Array.from(store.components)
-      },
-      { deep: true }
-    )
-
-    return { store, componentsData, markLine }
+    return { store, componentsGroupData, markLine }
   },
   data() {
     return {
@@ -195,16 +183,19 @@ export default {
        * @type {Template.BuiltinComponent}
        */
       const data = JSON.parse(response)
-      eventBus.$emit(templateChannel.stageComponentAdd, data)
+      const event = new TemplateEvent(templateChannel.componentAdd, { detail: data, target: 'stage' })
+      eventBus.$emit(templateChannel.componentAdd, event)
     },
     /**
-     * @param {object} component
+     * @param {Template.BuiltinComponent} component
      */
     selectComponent(component) {
-      this.store.currentComponent = component
+      const event = new TemplateEvent(templateChannel.componentSelect, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentSelect, event)
     },
     unSelectComponent() {
-      this.store.currentComponent = null
+      const event = new TemplateEvent(templateChannel.componentSelectUn, { detail: null, target: 'stage' })
+      eventBus.$emit(templateChannel.componentSelectUn, event)
     },
     /**
      * @param {KeyboardEvent} e
@@ -212,20 +203,62 @@ export default {
     deleteComponent(e) {
       if (this.store.currentComponent) {
         const component = this.store.currentComponent
-
-        this.store.currentComponent = null
-        this.store.components.delete(component.key)
-        eventBus.$emit(templateChannel.componentDel, componentRecordType.componentDel, component)
+        const event = new TemplateEvent(templateChannel.componentDel, { detail: component, target: 'stage' })
+        eventBus.$emit(templateChannel.componentDel, event)
       }
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    moveStart(component) {
+      const event = new TemplateEvent(templateChannel.componentMoveStart, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentMoveStart, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    move(component) {
+      const event = new TemplateEvent(templateChannel.componentMove, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentMove, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    moveEnd(component) {
+      const event = new TemplateEvent(templateChannel.componentMoveEnd, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentMoveEnd, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    resizeStart(component) {
+      const event = new TemplateEvent(templateChannel.componentResizeStart, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentResizeStart, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    resize(component) {
+      const event = new TemplateEvent(templateChannel.componentResize, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentResize, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    resizeEnd(component) {
+      const event = new TemplateEvent(templateChannel.componentResizeEnd, { detail: component, target: 'stage' })
+      eventBus.$emit(templateChannel.componentResizeEnd, event)
     }
   },
   watch: {
     scale(val) {
-      eventBus.$emit(templateChannel.stageScaleChange, val)
+      const event = new TemplateEvent(templateChannel.stageScaleChange, { detail: null, target: 'stage' })
+      eventBus.$emit(templateChannel.stageScaleChange, event)
     },
     position: {
       handler(val) {
-        eventBus.$emit(templateChannel.stagePositionChange, val)
+        const event = new TemplateEvent(templateChannel.stageMove, { detail: null, target: 'stage' })
+        eventBus.$emit(templateChannel.stageMove, event)
       },
       deep: true
     },

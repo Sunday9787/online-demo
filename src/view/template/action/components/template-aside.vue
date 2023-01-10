@@ -13,39 +13,13 @@
 </template>
 
 <script>
-import { inject, onBeforeUnmount, ref } from 'vue'
-import eventBus from '@/util/eventBus'
-import { createId } from '@/view/template/utils'
-import { storeSymbol, templateChannel, componentRecordType } from '@/view/template/constant'
 import { useBuiltinComponent } from './builtin'
 
 export default {
   name: 'TemplateAside',
   setup() {
     const { base } = useBuiltinComponent()
-    /**
-     * @type {Template.Store}
-     */
-    const store = inject(storeSymbol)
-    const index = ref(0)
-
-    /**
-     * @param {Template.BuiltinComponent} component
-     */
-    const addComponent = function (component) {
-      component.key = index.value++
-      component.id = createId(component.key)
-
-      store.components.set(component.key, component)
-      eventBus.$emit(templateChannel.componentAdd, componentRecordType.componentAdd, component)
-    }
-
-    eventBus.$on(templateChannel.stageComponentAdd, addComponent)
-    onBeforeUnmount(function () {
-      eventBus.$off(templateChannel.stageComponentAdd, addComponent)
-    })
-
-    return { base, store, index }
+    return { base }
   },
   methods: {
     /**
@@ -56,6 +30,7 @@ export default {
     },
     /**
      * @param {DragEvent} e
+     * @param {Template.BuiltinComponent} data
      */
     dragstartHandle(e, data) {
       console.log('开始拖拽')

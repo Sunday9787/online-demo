@@ -95,13 +95,14 @@
 </template>
 
 <script>
-import { cloneDeep } from 'lodash-es'
 import { inject, reactive } from 'vue'
-import { storeSymbol } from '@/view/template/constant'
-import { createId } from '@/view/template/utils'
+import { cloneDeep } from 'lodash-es'
+import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useSize } from '@/view/template/hooks/useSize'
-import { useDialog } from '@/hooks/useDialog'
 import { usePadding } from '@/view/template/hooks/usePadding'
+import { useDialog } from '@/hooks/useDialog'
+import eventBus from '@/util/eventBus'
+import { TemplateEvent } from '@/view/template/utils'
 
 export default {
   name: 'TemplateToolbar',
@@ -142,80 +143,16 @@ export default {
   },
   methods: {
     stageClear() {
-      this.store.components.clear()
-      this.store.currentComponent = null
+      const event = new TemplateEvent(templateChannel.stageClear, { detail: null, target: 'toolbar' })
+      eventBus.$emit(templateChannel.stageClear, event)
     },
     undo() {
-      const popRecord = this.store.record.pop()
-
-      if (popRecord) {
-        switch (popRecord.type) {
-          case 'component:add':
-            this.store.components.delete(popRecord.record.key)
-            this.store.currentComponent = null
-            break
-          case 'component:del':
-            this.store.components.set(popRecord.record.key, popRecord.record)
-            this.store.currentComponent = null
-            break
-          case 'component:property:position:change':
-          case 'component:property:font:change':
-          case 'component:property:size:change':
-            this.store.restore.push(cloneDeep(popRecord))
-            if (this.store.record.length) {
-              const record = this.store.record[this.store.record.length - 1].record
-
-              if (this.store.components.has(record.key)) {
-                /**
-                 * @type {Template.BuiltinComponent}
-                 */
-                const component = cloneDeep(record)
-                component.id = createId(record.key)
-
-                this.store.components.set(component.key, component)
-                console.log('撤销更改', 'key', component.key, '新id', component.id, '旧id', record.id)
-              }
-            }
-            break
-        }
-      }
+      const event = new TemplateEvent(templateChannel.stageClear, { detail: null, target: 'toolbar' })
+      eventBus.$emit(templateChannel.stageUndo, event)
     },
     restore() {
-      if (this.store.restore.length) {
-        console.log('restore')
-        const popRecord = this.store.restore.pop()
-
-        if (popRecord) {
-          switch (popRecord.type) {
-            case 'component:add':
-              this.store.components.delete(popRecord.record.key)
-              this.store.currentComponent = null
-              break
-            case 'component:del':
-              this.store.components.set(popRecord.record.key, popRecord.record)
-              this.store.currentComponent = null
-              break
-            case 'component:property:position:change':
-            case 'component:property:font:change':
-            case 'component:property:size:change':
-              ;(function (context) {
-                const record = popRecord.record
-
-                if (context.store.components.has(record.key)) {
-                  /**
-                   * @type {Template.BuiltinComponent}
-                   */
-                  const component = cloneDeep(record)
-                  component.id = createId(record.key)
-
-                  context.store.components.set(component.key, component)
-                  console.log('恢复更改', 'key', component.key, '新id', component.id, '旧id', record.id)
-                }
-              })(this)
-              break
-          }
-        }
-      }
+      const event = new TemplateEvent(templateChannel.stageClear, { detail: null, target: 'toolbar' })
+      eventBus.$emit(templateChannel.stageRestore, event)
     }
   }
 }
