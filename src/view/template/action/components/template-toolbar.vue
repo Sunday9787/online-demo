@@ -1,6 +1,9 @@
 <template lang="pug">
   header.template-toolbar
+    el-button(type="text" size="small" icon="el-icon-arrow-left" @click="goBack()") 返回
+
     div.flex1
+
     el-button(type="primary" size="small" @click="undo()")
       i.el-icon-back
       | &nbsp;撤销
@@ -14,16 +17,16 @@
 
     el-dialog(
       :visible.sync="dialog.visible"
-      :close-on-press-escape="false"
       :close-on-click-modal="false"
       append-to-body
       title="模板属性"
       width="500px"
+      @keydown.native.enter="action(actionType.submit)"
       @closed="resetForm('formRef')"
     )
       el-form(:model="form" ref="formRef" action="javascript:;" size="medium" label-suffix="：" label-width="100px")
         el-form-item(label="模板名称" prop="name")
-          el-input(v-model="form.name")
+          el-input(ref="templateName" v-model="form.name")
 
         el-form-item(label="尺寸" prop="size")
           el-radio-group(v-model="form.size")
@@ -95,7 +98,7 @@
 </template>
 
 <script>
-import { inject, reactive } from 'vue'
+import { getCurrentInstance, inject, reactive, nextTick } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useSize } from '@/view/template/hooks/useSize'
@@ -107,6 +110,7 @@ import { TemplateEvent } from '@/view/template/utils'
 export default {
   name: 'TemplateToolbar',
   setup() {
+    const vm = getCurrentInstance().proxy
     /**
      * @type {Template.Store}
      */
@@ -129,6 +133,14 @@ export default {
         form.size = store.size.name
         form.direction = store.direction
         form.padding = cloneDeep(store.padding)
+
+        nextTick(function () {
+          /**
+           * @type {import('element-ui').Input}
+           */
+          const templateNameInput = vm.$refs.templateName
+          templateNameInput.focus()
+        })
       },
       submit() {
         store.name = form.name
@@ -142,8 +154,14 @@ export default {
     return { store, size, form, dialog, action, actionType }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1)
+    },
     stageClear() {
-      const event = new TemplateEvent(templateChannel.stageClear, { detail: null, target: 'toolbar' })
+      const event = new TemplateEvent(templateChannel.stageClear, {
+        detail: Array.from(this.store.components.values()),
+        target: 'toolbar'
+      })
       eventBus.$emit(templateChannel.stageClear, event)
     },
     undo() {
@@ -163,7 +181,7 @@ export default {
   z-index: 1;
   position: relative;
   display: flex;
-  padding: 8px 0;
+  padding: 8px 20px;
   box-shadow: 0 0 8px 1px #bfbfbf;
 }
 

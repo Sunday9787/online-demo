@@ -1,22 +1,8 @@
+import moment from 'moment'
 import { onBeforeUnmount, onMounted } from 'vue'
 import { recordChannel, recordTypeMap } from '@/view/template/constant'
+import { createRecord } from '@/view/template/utils/record'
 import eventBus from '@/util/eventBus'
-import { cloneDeep } from 'lodash-es'
-
-/**
- * @param {Template.BuiltinComponentRecordType} type
- * @param {Template.BuiltinComponent} component
- */
-function createRecord(type, component) {
-  /**
-   * @type {Template.BuiltinComponentRecord}
-   */
-  const data = Object.create(null)
-  data.type = type
-  data.component = cloneDeep(component)
-
-  return data
-}
 
 /**
  * @this {Template.Store}
@@ -33,6 +19,7 @@ function recordHandle(type, component, record = true) {
     console.info('组件id', component.id)
     console.info('组件key', component.key)
     console.info('组件props', component.props)
+    console.info('时间戳', moment().format('yyyy-MM-DD HH:mm:ss'))
     console.groupEnd()
 
     if (record && this.record.length <= 20) {
@@ -44,6 +31,7 @@ function recordHandle(type, component, record = true) {
 
   console.group('record')
   console.info('事件', recordTypeMap[type])
+  console.info('时间戳', moment().format('yyyy-MM-DD HH:mm:ss'))
   console.groupEnd()
 }
 

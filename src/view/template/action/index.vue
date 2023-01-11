@@ -9,61 +9,17 @@
 
 <script>
 import { onMounted, onUnmounted, provide, ref } from 'vue'
-import { cloneDeep } from 'lodash-es'
 import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
-import { createId, TemplateEvent } from '@/view/template/utils'
+import { createId } from '@/view/template/utils'
+import { recordHandle } from '@/view/template/utils/record'
 import eventBus from '@/util/eventBus'
 
 import TemplateAside from './components/template-aside.vue'
 import TemplateToolbar from './components/template-toolbar.vue'
 import TemplateEditor from './components/template-editor.vue'
 import TemplateProperty from './components/template-property.vue'
-
-/**
- * @this {Template.Store}
- * @param {Template.BuiltinComponent} record
- */
-function undoGeneral(record) {
-  this.restore.push(cloneDeep(record))
-
-  if (this.record.length) {
-    const recordComponent = this.record[this.record.length - 1].component
-
-    if (this.components.has(recordComponent.key)) {
-      /**
-       * @type {Template.BuiltinComponent}
-       */
-      const component = cloneDeep(recordComponent)
-      component.id = createId(recordComponent.key)
-
-      this.components.set(component.key, component)
-      this.componentsData = Array.from(this.components)
-      console.log('撤销更改', 'key', component.key, '新id', component.id, '旧id', recordComponent.id)
-    }
-  }
-}
-
-/**
- * @this {Template.Store}
- * @param {Template.BuiltinComponentRecord} record
- */
-function restoreGeneral(record) {
-  const recordComponent = record.component
-
-  if (this.components.has(recordComponent.key)) {
-    /**
-     * @type {Template.BuiltinComponent}
-     */
-    const component = cloneDeep(recordComponent)
-    component.id = createId(recordComponent.key)
-
-    this.components.set(component.key, component)
-    this.componentsData = Array.from(this.components)
-    console.log('恢复更改', 'key', component.key, '新id', component.id, '旧id', recordComponent.id)
-  }
-}
 
 export default {
   name: 'TemplateAction',
@@ -184,13 +140,25 @@ export default {
     }
 
     /**
+     * 字体改变
+     * @param {Template.Event} e
+     */
+    const componentFontChange = function (e) {
+      eventBus.$emit(recordChannel.componentFontChange, e)
+      if (e.target === 'property') {
+        store.componentsData = Array.from(store.components)
+      }
+    }
+
+    /**
      * 清空画布
      * @param {Template.Event} e
      */
     const stageClear = function (e) {
       store.components.clear()
       store.currentComponent = null
-      eventBus.$emit(recordChannel.stageClear, templateChannel.stageClear)
+
+      eventBus.$emit(recordChannel.stageClear, e)
       store.componentsData = Array.from(store.components)
     }
 
@@ -211,35 +179,7 @@ export default {
       const popRecord = store.record.pop()
 
       if (popRecord) {
-        switch (popRecord.type) {
-          case 'component:add':
-            store.restore.push(popRecord)
-            eventBus.$emit(
-              templateChannel.componentDel,
-              new TemplateEvent(templateChannel.componentDel, {
-                detail: popRecord.component,
-                target: 'stage'
-              }),
-              false
-            )
-            break
-          case 'component:del':
-            store.restore.push(popRecord)
-            eventBus.$emit(
-              templateChannel.componentAdd,
-              new TemplateEvent(templateChannel.componentAdd, {
-                detail: popRecord.component,
-                target: 'stage'
-              }),
-              false
-            )
-            break
-          case 'component:font:change':
-          case 'component:resize:end':
-          case 'component:move:end':
-            undoGeneral.apply(store, [popRecord])
-            break
-        }
+        recordHandle.apply(store, ['undo', popRecord])
       }
     }
 
@@ -250,33 +190,7 @@ export default {
       const popRecord = store.restore.pop()
 
       if (popRecord) {
-        switch (popRecord.type) {
-          case 'component:add':
-            eventBus.$emit(
-              templateChannel.componentAdd,
-              new TemplateEvent(templateChannel.componentAdd, {
-                detail: popRecord.component,
-                target: 'stage'
-              }),
-              false
-            )
-            break
-          case 'component:del':
-            eventBus.$emit(
-              templateChannel.componentDel,
-              new TemplateEvent(templateChannel.componentDel, {
-                detail: popRecord.component,
-                target: 'stage'
-              }),
-              false
-            )
-            break
-          case 'component:move:end':
-          case 'component:resize:end':
-          case 'component:font:change':
-            restoreGeneral.apply(store, [popRecord])
-            break
-        }
+        recordHandle.apply(store, ['restore', popRecord])
       }
     }
 
@@ -291,6 +205,7 @@ export default {
       eventBus.$on(templateChannel.componentResizeStart, resizeComponentStart)
       eventBus.$on(templateChannel.componentResize, resizeComponent)
       eventBus.$on(templateChannel.componentResizeEnd, resizeComponentEnd)
+      eventBus.$on(templateChannel.componentFontChange, componentFontChange)
       eventBus.$on(templateChannel.groupPack, groupPack)
       eventBus.$on(templateChannel.groupUn, groupUn)
       eventBus.$on(templateChannel.stageClear, stageClear)
@@ -309,6 +224,7 @@ export default {
       eventBus.$off(templateChannel.componentResizeStart, resizeComponentStart)
       eventBus.$off(templateChannel.componentResize, resizeComponent)
       eventBus.$off(templateChannel.componentResizeEnd, resizeComponentEnd)
+      eventBus.$off(templateChannel.componentFontChange, componentFontChange)
       eventBus.$off(templateChannel.groupPack, groupPack)
       eventBus.$off(templateChannel.groupUn, groupUn)
       eventBus.$off(templateChannel.stageClear, stageClear)

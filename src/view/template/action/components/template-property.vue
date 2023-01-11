@@ -3,7 +3,11 @@
     el-row
       h1 字体
       section
-        el-select(v-model="current.property.font" @change="componentFontChange(currentComponent)")
+        el-select(
+          v-model="current.property.font"
+          :popper-append-to-body="false"
+          size="small"
+          @change="componentFontChange(currentComponent)")
           el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
     section.template-property-container
       div.template-property-item

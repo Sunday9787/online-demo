@@ -1,25 +1,15 @@
-<template>
-  <div class="app-table-container">
-    <el-row class="app-table-button-group" v-if="$slots.action">
-      <slot name="action" />
-    </el-row>
+<template lang="pug" functional>
+  .app-table-container
+    el-row.app-table-action(v-if="$slots.action")
+      slot(name='action')
 
-    <el-row class="app-table__inner">
-      <slot />
-    </el-row>
-  </div>
+    el-row.app-table__inner
+      slot
 </template>
 
 <script>
 export default {
-  name: 'app-table-container',
-  inject: ['dataView'],
-  props: {
-    groupHeight: {
-      type: Number,
-      default: 32
-    }
-  }
+  name: 'app-table-container'
 }
 </script>
 
@@ -38,7 +28,7 @@ export default {
 }
 
 .app-table-container + .app-pagination,
-.app-table-button-group + .app-table__inner {
+.app-table-action + .app-table__inner {
   padding-top: 12px;
 }
 </style>

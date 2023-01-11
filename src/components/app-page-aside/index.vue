@@ -1,20 +1,16 @@
-<template>
-  <aside class="app-page-aside">
-    <h3 class="app-page-aside__head">{{ title }}</h3>
+<template lang="pug">
+  aside.app-page-aside
+    h3.app-page-aside__head {{ title }}
 
-    <hr class="app-page-aside__gap" />
+    hr.app-page-aside__gap
 
-    <ol class="app-page-aside__menu">
-      <li
-        class="app-page-aside__menu__item"
-        :class="{ current: tabActive === item.name }"
+    nav.app-page-aside__menu
+      a.app-page-aside__menu__item(
         v-for="(item, k) in menu"
+        :class="{ current: tabActive === item.name }"
         :key="k"
-      >
-        <a href="javascript:;" @click="changeTab(item.name)">{{ item.label }}</a>
-      </li>
-    </ol>
-  </aside>
+        href="javascript:;"
+        @click="changeTab(item.name)") {{ item.label }}
 </template>
 
 <script>

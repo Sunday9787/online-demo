@@ -27,7 +27,7 @@ declare namespace Template {
 
   interface Event {
     target: EventTarget
-    detail: BuiltinComponent
+    detail: BuiltinComponent | null
     timestamp: number
     type: BuiltinComponentType
   }
@@ -95,7 +95,7 @@ declare namespace Template {
     padding: Padding
     currentComponent: BuiltinComponent
     components: Map<number, BuiltinComponent>
-    componentsData: BuiltinComponent[]
+    componentsData: [number, BuiltinComponent][]
     get componentsGroup(): number
     /** 历史记录 */
     record: BuiltinComponentRecord[]

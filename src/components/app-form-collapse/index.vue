@@ -47,7 +47,7 @@ export default {
     visible: Boolean,
     height: {
       type: Number,
-      default: 50
+      default: 51
     }
   },
   setup(props) {
