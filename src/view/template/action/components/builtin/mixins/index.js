@@ -6,6 +6,22 @@ const mixin = {
     mode: {
       type: String,
       default: 'shape'
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    size: {
+      type: Object,
+      required: true
+    },
+    property: {
+      type: Object,
+      required: true
+    },
+    position: {
+      type: Object,
+      required: true
     }
   },
   computed: {

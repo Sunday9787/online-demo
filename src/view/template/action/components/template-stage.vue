@@ -33,7 +33,17 @@
         :is="component.name"
         :label="component.props.label"
         :property="component.props.property"
-        :position="component.props.position")
+        :position="component.props.position"
+        :size="component.props.size"
+        :children="component.children"
+        v-if="component.name === 'builtin-group'")
+      component(
+        :is="component.name"
+        :label="component.props.label"
+        :property="component.props.property"
+        :size="component.props.size"
+        :position="component.props.position"
+        v-else)
 </template>
 
 <script>
@@ -46,7 +56,8 @@ import eventBus from '@/util/eventBus'
 export default {
   name: 'TemplateStage',
   components: {
-    TemplateInput: () => import('./builtin/template-input.vue'),
+    BuiltinInput: () => import('./builtin/builtin-input.vue'),
+    BuiltinGroup: () => import('./builtin/builtin-group.vue'),
     TemplateControl: () => import('./template-control.vue'),
     TemplateMarkLine: () => import('./template-mark-line.vue'),
     TemplateArea: () => import('./template-area.vue'),

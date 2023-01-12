@@ -23,6 +23,8 @@ declare namespace Template {
   type AddNameSpace<N extends string,T extends string> = `${N}:${T}`
   type BuiltinComponentRecordType = AddNameSpace<'record',BuiltinComponentType>
 
+  type BuiltinComponentName = 'builtin-group' | 'builtin-input'
+
   type EventTarget = 'stage'|'property'|'toolbar'
 
   interface Event {
@@ -43,9 +45,7 @@ declare namespace Template {
     visible: boolean
     group: number
     /** 组件名称 */
-    name: string
-    /** 组件类型 */
-    type: 'input',
+    name: BuiltinComponentName
     props: {
       label: string
       style: import('vue/types/jsx').StyleValue
@@ -58,7 +58,8 @@ declare namespace Template {
         w: number
         h: number
       }
-    }
+    },
+    children?: BuiltinComponent[]
   }
 
   interface BuiltinComponentRecord {

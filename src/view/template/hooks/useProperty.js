@@ -1,5 +1,3 @@
-import { isMac } from '@/util/validate'
-
 /**
  * @param {number} [x]
  * @param {number} [y]
@@ -10,11 +8,21 @@ export function usePosition(x = 0, y = 0) {
 }
 
 /**
- * @param {number} [w]
- * @param {number} [h]
+ * @param {object} options
+ * @param {number} [options.w]
+ * @param {number} [options.h]
+ * @param {Template.BuiltinComponentName} [options.type]
  */
-export function useSize(w = 0, h = 0) {
-  const state = { w, h }
+export function useSize(options = { w: 0, h: 0, type: '' }) {
+  const state = { w: options.w, h: options.h }
+
+  switch (options.type) {
+    case 'builtin-input':
+      state.w = 240
+      state.h = 24
+      break
+  }
+
   return state
 }
 
@@ -24,58 +32,40 @@ export function useFont() {
    */
   const fonts = [
     {
+      label: '宋体',
+      value: 'SimSun'
+    },
+    {
       label: '微软雅黑',
-      get value() {
-        return isMac() ? 'Microsoft YaHei' : '微软雅黑'
-      }
+      value: 'Microsoft YaHei'
     },
     {
       label: '黑体',
-      get value() {
-        return isMac() ? 'STHeitiSC-Light' : '黑体'
-      }
+      value: 'SimHei'
     },
     {
       label: '华文黑体',
-      get value() {
-        return isMac() ? 'STHeiti' : '华文黑体'
-      }
+      value: 'STHeiti'
     },
     {
       label: '华文宋体',
-      get value() {
-        return isMac() ? 'STSong' : '华文宋体'
-      }
-    },
-    {
-      label: '宋体',
-      get value() {
-        return isMac() ? 'STSongti-SC-Regular' : '宋体'
-      }
+      value: 'STSong'
     },
     {
       label: '楷体',
-      get value() {
-        return isMac() ? 'STKaitiSC-Regular' : '楷体'
-      }
+      value: 'KaiTi'
     },
     {
       label: 'Arial',
-      get value() {
-        return isMac() ? 'Arial' : 'Arial'
-      }
+      value: 'Arial'
     },
     {
       label: 'Tahoma',
-      get value() {
-        return isMac() ? 'Tahoma' : 'Tahoma'
-      }
+      value: 'Tahoma'
     },
     {
       label: 'Helvetica',
-      get value() {
-        return isMac() ? 'Helvetica' : 'Helvetica'
-      }
+      value: 'Helvetica'
     }
   ]
 

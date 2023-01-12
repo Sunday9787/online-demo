@@ -98,6 +98,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @param {'del'|'lock'|'toTop'|'toBottom'|'toPaste'} type
+     */
     command(type) {
       commandHandle[type].apply(this.store)
       this.visible = false
