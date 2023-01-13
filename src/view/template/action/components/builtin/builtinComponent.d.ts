@@ -38,27 +38,28 @@ declare namespace Template {
     underline: boolean
   }
 
+  interface BuiltinComponentProps {
+    label: string
+    style: import('vue/types/jsx').StyleValue
+    property: Property
+    position: {
+      x: number
+      y: number
+    }
+    size: {
+      w: number
+      h: number
+    }
+  }
+
   interface BuiltinComponent {
     /** 组件id */
     id: string
     key: number
     visible: boolean
-    group: number
     /** 组件名称 */
     name: BuiltinComponentName
-    props: {
-      label: string
-      style: import('vue/types/jsx').StyleValue
-      property: Property
-      position: {
-        x: number
-        y: number
-      }
-      size: {
-        w: number
-        h: number
-      }
-    },
+    props: BuiltinComponentProps
     children?: BuiltinComponent[]
   }
 

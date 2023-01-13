@@ -21,14 +21,22 @@ export default {
       required: true
     }
   },
-  setup(props) {
+  setup(props, context) {
     const vm = getCurrentInstance().proxy
     /**
      * @type {Template.Store}
      */
     const store = inject(storeSymbol)
+    /**
+     * @type {import('vue').Ref<{x: number, y: number} | null>}
+     */
     const stagePosition = ref(null)
     const rect = reactive({ w: 0, h: 0, x: 0, y: 0 })
+
+    /**
+     * @type {Map<number, Template.BuiltinComponent>}
+     */
+    const components = new Map()
 
     /**
      * @param {PointerEvent} e
@@ -66,9 +74,9 @@ export default {
             item.props.position.y >= rect.y &&
             item.props.position.y <= rect.y + rect.h
           ) {
-            component.visible = true
-          } else {
-            component.visible = false
+            if (!components.has(component.key)) {
+              components.set(component.key, component)
+            }
           }
         })
       }
@@ -80,6 +88,22 @@ export default {
     const pointerup = function (e) {
       stagePosition.value = null
       rect.w = rect.h = rect.x = rect.y = 0
+
+      if (components.size) {
+        const data = Array.from(components.values())
+
+        if (data.every(item => item.name === 'builtin-group')) {
+          components.clear()
+          return
+        }
+
+        context.emit('area', data)
+        components.clear()
+
+        return
+      }
+
+      context.emit('unArea')
     }
 
     const stageChangeHandle = function (val) {

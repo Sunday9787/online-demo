@@ -9,7 +9,7 @@
     @drop="dropHandle"
     @dragover.prevent="noop")
     TemplateContextmenu(:scale="scale")
-    TemplateArea(:scale="scale")
+    TemplateArea(:scale="scale" @area="area")
     TemplateMarkLine(v-for="(item) in markLine"
       :key="item.type"
       :position="item.position"
@@ -259,6 +259,13 @@ export default {
     resizeEnd(component) {
       const event = new TemplateEvent(templateChannel.componentResizeEnd, { detail: component, target: 'stage' })
       eventBus.$emit(templateChannel.componentResizeEnd, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent[]} data
+     */
+    area(data) {
+      const event = new TemplateEvent(templateChannel.groupPack, { detail: data, target: 'stage' })
+      eventBus.$emit(templateChannel.groupPack, event)
     }
   },
   watch: {

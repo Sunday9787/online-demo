@@ -11,8 +11,9 @@
 import { onMounted, onUnmounted, provide, ref } from 'vue'
 import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
+import { useShortcuts } from '@/view/template/hooks/useShortcuts'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
-import { createId } from '@/view/template/utils'
+import { createId, createComponentGroup, removeComponentGroup, TemplateEvent } from '@/view/template/utils'
 import { recordHandle } from '@/view/template/utils/record'
 import eventBus from '@/util/eventBus'
 
@@ -35,6 +36,7 @@ export default {
 
     provide(storeSymbol, store)
     useRecord(store)
+    useShortcuts(store)
 
     /**
      * 添加组件
@@ -164,13 +166,35 @@ export default {
 
     /**
      * 创建组
+     * @param {Template.Event} e
      */
-    const groupPack = function () {}
+    const groupPack = function (e) {
+      const groupComponent = createComponentGroup(e.detail)
+
+      groupComponent.children.forEach(item => {
+        store.components.delete(item.key)
+      })
+
+      const event = new TemplateEvent(templateChannel.componentAdd, { detail: groupComponent, target: 'stage' })
+
+      eventBus.$emit(templateChannel.componentAdd, event)
+    }
 
     /**
      * 组解散
+     * @param {Template.Event} e
      */
-    const groupUn = function () {}
+    const groupUn = function (e) {
+      const components = removeComponentGroup(e.detail)
+
+      components.forEach(item => {
+        const event = new TemplateEvent(templateChannel.componentAdd, { detail: item, target: 'stage' })
+        eventBus.$emit(templateChannel.componentAdd, event, false)
+      })
+
+      eventBus.$emit(recordChannel.groupUn, e)
+      eventBus.$emit(templateChannel.componentDel, e, false)
+    }
 
     /**
      * 撤销
