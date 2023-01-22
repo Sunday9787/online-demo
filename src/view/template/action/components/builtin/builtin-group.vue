@@ -42,9 +42,6 @@ export default {
         width: this.rect.w + 'px',
         height: this.rect.h + 'px'
       }
-    },
-    id() {
-      return 'template-group-' + this._uid
     }
   }
 }

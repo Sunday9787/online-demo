@@ -101,11 +101,11 @@
 import { getCurrentInstance, inject, reactive, nextTick } from 'vue'
 import { cloneDeep } from 'lodash-es'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
-import { useSize } from '@/view/template/hooks/useSize'
 import { usePadding } from '@/view/template/hooks/usePadding'
+import { useSize } from '@/view/template/hooks/useSize'
+import { TemplateEvent } from '@/view/template/utils'
 import { useDialog } from '@/hooks/useDialog'
 import eventBus from '@/util/eventBus'
-import { TemplateEvent } from '@/view/template/utils'
 
 export default {
   name: 'TemplateToolbar',

@@ -10,16 +10,17 @@
     @dragover.prevent="noop")
     TemplateContextmenu(:scale="scale")
     TemplateArea(:scale="scale" @area="area")
-    TemplateMarkLine(v-for="(item) in markLine"
+    TemplateMarkLine(v-for="(item) of markLine"
       :key="item.type"
       :position="item.position"
       :direction="item.direction"
       :visible="item.visible")
     TemplateControl(
-      v-for="[key, component] of store.componentsData"
+      v-for="component of store.componentsData"
       v-model="component.visible"
       :key="component.id"
       :scale="scale"
+      :lock="component.props.lock"
       :position.sync="component.props.position"
       :size.sync="component.props.size"
       @moveStart="moveStart(component)"
@@ -47,7 +48,8 @@
 </template>
 
 <script>
-import { inject, ref } from 'vue'
+import { inject } from 'vue'
+import { builtinComponent } from './builtin'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useMarkLine } from '@/view/template/hooks/useMarkLine'
 import { TemplateEvent } from '@/view/template/utils'
@@ -80,10 +82,9 @@ export default {
      * @type {Template.Store}
      */
     const store = inject(storeSymbol)
-    const componentsGroupData = ref([])
     const { markLine } = useMarkLine()
 
-    return { store, componentsGroupData, markLine }
+    return { store, markLine }
   },
   data() {
     return {
@@ -191,22 +192,41 @@ export default {
     dropHandle(e) {
       const response = e.dataTransfer.getData('application/json')
       /**
-       * @type {Template.BuiltinComponent}
+       * @type {Template.BuiltinComponentItem}
        */
       const data = JSON.parse(response)
-      const event = new TemplateEvent(templateChannel.componentAdd, { detail: data, target: 'stage' })
+      const component = builtinComponent.get(data.id)
+
+      const event = new TemplateEvent(templateChannel.componentAdd, {
+        detail: component,
+        target: 'stage'
+      })
       eventBus.$emit(templateChannel.componentAdd, event)
     },
     /**
      * @param {Template.BuiltinComponent} component
      */
     selectComponent(component) {
-      const event = new TemplateEvent(templateChannel.componentSelect, { detail: component, target: 'stage' })
+      const event = new TemplateEvent(templateChannel.componentSelect, {
+        detail: component,
+        target: 'stage'
+      })
       eventBus.$emit(templateChannel.componentSelect, event)
     },
     unSelectComponent() {
-      const event = new TemplateEvent(templateChannel.componentSelectUn, { detail: null, target: 'stage' })
-      eventBus.$emit(templateChannel.componentSelectUn, event)
+      if (this.store.currentComponent) {
+        if (this.store.currentComponent.children) {
+          const event = new TemplateEvent(templateChannel.componentSelectUn, {
+            detail: this.store.currentComponent,
+            target: 'stage'
+          })
+          eventBus.$emit(templateChannel.groupUn, event)
+          return
+        }
+
+        const event = new TemplateEvent(templateChannel.componentSelectUn, { detail: null, target: 'stage' })
+        eventBus.$emit(templateChannel.componentSelectUn, event)
+      }
     },
     /**
      * @param {KeyboardEvent} e

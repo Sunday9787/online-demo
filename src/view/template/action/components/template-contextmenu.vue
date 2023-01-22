@@ -113,6 +113,7 @@ export default {
 .template-contextmenu {
   position: absolute;
   visibility: hidden;
+  z-index: 999;
   width: 98px;
   margin: 0;
   padding: 0;

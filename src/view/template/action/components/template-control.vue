@@ -1,6 +1,6 @@
 <template lang="pug">
   div.template-control(
-    :class="{visible}"
+    :class="{ visible, lock }"
     :style="wrapperStyle"
     @pointerdown.stop="onPointerdown")
     div.template-control-mask
@@ -169,6 +169,10 @@ export default {
       required: true
     },
     value: {
+      type: Boolean,
+      required: true
+    },
+    lock: {
       type: Boolean,
       required: true
     }
@@ -364,6 +368,12 @@ export default {
 .template-control {
   position: absolute;
   user-select: none;
+
+  &.lock {
+    .template-control-point {
+      display: none;
+    }
+  }
 
   &.visible {
     .template-control-mask,

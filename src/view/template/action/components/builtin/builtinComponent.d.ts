@@ -34,13 +34,43 @@ declare namespace Template {
     type: BuiltinComponentType
   }
 
+  interface TemplatePropertyOptions {
+    value: string | number | boolean
+    unit?: string
+    trueValue?: string | number
+    falseValue?: string | number
+    indeterminate?: boolean
+    indeterminateTrueValue?: string | number
+    indeterminateFalseValue?: string | number
+  }
+
+  class TemplateProperty {
+    static options: Omit<TemplatePropertyOptions, 'value'>
+    static format(): string | void
+
+    constructor(options: TemplatePropertyOptions)
+    public property: string
+    public unit: string
+    public trueValue: string | number
+    public falseValue: string | number
+    public value: string | number | boolean
+    public indeterminate: boolean | null
+    public indeterminateTrueValue: string | number | null
+    public indeterminateFalseValue: string | number | null
+  }
+
   interface Property {
     underline: boolean
+    lineHeight: TemplateProperty
+    color: TemplateProperty
+    fontFamily: TemplateProperty
+    letterSpacing: TemplateProperty
+    [key: string]: TemplateProperty | boolean
   }
 
   interface BuiltinComponentProps {
+    lock: boolean
     label: string
-    style: import('vue/types/jsx').StyleValue
     property: Property
     position: {
       x: number
@@ -50,6 +80,11 @@ declare namespace Template {
       w: number
       h: number
     }
+  }
+
+  interface BuiltinComponentItem {
+    label: string
+    id: string
   }
 
   interface BuiltinComponent {
@@ -92,13 +127,14 @@ declare namespace Template {
 
   interface Store {
     name: string
+    get changes(): number
+    set changes(): number
+    get size(): Readonly<Size>
     direction: 'vertical' | 'horizontal'
-    get size(): Size
     padding: Padding
     currentComponent: BuiltinComponent
     components: Map<number, BuiltinComponent>
-    componentsData: [number, BuiltinComponent][]
-    get componentsGroup(): number
+    componentsData: BuiltinComponent[]
     /** 历史记录 */
     record: BuiltinComponentRecord[]
     /** 恢复队列 */

@@ -1,12 +1,37 @@
-import { cloneDeep, merge } from 'lodash-es'
+import { merge } from 'lodash-es'
 import { useFont, useSize, usePosition } from '@/view/template/hooks/useProperty'
 
 /**
- * 创建组件 id
- * @param {number} id
+ * @type {Template.TemplateProperty}
  */
-export function createId(id) {
-  return `component-${id}-${Date.now().toString()}`
+export class TemplateProperty {
+  /**
+   * @param {Template.TemplatePropertyOptions} options
+   */
+  constructor(options) {
+    /**
+     * @type {Template.TemplatePropertyOptions}
+     */
+    const opt = Object.assign({}, TemplateProperty.options, options)
+
+    this.value = opt.value
+    this.unit = opt.unit
+    this.trueValue = opt.trueValue
+    this.falseValue = opt.falseValue
+
+    this.indeterminate = opt.indeterminate
+    this.indeterminateTrueValue = opt.indeterminateTrueValue
+    this.indeterminateFalseValue = opt.indeterminateFalseValue
+  }
+}
+
+TemplateProperty.options = {
+  unit: null,
+  trueValue: null,
+  falseValue: null,
+  indeterminate: null,
+  indeterminateTrueValue: null,
+  indeterminateFalseValue: null
 }
 
 export class TemplateEvent {
@@ -20,12 +45,20 @@ export class TemplateEvent {
     /** @type {Template.EventTarget} */
     this.target = options.target
     /** @type {Readonly<Template.BuiltinComponent>} */
-    this.detail = options.detail ? cloneDeep(options.detail) : options.detail
+    this.detail = options.detail
     /** @type {Template.BuiltinComponentType} */
     this.type = event
     /** @type {number} */
     this.timestamp = Date.now()
   }
+}
+
+/**
+ * 创建组件 id
+ * @param {number} id
+ */
+export function createId(id) {
+  return `component-${id}-${Date.now().toString()}`
 }
 
 /**
@@ -70,6 +103,35 @@ export function createComponent(...args) {
     }
   }
 
+  const property = {
+    display: new TemplateProperty({ value: 'flex' }),
+    color: new TemplateProperty({ value: '#333' }),
+    fontFamily: new TemplateProperty({ value: font.value }),
+    lineHeight: new TemplateProperty({ value: 25, unit: 'px' }),
+    borderWidth: new TemplateProperty({ value: 1, unit: 'px' }),
+    borderStyle: new TemplateProperty({
+      value: false,
+      trueValue: 'dashed',
+      falseValue: 'solid',
+      indeterminate: true,
+      indeterminateTrueValue: 'solid',
+      indeterminateFalseValue: 'none'
+    }),
+    borderColor: new TemplateProperty({ value: '#333' }),
+    get dashed() {
+      return this.borderStyle.value
+    },
+    set dashed(val) {
+      this.borderStyle.value = val
+    },
+    get underline() {
+      return this.borderStyle.indeterminate
+    },
+    set underline(val) {
+      this.borderStyle.indeterminate = val
+    }
+  }
+
   /**
    * @type {Template.BuiltinComponent}
    */
@@ -78,12 +140,10 @@ export function createComponent(...args) {
     name: type,
     visible: false,
     props: {
+      lock: false,
+      required: false,
       label: '',
-      property: {
-        underline: true,
-        color: '#333',
-        font: font.value
-      },
+      property,
       position: usePosition(),
       size: useSize({ type })
     }
@@ -99,12 +159,12 @@ export function createComponent(...args) {
 /**
  * @param {[Template.BuiltinComponent, Template.BuiltinComponent[]]|[Template.BuiltinComponent[]]} args
  */
-export function createComponentGroup(...args) {
+export function createGroupComponent(...args) {
   const component =
     args.length === 2
       ? createComponent(args[0], 'builtin-group')
       : createComponent({ label: '自定义组' }, 'builtin-group')
-  const children = (args.length === 2 ? args[1] : args[0]).map(createComponent)
+  const children = args.length === 2 ? args[1] : args[0]
 
   const rects = children.map(getRect)
 
@@ -154,11 +214,67 @@ export function createComponentGroup(...args) {
  * @param {Template.BuiltinComponent} component
  * @returns {Template.BuiltinComponent[]}
  */
-export function removeComponentGroup(component) {
+export function removeGroupComponent(component) {
   component.children.forEach(item => {
     item.props.position.x += component.props.position.x
     item.props.position.y += component.props.position.y
   })
 
   return component.children
+}
+
+/**
+ * @this {Template.TemplateProperty}
+ */
+TemplateProperty.format = function () {
+  if (typeof this.value === 'boolean') {
+    if (this.trueValue === null && this.falseValue === null) {
+      throw new Error('value 为 Boolean 类型时 trueValue 且 falseValue 不能为 null')
+    }
+  }
+
+  if (typeof this.indeterminate === 'boolean') {
+    if (this.indeterminateTrueValue === null && this.indeterminateFalseValue === null) {
+      throw new Error(' indeterminate 为 Boolean 时 indeterminateTrueValue 且 indeterminateFalseValue 不能为 null')
+    }
+  }
+
+  let val = this.value
+
+  if (this.indeterminate !== null) {
+    val = this.indeterminate ? this.indeterminateTrueValue : this.indeterminateFalseValue
+  }
+
+  if (this.indeterminate) {
+    val = this.value ? this.trueValue : this.falseValue
+  }
+
+  if (typeof val === 'boolean') {
+    return
+  }
+
+  if (this.unit) {
+    return val + this.unit
+  }
+
+  return val
+}
+
+/**
+ * @param {Template.Property} property
+ */
+export function formatComponentStyle(property) {
+  /**
+   * @type {import('vue/types/jsx').StyleValue}
+   */
+  const result = Object.create(null)
+
+  for (const [key, value] of Object.entries(property)) {
+    if (typeof value === 'boolean') continue
+
+    const val = TemplateProperty.format.call(value)
+    if (val) result[key] = val
+  }
+
+  return result
 }

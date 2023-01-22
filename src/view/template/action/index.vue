@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, provide, ref } from 'vue'
+import { onMounted, onUnmounted, provide, reactive, ref } from 'vue'
 import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
 import { useShortcuts } from '@/view/template/hooks/useShortcuts'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
-import { createId, createComponentGroup, removeComponentGroup, TemplateEvent } from '@/view/template/utils'
+import { createId, createGroupComponent, removeGroupComponent, TemplateEvent } from '@/view/template/utils'
 import { recordHandle } from '@/view/template/utils/record'
 import eventBus from '@/util/eventBus'
 
@@ -44,7 +44,7 @@ export default {
      * @param {boolean} [record] 是否添加到历史记录
      */
     const addComponent = function (e, record = true) {
-      const component = e.detail
+      const component = reactive(e.detail)
 
       component.key = index.value++
       component.id = createId(component.key)
@@ -52,7 +52,7 @@ export default {
 
       store.components.set(component.key, component)
       store.currentComponent = component
-      store.componentsData = Array.from(store.components)
+      store.changes += 1
 
       if (record) {
         eventBus.$emit(recordChannel.componentAdd, e)
@@ -69,7 +69,7 @@ export default {
 
       store.currentComponent = null
       store.components.delete(component.key)
-      store.componentsData = Array.from(store.components)
+      store.changes += 1
 
       if (record) {
         eventBus.$emit(recordChannel.componentDel, e)
@@ -105,16 +105,12 @@ export default {
      */
     const moveComponent = function (e) {
       eventBus.$emit(recordChannel.componentMove, e)
-      store.componentsData = Array.from(store.components)
     }
     /**
      * @param {Template.Event} e
      */
     const moveComponentEnd = function (e) {
       eventBus.$emit(recordChannel.componentMoveEnd, e)
-      if (e.target === 'property') {
-        store.componentsData = Array.from(store.components)
-      }
     }
 
     /**
@@ -129,16 +125,12 @@ export default {
      */
     const resizeComponent = function (e) {
       eventBus.$emit(recordChannel.componentResize, e)
-      store.componentsData = Array.from(store.components)
     }
     /**
      * @param {Template.Event} e
      */
     const resizeComponentEnd = function (e) {
       eventBus.$emit(recordChannel.componentResizeEnd, e)
-      if (e.target === 'property') {
-        store.componentsData = Array.from(store.components)
-      }
     }
 
     /**
@@ -147,9 +139,6 @@ export default {
      */
     const componentFontChange = function (e) {
       eventBus.$emit(recordChannel.componentFontChange, e)
-      if (e.target === 'property') {
-        store.componentsData = Array.from(store.components)
-      }
     }
 
     /**
@@ -161,7 +150,7 @@ export default {
       store.currentComponent = null
 
       eventBus.$emit(recordChannel.stageClear, e)
-      store.componentsData = Array.from(store.components)
+      store.changes += 1
     }
 
     /**
@@ -169,7 +158,7 @@ export default {
      * @param {Template.Event} e
      */
     const groupPack = function (e) {
-      const groupComponent = createComponentGroup(e.detail)
+      const groupComponent = createGroupComponent(e.detail)
 
       groupComponent.children.forEach(item => {
         store.components.delete(item.key)
@@ -185,7 +174,7 @@ export default {
      * @param {Template.Event} e
      */
     const groupUn = function (e) {
-      const components = removeComponentGroup(e.detail)
+      const components = removeGroupComponent(e.detail)
 
       components.forEach(item => {
         const event = new TemplateEvent(templateChannel.componentAdd, { detail: item, target: 'stage' })

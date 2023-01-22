@@ -3,6 +3,7 @@ import { usePadding } from './usePadding'
 import { useSize } from './useSize'
 
 export function useStore() {
+  let changes = 0
   const size = useSize()
   const padding = usePadding()
 
@@ -12,6 +13,13 @@ export function useStore() {
   const state = reactive({
     name: '',
     direction: 'vertical',
+    get changes() {
+      return changes
+    },
+    set changes(val) {
+      changes = val
+      this.componentsData = Array.from(this.components.values())
+    },
     size: {
       name: size.A4.name,
       /** @type {number} */
