@@ -36,3 +36,14 @@ interface Directive {
   name: string
   option: import('vue').DirectiveOptions
 }
+
+declare namespace Line {
+  interface Method {
+      /** 注册 hooks */
+      hook(fn: Hooks): void
+  }
+
+  type Hooks = (...args: unknown[]) => boolean | void
+  type Handle = (...args: unknown[]) => any
+  type Config = (config: Method) => void
+}

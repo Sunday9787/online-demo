@@ -1,3 +1,4 @@
+/* stylelint-disable scss/at-import-no-partial-leading-underscore */
 @import './_variables';
 @import './_element-ui';
 
@@ -17,3 +18,4 @@
 @import './dialog';
 @import './radio';
 @import './input-number';
+@import './checkbox';
