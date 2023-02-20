@@ -8,7 +8,7 @@ import eventBus from '@/util/eventBus'
  * @param {number} targetValue
  */
 function isNearly(dragValue, targetValue) {
-  return Math.abs(dragValue - targetValue) <= 2
+  return Math.abs(dragValue - targetValue) <= 5
 }
 
 /**
@@ -86,6 +86,10 @@ export function useMarkLine() {
    * @type {Template.Store}
    */
   const store = inject(storeSymbol)
+
+  /**
+   * @type {import('vue').Ref<Array<{type: 'yl'|'yc'|'yr'|'xt'|'xc'|'xb',direction: string, visible: boolean, position: {left: number, top: number}}>>}
+   */
   const markLine = ref([
     { type: 'yl', direction: 'vertical', visible: false, position: { left: 0, top: 0 } },
     { type: 'yc', direction: 'vertical', visible: false, position: { left: 0, top: 0 } },
@@ -99,21 +103,62 @@ export function useMarkLine() {
    * @param {Template.Event} e
    */
   const moveHandle = function (e) {
-    const currentRect = getRect(e.detail)
+    const currentComponent = e.detail
+    const currentRect = getRect(currentComponent)
 
-    // eslint-disable-next-line no-labels
-    components: for (const [key, item] of store.components) {
-      if (key === e.detail.key) continue
+    for (const [key, item] of store.components) {
+      if (key === currentComponent.key) continue
 
       const rect = getRect(item)
 
-      for (const line of Object.values(markLine.value)) {
+      let condition = 0
+
+      for (const line of markLine.value) {
         const { visible, position } = conditions[line.type].apply(null, [currentRect, rect])
         line.visible = visible
         line.position = position
-        // eslint-disable-next-line no-labels
-        if (visible) break components
+
+        if (visible) {
+          condition += 1
+
+          /**
+           * @type {[number, number]}
+           */
+          const [x, y] = [
+            position.left || currentComponent.props.position.x,
+            position.top || currentComponent.props.position.y
+          ]
+
+          switch (line.type) {
+            case 'xt':
+              currentComponent.props.position.x = x
+              currentComponent.props.position.y = y
+              break
+            case 'xc':
+              currentComponent.props.position.x = x
+              currentComponent.props.position.y = y - currentComponent.props.size.h / 2
+              break
+            case 'xb':
+              currentComponent.props.position.x = x
+              currentComponent.props.position.y = y - currentComponent.props.size.h
+              break
+            case 'yc':
+              currentComponent.props.position.x = x - currentComponent.props.size.w / 2
+              currentComponent.props.position.y = y
+              break
+            case 'yl':
+              currentComponent.props.position.x = x
+              currentComponent.props.position.y = y
+              break
+            case 'yr':
+              currentComponent.props.position.x = x - currentComponent.props.size.w
+              currentComponent.props.position.y = y
+              break
+          }
+        }
       }
+
+      if (condition) break
     }
   }
 

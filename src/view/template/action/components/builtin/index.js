@@ -1,5 +1,5 @@
 import { createComponent, createGroupComponent } from '@/view/template/utils'
-import { usePosition } from '@/view/template/hooks/useProperty'
+import { usePosition, useSize } from '@/view/template/hooks/useProperty'
 
 export const basicBuiltinComponent = new Map([
   ['basicBuiltinComponent-0', createComponent({ props: { label: '病例名称' } })],
@@ -43,8 +43,10 @@ export const customBuiltinComponent = new Map([
   ['customBuiltinComponent-4', createComponent({ props: { label: '文本域' } })],
   ['customBuiltinComponent-5', createComponent({ props: { label: '图片' } })],
   ['customBuiltinComponent-6', createComponent({ props: { label: '矩形' } })],
-  ['customBuiltinComponent-7', createComponent({ props: { label: '横线' } })],
-  ['customBuiltinComponent-8', createComponent({ props: { label: '竖线' } })]
+  ['customBuiltinComponent-7', createComponent({ props: { label: '矩形1', size: useSize({ w: 120, h: 60 }) } })],
+  ['customBuiltinComponent-8', createComponent({ props: { label: '矩形2', size: useSize({ w: 60, h: 120 }) } })],
+  ['customBuiltinComponent-9', createComponent({ props: { label: '横线' } })],
+  ['customBuiltinComponent-10', createComponent({ props: { label: '竖线' } })]
 ])
 
 /**

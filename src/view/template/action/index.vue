@@ -11,7 +11,6 @@
 import { onMounted, onUnmounted, provide, reactive, ref } from 'vue'
 import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
-import { useShortcuts } from '@/view/template/hooks/useShortcuts'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
 import { createId, createGroupComponent, removeGroupComponent, TemplateEvent } from '@/view/template/utils'
 import { recordHandle } from '@/view/template/utils/record'
@@ -36,7 +35,6 @@ export default {
 
     provide(storeSymbol, store)
     useRecord(store)
-    useShortcuts(store)
 
     /**
      * 添加组件

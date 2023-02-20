@@ -20,7 +20,7 @@
             el-input-number.flex1(
               size="small"
               :min="0"
-              :precision="1"
+              :precision="0"
               :controls="false"
               v-model="current.position.x"
               @change="componentMove(currentComponent)")
@@ -29,7 +29,7 @@
             el-input-number.flex1(
               size="small"
               :min="0"
-              :precision="1"
+              :precision="0"
               :controls="false"
               v-model="current.position.y"
               @change="componentMove(currentComponent)")
@@ -41,7 +41,7 @@
             el-input-number.flex1(
               size="small"
               :min="0"
-              :precision="1"
+              :precision="0"
               :controls="false"
               v-model="current.size.w"
               @change="componentSizeChange(currentComponent)")
@@ -50,7 +50,7 @@
             el-input-number.flex1(
               size="small"
               :min="0"
-              :precision="1"
+              :precision="0"
               :controls="false"
               v-model="current.size.h"
               @change="componentSizeChange(currentComponent)")

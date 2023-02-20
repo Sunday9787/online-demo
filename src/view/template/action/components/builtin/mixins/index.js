@@ -62,7 +62,7 @@ const mixin = {
         style.left = this.position.x + 'px'
         style.top = this.position.y + 'px'
         style.width = this.size.w + 'px'
-        style.height = this.size.h + 'px'
+        style.height = style.lineHeight + 'px'
       }
 
       return style

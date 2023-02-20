@@ -18,15 +18,41 @@
 <script>
 import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useControl } from '@/view/template/hooks/controlManage'
+import { useBorderSize } from '@/view/template/hooks/useBorder'
 
 /**
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
  */
 const onPointeDownHandle = {
-  topLeft(e) {},
-  topCenter(e) {},
-  topRight(e) {},
-  centerLeft(e) {},
+  topLeft(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: rect.left,
+      y: rect.top
+    }
+  },
+  topCenter(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: rect.left,
+      y: rect.top
+    }
+  },
+  topRight(e) {
+    const rect = this.$el.getBoundingClientRect()
+    const scale = this.scale / 100
+    this.stashPosition = {
+      x: this.$el.offsetWidth * scale + rect.left,
+      y: rect.top
+    }
+  },
+  centerLeft(e) {
+    const rect = this.$el.getBoundingClientRect()
+    this.stashPosition = {
+      x: rect.left,
+      y: rect.top
+    }
+  },
   centerRight(e) {
     const rect = this.$el.getBoundingClientRect()
     const scale = this.scale / 100
@@ -35,7 +61,15 @@ const onPointeDownHandle = {
       y: (this.$el.offsetHeight / 2) * scale + rect.top
     }
   },
-  bottomLeft(e) {},
+  bottomLeft(e) {
+    const rect = this.$el.getBoundingClientRect()
+    const scale = this.scale / 100
+
+    this.stashPosition = {
+      x: rect.left,
+      y: this.$el.offsetHeight * scale + rect.top
+    }
+  },
   bottomCenter(e) {
     const rect = this.$el.getBoundingClientRect()
     const scale = this.scale / 100
@@ -59,10 +93,122 @@ const onPointeDownHandle = {
  * @type {Record<string, (this: Vue, e: PointerEvent) => void>}
  */
 const onPointermoveHandle = {
-  topLeft(e) {},
-  topCenter(e) {},
-  topRight(e) {},
-  centerLeft(e) {},
+  topLeft(e) {
+    if (this.stashPosition) {
+      const scale = this.scale / 100
+      const rect = this.stageInstance.$el.getBoundingClientRect()
+      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
+      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+
+      if (x <= 0) {
+        x = 0
+      }
+
+      let w = this.data.w + (this.data.x - x / scale)
+
+      if (w <= this.miniSize.w) {
+        w = this.miniSize.w
+      } else {
+        this.data.x = x / scale
+      }
+
+      if (y <= 0) {
+        y = 0
+      }
+
+      let h = this.data.h + (this.data.y - y / scale)
+
+      if (h <= this.miniSize.h) {
+        h = this.miniSize.h
+      } else {
+        this.data.y = y / scale
+      }
+
+      this.data.h = h
+      this.data.w = w
+    }
+  },
+  topCenter(e) {
+    if (this.stashPosition) {
+      const scale = this.scale / 100
+      const rect = this.stageInstance.$el.getBoundingClientRect()
+      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
+
+      if (y <= 0) {
+        y = 0
+      }
+
+      let h = this.data.h + (this.data.y - y / scale)
+
+      if (h <= this.miniSize.h) {
+        h = this.miniSize.h
+      } else {
+        this.data.y = y / scale
+      }
+
+      this.data.h = h
+    }
+  },
+  topRight(e) {
+    if (this.stashPosition) {
+      const scale = this.scale / 100
+      const rect = this.stageInstance.$el.getBoundingClientRect()
+      let w = this.initSize.w * scale + (e.pageX - this.stashPosition.x)
+
+      /**
+       * 左边限制
+       */
+      if (w <= this.miniSize.w * scale) {
+        w = this.miniSize.w * scale
+      }
+
+      /**
+       * 右边限制
+       */
+      if (this.$el.offsetLeft * scale + w >= this.stageInstance.$el.clientWidth * scale) {
+        w = (this.stageInstance.$el.clientWidth - this.$el.offsetLeft) * scale
+      }
+
+      this.data.w = w / scale
+
+      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
+
+      if (y <= 0) {
+        y = 0
+      }
+
+      let h = this.data.h + (this.data.y - y / scale)
+
+      if (h <= this.miniSize.h) {
+        h = this.miniSize.h
+      } else {
+        this.data.y = y / scale
+      }
+
+      this.data.h = h
+    }
+  },
+  centerLeft(e) {
+    if (this.stashPosition) {
+      const scale = this.scale / 100
+      const rect = this.stageInstance.$el.getBoundingClientRect()
+      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+
+      if (x <= 0) {
+        x = 0
+      }
+
+      let w = this.data.w + (this.data.x - x / scale)
+
+      if (w <= this.miniSize.w) {
+        w = this.miniSize.w
+      } else {
+        this.data.x = x / scale
+      }
+
+      this.data.w = w
+    }
+  },
   centerRight(e) {
     if (this.stashPosition) {
       const scale = this.scale / 100
@@ -83,11 +229,46 @@ const onPointermoveHandle = {
       }
 
       this.data.w = w / scale
-      this.$emit('update:size', { w: this.data.w, h: this.data.h })
-      this.$emit('resize', { w: this.data.w, h: this.data.h })
     }
   },
-  bottomLeft(e) {},
+  bottomLeft(e) {
+    if (this.stashPosition) {
+      const scale = this.scale / 100
+      const rect = this.stageInstance.$el.getBoundingClientRect()
+      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+      let h = this.initSize.h * scale + (e.pageY - this.stashPosition.y)
+
+      /**
+       * 上边限制
+       */
+      if (h <= this.miniSize.h * scale) {
+        h = this.miniSize.h * scale
+      }
+
+      /**
+       * 下边限制
+       */
+      if (this.$el.offsetTop * scale + h >= this.stageInstance.$el.clientHeight * scale) {
+        h = this.stageInstance.$el.clientHeight * scale - this.$el.offsetTop * scale
+      }
+
+      this.data.h = h / scale
+
+      if (x <= 0) {
+        x = 0
+      }
+
+      let w = this.data.w + (this.data.x - x / scale)
+
+      if (w <= this.miniSize.w) {
+        w = this.miniSize.w
+      } else {
+        this.data.x = x / scale
+      }
+
+      this.data.w = w
+    }
+  },
   bottomCenter(e) {
     if (this.stashPosition) {
       const scale = this.scale / 100
@@ -108,8 +289,6 @@ const onPointermoveHandle = {
       }
 
       this.data.h = h / scale
-      this.$emit('update:size', { w: this.data.w, h: this.data.h })
-      this.$emit('resize', { w: this.data.w, h: this.data.h })
     }
   },
   bottomRight(e) {
@@ -147,8 +326,6 @@ const onPointermoveHandle = {
 
     this.data.w = w / scale
     this.data.h = h / scale
-    this.$emit('update:size', { w: this.data.w, h: this.data.h })
-    this.$emit('resize', { w: this.data.w, h: this.data.h })
   }
 }
 
@@ -187,6 +364,7 @@ export default {
     const pointType = ref(null)
     /**
      * 实际显示 定位 & 宽度
+     * @type {{x: number, y: number, h: number, w: number}}
      */
     const data = reactive({ x: props.position.x, y: props.position.y, h: props.size.h, w: props.size.w })
     /**
@@ -202,6 +380,8 @@ export default {
      * 最小控件大小
      */
     const miniSize = reactive({ w: 0, h: 0 })
+
+    const { border: stageInstanceBorder } = useBorderSize(vm.stageInstance)
 
     /**
      * @param {PointerEvent} e
@@ -230,6 +410,9 @@ export default {
         const scale = props.scale / 100
         if (pointType.value) {
           onPointermoveHandle[pointType.value].call(vm, e)
+
+          context.emit('update:position', { x: data.x, y: data.y })
+          context.emit('update:size', { w: data.w, h: data.h })
           return
         }
 
@@ -311,6 +494,7 @@ export default {
     })
 
     return {
+      stageInstanceBorder,
       visible,
       multiple,
       pointType,
