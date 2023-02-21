@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { merge } from 'lodash-es'
 import { useFont, useSize, usePosition } from '@/view/template/hooks/useProperty'
 
@@ -143,11 +144,35 @@ export function createComponent(...args) {
       lock: false,
       required: false,
       label: '',
+      value: '',
       property,
       position: usePosition(),
-      size: useSize({ type })
+      size: useSize({ type }),
+      option: {
+        value: Vue.observable([]),
+        add() {
+          if (this.value.length) {
+            // 当最后一项不为空时 才可以 新增项
+            if (this.value[this.value.length - 1].value) {
+              this.value.push({ value: '', key: Date.now() })
+            }
+            return
+          }
+
+          this.value.push({ value: '', key: Date.now() })
+        },
+        del(index) {
+          this.value.splice(index, 1)
+        }
+      },
+      get options() {
+        return this.option.value
+      }
     }
   }
+
+  // 初始化选项
+  result.props.option.add()
 
   if (component) {
     merge(result, component)

@@ -23,7 +23,7 @@ declare namespace Template {
   type AddNameSpace<N extends string,T extends string> = `${N}:${T}`
   type BuiltinComponentRecordType = AddNameSpace<'record',BuiltinComponentType>
 
-  type BuiltinComponentName = 'builtin-group' | 'builtin-input'
+  type BuiltinComponentName = 'builtin-group' | 'builtin-input' | 'builtin-select'
 
   type EventTarget = 'stage'|'property'|'toolbar'
 
@@ -80,6 +80,19 @@ declare namespace Template {
       w: number
       h: number
     }
+    value: string
+    option: {
+      value: BuiltinComponentPropsOptions[]
+      del(key: number): void
+      add(): void
+    }
+    get options(): BuiltinComponentPropsOptions[]
+  }
+
+  interface BuiltinComponentPropsOptions {
+    label: string
+    value: string
+    key: number
   }
 
   interface BuiltinComponentItem {

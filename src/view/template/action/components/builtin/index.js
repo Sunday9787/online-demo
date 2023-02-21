@@ -46,7 +46,8 @@ export const customBuiltinComponent = new Map([
   ['customBuiltinComponent-7', createComponent({ props: { label: '矩形1', size: useSize({ w: 120, h: 60 }) } })],
   ['customBuiltinComponent-8', createComponent({ props: { label: '矩形2', size: useSize({ w: 60, h: 120 }) } })],
   ['customBuiltinComponent-9', createComponent({ props: { label: '横线' } })],
-  ['customBuiltinComponent-10', createComponent({ props: { label: '竖线' } })]
+  ['customBuiltinComponent-10', createComponent({ props: { label: '竖线' } })],
+  ['customBuiltinComponent-11', createComponent({ props: { label: '筛选项' } }, 'builtin-select')]
 ])
 
 /**

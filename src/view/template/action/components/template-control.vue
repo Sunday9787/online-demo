@@ -388,7 +388,6 @@ export default {
      */
     const onPointerdown = function (e) {
       const scale = props.scale / 100
-      vm.$el.style.cursor = 'grab'
 
       visible.value = true
       pointType.value = null
@@ -406,6 +405,7 @@ export default {
      * @param {PointerEvent} e
      */
     const onPointermove = function (e) {
+      if (props.lock) return
       if (stashPosition.value) {
         const scale = props.scale / 100
         if (pointType.value) {
@@ -456,7 +456,6 @@ export default {
      */
     const onPointerup = function (e) {
       if (stashPosition.value) {
-        vm.$el.style.cursor = 'default'
         stashPosition.value = null
         pointType.value = null
         initSize.w = data.w
@@ -568,6 +567,10 @@ export default {
     .template-control-point {
       background-color: #fff;
     }
+  }
+
+  &:not(.lock):active {
+    cursor: grab;
   }
 }
 

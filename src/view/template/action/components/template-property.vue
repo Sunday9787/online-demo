@@ -19,6 +19,7 @@
           li.template-property-list-item
             el-input-number.flex1(
               size="small"
+              :disabled="current.lock"
               :min="0"
               :precision="0"
               :controls="false"
@@ -28,6 +29,7 @@
           li.template-property-list-item
             el-input-number.flex1(
               size="small"
+              :disabled="current.lock"
               :min="0"
               :precision="0"
               :controls="false"
@@ -55,9 +57,10 @@
               v-model="current.size.h"
               @change="componentSizeChange(currentComponent)")
             span H
-      div.template-property-item
+
+      div.template-property-item(v-if="property")
         label 设置
-        ol.template-property-list.flex1(v-if="property")
+        ol.template-property-list.flex1
           li.template-property-list-item(v-for="item of property.setting" :key="item.type")
             el-checkbox(
               :label="item.value"
@@ -75,6 +78,8 @@
               :label="item.value"
               v-model="current.required"
               v-if="item.type === 'required'") {{ item.label }}
+
+      TemplatePropertyOption(v-if="property && property.option" :option="property.option" :current="current")
   aside.template-property(key="2" v-else)
 </template>
 
@@ -88,6 +93,9 @@ import eventBus from '@/util/eventBus'
 
 export default {
   name: 'TemplateProperty',
+  components: {
+    TemplatePropertyOption: () => import('./template-property-option.vue')
+  },
   setup() {
     /**
      * @type {Template.Store}

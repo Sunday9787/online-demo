@@ -5,24 +5,24 @@
 
   div(v-else :style="containerStyle")
     label(:for="id") {{ label }}
-    el-input(v-model="formValue" :id="id" style="flex: 1")
+    el-select(v-model="formValue" :id="id" style="flex: 1")
+      el-option(v-for="(item) of options" :key="item.key" :value="item.value" :label="item.label")
 </template>
 
 <script>
 import mixin from './mixins'
 
 export default {
-  name: 'BuiltinInput',
+  name: 'BuiltinSelect',
   mixins: [mixin],
-  inheritAttrs: false,
   props: {
     value: {
       type: String,
       required: true
     },
-    group: {
-      type: Boolean,
-      default: false
+    options: {
+      type: Array,
+      required: true
     }
   }
 }

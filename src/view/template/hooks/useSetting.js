@@ -15,7 +15,16 @@ const builtinComponentPropertySetting = {
     ]
   },
   [builtinComponentName.select]: {
-    setting: {}
+    setting: [
+      { label: '锁定位置', type: 'lock', value: false },
+      { label: '设为必填', type: 'required', value: false }
+    ],
+    option: [
+      {
+        label: '选项',
+        type: 'option'
+      }
+    ]
   }
 }
 

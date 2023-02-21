@@ -1,12 +1,10 @@
 <template lang="pug">
   div.builtin-group(:style="wrapperStyle")
     component(
-      v-for="(component) in children" :key="component.key"
+      v-for="(component) in children"
+      v-bind="component.props"
+      :key="component.key"
       :is="component.name"
-      :label="component.props.label"
-      :size="component.props.size"
-      :property="component.props.property"
-      :position="component.props.position"
       group)
 </template>
 
@@ -14,12 +12,14 @@
 import { reactive } from 'vue'
 import mixin from './mixins'
 import BuiltinInput from './builtin-input.vue'
+import BuiltinSelect from './builtin-select.vue'
 
 export default {
   name: 'BuiltinGroup',
   mixins: [mixin],
   components: {
-    BuiltinInput
+    BuiltinInput,
+    BuiltinSelect
   },
   props: {
     children: {

@@ -18,6 +18,7 @@ export function useSize(options = { w: 0, h: 0, type: '' }) {
 
   switch (options.type) {
     case 'builtin-input':
+    case 'builtin-select':
       state.w = 240
       state.h = 24
       break

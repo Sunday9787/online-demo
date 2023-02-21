@@ -1,33 +1,39 @@
 <template lang="pug">
   nav.template-contextmenu(:class="{ visible }" :style="wrapperStyle" @pointerdown.stop="noop")
-    template(v-if="store.currentComponent")
+    template(v-if="currentComponent")
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('del')") 删除
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('lock')") 锁定
+      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('unlock')" v-if="current.lock") 取消锁定
+      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('lock')" v-else) 锁定
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toTop')") 置于顶层
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toBottom')") 置于底层
     a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toPaste')" v-else) 粘贴
 </template>
 
 <script>
-import { inject, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { inject, onBeforeUnmount, onMounted, reactive, ref, computed } from 'vue'
 import { useBorderSize } from '@/view/template/hooks/useBorder'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { TemplateEvent } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
 /**
- * @type {Record<string, (this: Template.Store) => void>}
+ * @type {Record<string, (this: Template.BuiltinComponent) => void>}
  */
 const commandHandle = {
   del() {
     const event = new TemplateEvent(templateChannel.componentDel, {
-      detail: this.currentComponent,
+      detail: this,
       target: 'stage'
     })
 
     eventBus.$emit(templateChannel.componentDel, event)
   },
-  lock() {},
+  lock() {
+    this.props.lock = true
+  },
+  unlock() {
+    this.props.lock = false
+  },
   toTop() {},
   toBottom() {},
   toPaste() {}
@@ -53,6 +59,19 @@ export default {
     const visible = ref(false)
     const position = reactive({ x: 0, y: 0 })
     const { border } = useBorderSize(stageInstance)
+
+    /**
+     * @type {import('vue').Ref<Template.BuiltinComponent>}
+     */
+    const currentComponent = computed(() => store.currentComponent)
+
+    const current = computed(() => {
+      if (currentComponent.value) {
+        return currentComponent.value.props
+      }
+
+      return null
+    })
 
     /**
      * @param {PointerEvent} e
@@ -87,7 +106,7 @@ export default {
       window.removeEventListener('pointerdown', pointerdown)
     })
 
-    return { visible, position, store }
+    return { visible, position, currentComponent, current }
   },
   computed: {
     wrapperStyle() {
@@ -102,7 +121,7 @@ export default {
      * @param {'del'|'lock'|'toTop'|'toBottom'|'toPaste'} type
      */
     command(type) {
-      commandHandle[type].apply(this.store)
+      commandHandle[type].apply(this.currentComponent)
       this.visible = false
     }
   }

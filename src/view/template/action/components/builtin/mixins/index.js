@@ -1,6 +1,15 @@
 import * as transformCase from '@/util/case'
 import { formatComponentStyle } from '@/view/template/utils'
 
+const borderComponent = ['BuiltinInput', 'BuiltinSelect']
+
+/**
+ * @param {string} componentName
+ */
+function isInnerBorderComponent(componentName) {
+  return borderComponent.indexOf(componentName) > -1
+}
+
 /**
  * @type {Vue.ComponentOptions<Vue>}
  */
@@ -25,6 +34,10 @@ const mixin = {
     position: {
       type: Object,
       required: true
+    },
+    group: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -36,6 +49,14 @@ const mixin = {
     this.name = this.$vnode.componentOptions.Ctor.options.name
   },
   computed: {
+    formValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
+    },
     id() {
       return transformCase.kebabCase(this.name) + '-' + this._uid
     },
@@ -51,7 +72,7 @@ const mixin = {
        */
       const style = Object.assign(Object.create(null), this.style)
 
-      if (this.name === 'BuiltinInput') {
+      if (isInnerBorderComponent(this.name)) {
         delete style.borderWidth
         delete style.borderColor
         delete style.borderStyle
@@ -68,7 +89,7 @@ const mixin = {
       return style
     },
     valueStyle() {
-      if (this.name === 'BuiltinInput') {
+      if (isInnerBorderComponent(this.name)) {
         return {
           borderWidth: this.style.borderWidth,
           borderBottomStyle: this.style.borderStyle,

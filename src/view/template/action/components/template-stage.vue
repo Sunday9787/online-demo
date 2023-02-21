@@ -15,8 +15,7 @@
       :position="item.position"
       :direction="item.direction"
       :visible="item.visible")
-    TemplateControl(
-      v-for="component of store.componentsData"
+    TemplateControl(v-for="component of store.componentsData"
       v-model="component.visible"
       :key="component.id"
       :scale="scale"
@@ -32,19 +31,10 @@
       @select="selectComponent(component)")
       component(
         :is="component.name"
-        :label="component.props.label"
-        :property="component.props.property"
-        :position="component.props.position"
-        :size="component.props.size"
         :children="component.children"
+        v-bind="component.props"
         v-if="component.name === 'builtin-group'")
-      component(
-        :is="component.name"
-        :label="component.props.label"
-        :property="component.props.property"
-        :size="component.props.size"
-        :position="component.props.position"
-        v-else)
+      component(:is="component.name" v-bind="component.props" v-else)
 </template>
 
 <script>
@@ -60,6 +50,7 @@ export default {
   components: {
     BuiltinInput: () => import('./builtin/builtin-input.vue'),
     BuiltinGroup: () => import('./builtin/builtin-group.vue'),
+    BuiltinSelect: () => import('./builtin/builtin-select.vue'),
     TemplateControl: () => import('./template-control.vue'),
     TemplateMarkLine: () => import('./template-mark-line.vue'),
     TemplateArea: () => import('./template-area.vue'),
