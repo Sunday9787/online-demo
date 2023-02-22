@@ -39,7 +39,6 @@
 
 <script>
 import { inject } from 'vue'
-import { cloneDeep } from 'lodash-es'
 import { builtinComponent } from './builtin'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useMarkLine } from '@/view/template/hooks/useMarkLine'
@@ -187,7 +186,7 @@ export default {
        * @type {Template.BuiltinComponentItem}
        */
       const data = JSON.parse(response)
-      const component = cloneDeep(builtinComponent.get(data.id))
+      const component = builtinComponent.get(data.id).create()
       const [x, y] = shapeLocation({ x: e.pageX, y: e.pageY, el: this.$el }, this.scale / 100)
 
       component.props.position.x = x - data.offset.x

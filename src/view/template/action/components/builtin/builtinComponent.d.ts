@@ -102,6 +102,13 @@ declare namespace Template {
     offset: { x: number, y: number }
   }
 
+  interface Builtin {
+    /** 组件id */
+    id: string
+    label: string
+    create(): Template.BuiltinComponent
+  }
+
   interface BuiltinComponent {
     /** 组件id */
     id: string

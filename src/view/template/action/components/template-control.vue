@@ -97,8 +97,8 @@ const onPointermoveHandle = {
     if (this.stashPosition) {
       const scale = this.scale / 100
       const rect = this.stageInstance.$el.getBoundingClientRect()
-      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
-      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+      let y = e.pageY - rect.top - this.offset.h * scale
+      let x = e.pageX - rect.left - this.offset.w * scale
 
       if (x <= 0) {
         x = 0
@@ -132,7 +132,7 @@ const onPointermoveHandle = {
     if (this.stashPosition) {
       const scale = this.scale / 100
       const rect = this.stageInstance.$el.getBoundingClientRect()
-      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
+      let y = e.pageY - rect.top - this.offset.h * scale
 
       if (y <= 0) {
         y = 0
@@ -171,7 +171,7 @@ const onPointermoveHandle = {
 
       this.data.w = w / scale
 
-      let y = e.pageY - rect.top - this.stageInstanceBorder.h * scale
+      let y = e.pageY - rect.top - this.offset.h * scale
 
       if (y <= 0) {
         y = 0
@@ -192,7 +192,7 @@ const onPointermoveHandle = {
     if (this.stashPosition) {
       const scale = this.scale / 100
       const rect = this.stageInstance.$el.getBoundingClientRect()
-      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+      let x = e.pageX - rect.left - this.offset.w * scale
 
       if (x <= 0) {
         x = 0
@@ -235,7 +235,7 @@ const onPointermoveHandle = {
     if (this.stashPosition) {
       const scale = this.scale / 100
       const rect = this.stageInstance.$el.getBoundingClientRect()
-      let x = e.pageX - rect.left - this.stageInstanceBorder.w * scale
+      let x = e.pageX - rect.left - this.offset.w * scale
       let h = this.initSize.h * scale + (e.pageY - this.stashPosition.y)
 
       /**
@@ -389,7 +389,7 @@ export default {
      */
     const miniSize = reactive({ w: 0, h: 0 })
 
-    const { border: stageInstanceBorder } = useBorderSize(vm.stageInstance)
+    const offset = useBorderSize(vm.stageInstance)
 
     /**
      * @param {PointerEvent} e
@@ -499,7 +499,7 @@ export default {
     })
 
     return {
-      stageInstanceBorder,
+      offset,
       visible,
       multiple,
       pointType,

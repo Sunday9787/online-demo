@@ -79,6 +79,8 @@ export function getRect(component) {
 }
 
 /**
+ * 元件相对于画布的位置
+ *
  * @param {object} option
  * @param {number} option.x
  * @param {number} option.y
@@ -87,10 +89,18 @@ export function getRect(component) {
  * @returns {[number, number]}
  */
 export function shapeLocation(option, scale) {
-  const border = { w: 0, h: 0 }
-  const reg = /(?<width>\d+\.?\d+)\w+/
+  const [offsetLeft, offsetTop] = getBorderSize(option.el)
   const rect = option.el.getBoundingClientRect()
-  const style = window.getComputedStyle(option.el)
+  return [(option.x - rect.left - offsetLeft * scale) / scale, (option.y - rect.top - offsetTop * scale) / scale]
+}
+
+/**
+ * @param {HTMLElement} el
+ * @returns {[number, number]}
+ */
+export function getBorderSize(el) {
+  const reg = /(?<width>\d+\.?\d+)\w+/
+  const style = window.getComputedStyle(el)
   const borderLeftWidthMatch = reg.exec(style.borderLeftWidth)
   const borderTopWidthMatch = reg.exec(style.borderTopWidth)
 
@@ -98,11 +108,10 @@ export function shapeLocation(option, scale) {
     const w = Number(borderLeftWidthMatch.groups.width)
     const h = Number(borderTopWidthMatch.groups.width)
 
-    border.w = w
-    border.h = h
+    return [w, h]
   }
 
-  return [(option.x - rect.left - border.w * scale) / scale, (option.y - rect.top - border.h * scale) / scale]
+  return [0, 0]
 }
 
 /**

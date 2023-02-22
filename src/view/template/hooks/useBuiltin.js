@@ -20,14 +20,21 @@ export function useBuiltinComponent() {
   ]
 
   /**
-   * @type {Record<string, Template.BuiltinComponentItem>}
+   * @type {Map<string, Template.BuiltinComponentItem>}
    */
-  const builtinComponentMap = Object.create(null)
+  const builtinComponentMap = new Map()
 
   builtinComponents.forEach((components, index) => {
-    for (const [id, item] of components) {
-      builtinComponentMap[id] = reactive({ label: item.props.label, id, used: false, offset: { x: 0, y: 0 } })
-      builtinComponent[index].items.push(builtinComponentMap[id])
+    for (const item of components) {
+      const data = reactive({
+        label: item.label,
+        id: item.id,
+        used: false,
+        offset: { x: 0, y: 0 }
+      })
+
+      builtinComponentMap.set(item.id, data)
+      builtinComponent[index].items.push(data)
     }
   })
 
@@ -53,8 +60,9 @@ export function useBuiltinComponent() {
    * @param {Template.Event<string>} e
    */
   const componentAddFinish = function (e) {
-    if (e.detail in builtinComponentMap) {
-      builtinComponentMap[e.detail].used = true
+    if (builtinComponentMap.has(e.detail)) {
+      const item = builtinComponentMap.get(e.detail)
+      item.used = true
     }
   }
 

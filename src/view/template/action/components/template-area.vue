@@ -10,6 +10,7 @@
 <script>
 import { getCurrentInstance, inject, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { templateChannel, storeSymbol } from '@/view/template/constant'
+import { getBorderSize } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -157,20 +158,8 @@ export default {
   methods: {
     updateOffset() {
       if (this.stageInstance.$el) {
-        const style = window.getComputedStyle(this.stageInstance.$el)
-        const reg = /(?<width>\d+\.?\d+)\w+/
-        const borderLeftWidthMatch = reg.exec(style.borderLeftWidth)
-        const borderTopWidthMatch = reg.exec(style.borderTopWidth)
-
-        if (borderLeftWidthMatch && borderTopWidthMatch) {
-          const x = Number(borderLeftWidthMatch.groups.width)
-          const y = Number(borderTopWidthMatch.groups.width)
-
-          this.offset = { x, y }
-          return
-        }
-
-        this.offset = { x: 0, y: 0 }
+        const [x, y] = getBorderSize(this.stageInstance.$el)
+        this.offset = { x, y }
         return
       }
 

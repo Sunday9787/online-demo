@@ -11,9 +11,8 @@
 
 <script>
 import { inject, onBeforeUnmount, onMounted, reactive, ref, computed } from 'vue'
-import { useBorderSize } from '@/view/template/hooks/useBorder'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
-import { TemplateEvent } from '@/view/template/utils'
+import { TemplateEvent, shapeLocation } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
 /**
@@ -58,7 +57,6 @@ export default {
     const store = inject(storeSymbol)
     const visible = ref(false)
     const position = reactive({ x: 0, y: 0 })
-    const { border } = useBorderSize(stageInstance)
 
     /**
      * @type {import('vue').Ref<Template.BuiltinComponent>}
@@ -78,14 +76,12 @@ export default {
      */
     const contextmenu = function (e) {
       e.preventDefault()
+
       const scale = props.scale / 100
-      const rect = stageInstance.$el.getBoundingClientRect()
+      const [x, y] = shapeLocation({ x: e.pageX, y: e.pageY, el: stageInstance.$el }, scale)
 
-      const x = e.pageX - rect.left - border.w * scale
-      const y = e.pageY - rect.top - border.h * scale
-
-      position.x = x / scale
-      position.y = y / scale
+      position.x = x
+      position.y = y
       visible.value = true
     }
 
