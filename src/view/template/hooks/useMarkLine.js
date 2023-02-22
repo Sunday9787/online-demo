@@ -100,14 +100,14 @@ export function useMarkLine() {
   ])
 
   /**
-   * @param {Template.Event} e
+   * @param {Template.Event<Template.BuiltinComponent>} e
    */
   const moveHandle = function (e) {
     const currentComponent = e.detail
     const currentRect = getRect(currentComponent)
 
     for (const [key, item] of store.components) {
-      if (key === currentComponent.key) continue
+      if (key === currentComponent.uid) continue
 
       const rect = getRect(item)
 

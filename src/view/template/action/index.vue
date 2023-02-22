@@ -11,9 +11,9 @@
 import { onMounted, onUnmounted, provide, reactive, ref } from 'vue'
 import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
+import { recordHandle } from '@/view/template/utils/record'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
 import { createId, createGroupComponent, removeGroupComponent, TemplateEvent } from '@/view/template/utils'
-import { recordHandle } from '@/view/template/utils/record'
 import eventBus from '@/util/eventBus'
 
 import TemplateAside from './components/template-aside.vue'
@@ -38,17 +38,23 @@ export default {
 
     /**
      * 添加组件
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      * @param {boolean} [record] 是否添加到历史记录
      */
     const addComponent = function (e, record = true) {
       const component = reactive(e.detail)
 
-      component.key = index.value++
-      component.id = createId(component.key)
+      component.uid = index.value++
+      component.id = createId(component.uid)
       component.visible = true
 
-      store.components.set(component.key, component)
+      if (component.children) {
+        component.children.forEach(function (item) {
+          item.uid = index.value++
+        })
+      }
+
+      store.components.set(component.uid, component)
       store.currentComponent = component
       store.changes += 1
 
@@ -59,14 +65,14 @@ export default {
 
     /**
      * 删除组件
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      * @param {boolean} [record]
      */
     const delComponent = function (e, record = true) {
       const component = e.detail
 
       store.currentComponent = null
-      store.components.delete(component.key)
+      store.components.delete(component.uid)
       store.changes += 1
 
       if (record) {
@@ -76,10 +82,11 @@ export default {
 
     /**
      * 选择组件
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const selectComponent = function (e) {
       store.currentComponent = e.detail
+      store.currentComponent.visible = true
       eventBus.$emit(recordChannel.componentSelect, e)
     }
 
@@ -93,19 +100,19 @@ export default {
 
     /**
      * 移动组件
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const moveComponentStart = function (e) {
       eventBus.$emit(recordChannel.componentMoveStart, e)
     }
     /**
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const moveComponent = function (e) {
       eventBus.$emit(recordChannel.componentMove, e)
     }
     /**
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const moveComponentEnd = function (e) {
       eventBus.$emit(recordChannel.componentMoveEnd, e)
@@ -113,19 +120,19 @@ export default {
 
     /**
      * 组件修改大小
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const resizeComponentStart = function (e) {
       eventBus.$emit(recordChannel.componentResizeStart, e)
     }
     /**
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const resizeComponent = function (e) {
       eventBus.$emit(recordChannel.componentResize, e)
     }
     /**
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const resizeComponentEnd = function (e) {
       eventBus.$emit(recordChannel.componentResizeEnd, e)
@@ -133,7 +140,7 @@ export default {
 
     /**
      * 字体改变
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const componentFontChange = function (e) {
       eventBus.$emit(recordChannel.componentFontChange, e)
@@ -153,13 +160,13 @@ export default {
 
     /**
      * 创建组
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const groupPack = function (e) {
       const groupComponent = createGroupComponent(e.detail)
 
       groupComponent.children.forEach(item => {
-        store.components.delete(item.key)
+        store.components.delete(item.uid)
       })
 
       const event = new TemplateEvent(templateChannel.componentAdd, { detail: groupComponent, target: 'stage' })
@@ -169,7 +176,7 @@ export default {
 
     /**
      * 组解散
-     * @param {Template.Event} e
+     * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const groupUn = function (e) {
       const components = removeGroupComponent(e.detail)

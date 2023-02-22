@@ -27,9 +27,9 @@ declare namespace Template {
 
   type EventTarget = 'stage'|'property'|'toolbar'
 
-  interface Event {
+  interface Event<T extends unknown> {
     target: EventTarget
-    detail: BuiltinComponent | null
+    detail: T
     timestamp: number
     type: BuiltinComponentType
   }
@@ -98,12 +98,14 @@ declare namespace Template {
   interface BuiltinComponentItem {
     label: string
     id: string
+    used: boolean
+    offset: { x: number, y: number }
   }
 
   interface BuiltinComponent {
     /** 组件id */
     id: string
-    key: number
+    uid: number
     visible: boolean
     /** 组件名称 */
     name: BuiltinComponentName

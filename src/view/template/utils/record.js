@@ -28,16 +28,16 @@ function undoGeneral(record) {
   if (this.record.length) {
     const recordComponent = this.record[this.record.length - 1].component
 
-    if (this.components.has(recordComponent.key)) {
+    if (this.components.has(recordComponent.uid)) {
       /**
        * @type {Template.BuiltinComponent}
        */
       const component = cloneDeep(recordComponent)
-      component.id = createId(recordComponent.key)
+      component.id = createId(recordComponent.uid)
 
-      this.components.set(component.key, component)
-      this.componentsData = Array.from(this.components)
-      console.log('撤销更改', 'key', component.key, '新id', component.id, '旧id', recordComponent.id)
+      this.components.set(component.uid, component)
+      this.componentsData = Array.from(this.components.values())
+      console.log('撤销更改', 'uid', component.uid, '新id', component.id, '旧id', recordComponent.id)
     }
   }
 }
@@ -49,16 +49,16 @@ function undoGeneral(record) {
 function restoreGeneral(record) {
   const recordComponent = record.component
 
-  if (this.components.has(recordComponent.key)) {
+  if (this.components.has(recordComponent.uid)) {
     /**
      * @type {Template.BuiltinComponent}
      */
     const component = cloneDeep(recordComponent)
-    component.id = createId(recordComponent.key)
+    component.id = createId(recordComponent.uid)
 
-    this.components.set(component.key, component)
-    this.componentsData = Array.from(this.components)
-    console.log('恢复更改', 'key', component.key, '新id', component.id, '旧id', recordComponent.id)
+    this.components.set(component.uid, component)
+    this.componentsData = Array.from(this.components.values())
+    console.log('恢复更改', 'uid', component.uid, '新id', component.id, '旧id', recordComponent.id)
   }
 }
 

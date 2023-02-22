@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { merge } from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-es'
 import { useFont, useSize, usePosition } from '@/view/template/hooks/useProperty'
 
 /**
@@ -41,12 +41,13 @@ export class TemplateEvent {
    * @param {object} options
    * @param {Template.BuiltinComponent|null} options.detail
    * @param {Template.EventTarget} options.target
+   * @param {boolean} [options.clone]
    */
   constructor(event, options) {
     /** @type {Template.EventTarget} */
     this.target = options.target
     /** @type {Readonly<Template.BuiltinComponent>} */
-    this.detail = options.detail
+    this.detail = options.clone ? cloneDeep(options.detail) : options.detail
     /** @type {Template.BuiltinComponentType} */
     this.type = event
     /** @type {number} */
@@ -75,6 +76,33 @@ export function getRect(component) {
   const width = component.props.size.w
 
   return { left, top, right, bottom, height, width }
+}
+
+/**
+ * @param {object} option
+ * @param {number} option.x
+ * @param {number} option.y
+ * @param {HTMLElement} option.el
+ * @param {number} scale
+ * @returns {[number, number]}
+ */
+export function shapeLocation(option, scale) {
+  const border = { w: 0, h: 0 }
+  const reg = /(?<width>\d+\.?\d+)\w+/
+  const rect = option.el.getBoundingClientRect()
+  const style = window.getComputedStyle(option.el)
+  const borderLeftWidthMatch = reg.exec(style.borderLeftWidth)
+  const borderTopWidthMatch = reg.exec(style.borderTopWidth)
+
+  if (borderLeftWidthMatch && borderTopWidthMatch) {
+    const w = Number(borderLeftWidthMatch.groups.width)
+    const h = Number(borderTopWidthMatch.groups.width)
+
+    border.w = w
+    border.h = h
+  }
+
+  return [(option.x - rect.left - border.w * scale) / scale, (option.y - rect.top - border.h * scale) / scale]
 }
 
 /**
@@ -137,9 +165,10 @@ export function createComponent(...args) {
    * @type {Template.BuiltinComponent}
    */
   const result = {
-    id: 0,
+    id: '',
     name: type,
     visible: false,
+    uid: -1,
     props: {
       lock: false,
       required: false,

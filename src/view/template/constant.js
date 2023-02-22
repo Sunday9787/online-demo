@@ -31,6 +31,8 @@ export const templateChannel = readonly({
   groupUn: 'group:un',
   /** 组件 添加 */
   componentAdd: 'component:add',
+  /** 组件 添加完成 */
+  componentAddFinish: 'component:add:finish',
   /** 组件 删除 */
   componentDel: 'component:del',
   /** 组件 选择 */

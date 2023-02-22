@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { useControl } from '@/view/template/hooks/controlManage'
 import { useBorderSize } from '@/view/template/hooks/useBorder'
 
@@ -356,7 +356,15 @@ export default {
   },
   setup(props, context) {
     const vm = getCurrentInstance().proxy
-    const visible = ref(props.value)
+    const visible = computed({
+      get() {
+        return props.value
+      },
+      set(val) {
+        context.emit('input', val)
+      }
+    })
+
     const { multiple } = useControl()
     /**
      * 指针点击类型 - 控制方向类型/null
@@ -397,7 +405,6 @@ export default {
       }
 
       context.emit('select', vm)
-      context.emit('input', visible.value)
       context.emit('moveStart', { x: data.x, y: data.y })
     }
 
@@ -471,7 +478,6 @@ export default {
      */
     const onBodyPointerdown = function (e) {
       visible.value = false
-      context.emit('input', visible.value)
     }
 
     onMounted(function () {

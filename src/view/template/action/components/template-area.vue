@@ -66,7 +66,7 @@ export default {
         rect.h = h
 
         store.components.forEach(function (item) {
-          const component = store.components.get(item.key)
+          const component = store.components.get(item.uid)
 
           if (
             item.props.position.x >= rect.x &&
@@ -74,8 +74,8 @@ export default {
             item.props.position.y >= rect.y &&
             item.props.position.y <= rect.y + rect.h
           ) {
-            if (!components.has(component.key)) {
-              components.set(component.key, component)
+            if (!components.has(component.uid)) {
+              components.set(component.uid, component)
             }
           }
         })

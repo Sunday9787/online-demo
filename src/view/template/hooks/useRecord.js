@@ -10,14 +10,14 @@ import eventBus from '@/util/eventBus'
  * @param {Template.BuiltinComponent} component
  * @param {boolean} [record] 是否记录
  */
-function recordHandle(type, component, record = true) {
+function recordHandle(type, component = null, record = true) {
   if (component) {
     const recordData = createRecord(type, component)
 
     console.group('record')
     console.info('事件', recordTypeMap[type])
     console.info('组件id', component.id)
-    console.info('组件key', component.key)
+    console.info('组件uid', component.uid)
     console.info('组件props', component.props)
     console.info('时间戳', moment().format('yyyy-MM-DD HH:mm:ss'))
     console.groupEnd()
@@ -43,7 +43,7 @@ export function useRecord(store) {
   let resize = false
 
   /**
-   * @param {Template.Event} e
+   * @param {Template.Event<Template.BuiltinComponent | null>} e
    */
   const componentChange = function (e) {
     switch (e.type) {

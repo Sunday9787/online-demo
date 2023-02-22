@@ -3,7 +3,7 @@
     component(
       v-for="(component) in children"
       v-bind="component.props"
-      :key="component.key"
+      :key="component.uid"
       :is="component.name"
       group)
 </template>

@@ -10,7 +10,7 @@
     @dragover.prevent="noop")
     TemplateContextmenu(:scale="scale")
     TemplateArea(:scale="scale" @area="area")
-    TemplateMarkLine(v-for="(item) of markLine"
+    TemplateMarkLine(v-for="item of markLine"
       :key="item.type"
       :position="item.position"
       :direction="item.direction"
@@ -39,10 +39,11 @@
 
 <script>
 import { inject } from 'vue'
+import { cloneDeep } from 'lodash-es'
 import { builtinComponent } from './builtin'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useMarkLine } from '@/view/template/hooks/useMarkLine'
-import { TemplateEvent } from '@/view/template/utils'
+import { TemplateEvent, shapeLocation } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
 export default {
@@ -186,13 +187,22 @@ export default {
        * @type {Template.BuiltinComponentItem}
        */
       const data = JSON.parse(response)
-      const component = builtinComponent.get(data.id)
+      const component = cloneDeep(builtinComponent.get(data.id))
+      const [x, y] = shapeLocation({ x: e.pageX, y: e.pageY, el: this.$el }, this.scale / 100)
+
+      component.props.position.x = x - data.offset.x
+      component.props.position.y = y - data.offset.y
 
       const event = new TemplateEvent(templateChannel.componentAdd, {
         detail: component,
         target: 'stage'
       })
+
       eventBus.$emit(templateChannel.componentAdd, event)
+      eventBus.$emit(
+        templateChannel.componentAddFinish,
+        new TemplateEvent(templateChannel.componentAddFinish, { detail: data.id })
+      )
     },
     /**
      * @param {Template.BuiltinComponent} component
@@ -275,8 +285,14 @@ export default {
      * @param {Template.BuiltinComponent[]} data
      */
     area(data) {
-      const event = new TemplateEvent(templateChannel.groupPack, { detail: data, target: 'stage' })
-      eventBus.$emit(templateChannel.groupPack, event)
+      // 如果选中个数 大于 1 的时候 创建组 否则 选择组件
+      if (data.length > 1) {
+        const event = new TemplateEvent(templateChannel.groupPack, { detail: data, target: 'stage' })
+        eventBus.$emit(templateChannel.groupPack, event)
+        return
+      }
+
+      this.selectComponent(data[0])
     }
   },
   watch: {

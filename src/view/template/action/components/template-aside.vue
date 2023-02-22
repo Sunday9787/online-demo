@@ -6,7 +6,8 @@
         li.template-component-item(
           v-for="item of value.items"
           :key="item.id"
-          draggable
+          :class="{ used: item.used }"
+          :draggable="!item.used"
           @dragstart="dragstartHandle($event, item)"
           @dragend="dragendHandle($event)"
           @drag="dragHandle($event)") {{item.label}}
@@ -18,7 +19,7 @@ import { useBuiltinComponent } from '@/view/template/hooks/useBuiltin'
 export default {
   name: 'TemplateAside',
   setup() {
-    const builtinComponent = useBuiltinComponent()
+    const { builtinComponent } = useBuiltinComponent()
 
     return { builtinComponent }
   },
@@ -31,10 +32,20 @@ export default {
     },
     /**
      * @param {DragEvent} e
-     * @param {Template.BuiltinComponent} data
+     * @param {Template.BuiltinComponentItem} data
      */
     dragstartHandle(e, data) {
       console.log('开始拖拽')
+
+      /**
+       * @type {HTMLLIElement}
+       */
+      const el = e.target
+      const rect = el.getBoundingClientRect()
+
+      data.offset.x = e.pageX - rect.left
+      data.offset.y = e.pageY - rect.top
+
       e.dataTransfer.dropEffect = 'move'
       e.dataTransfer.effectAllowed = 'move'
       e.dataTransfer.setData('application/json', JSON.stringify(data))
@@ -83,13 +94,19 @@ export default {
 }
 
 .template-component-item {
-  text-align: center;
-  cursor: grab;
   font-size: 12px;
   padding: 6px;
+  cursor: grab;
+  text-align: center;
+  user-select: none;
   border: 1px solid var(--color-border-light);
 
-  &:active {
+  &.used {
+    cursor: not-allowed;
+    background-color: var(--color-primary-light-7);
+  }
+
+  &:not(.used):active {
     cursor: grabbing;
   }
 }
