@@ -30,6 +30,8 @@
       @resizeEnd="resizeEnd(component)"
       @select="selectComponent(component)")
       component(
+        top
+        group
         :is="component.name"
         :children="component.children"
         v-bind="component.props"
@@ -215,7 +217,7 @@ export default {
     },
     unSelectComponent() {
       if (this.store.currentComponent) {
-        if (this.store.currentComponent.children) {
+        if (this.store.currentComponent.children && !this.store.currentComponent.builtin) {
           const event = new TemplateEvent(templateChannel.componentSelectUn, {
             detail: this.store.currentComponent,
             target: 'stage'

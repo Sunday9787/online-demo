@@ -1,8 +1,9 @@
 <template lang="pug">
-  div.builtin-group(:style="wrapperStyle")
+  div.builtin-group(:style="groupStyle")
     component(
       v-for="(component) in children"
       v-bind="component.props"
+      :children="component.children"
       :key="component.uid"
       :is="component.name"
       group)
@@ -22,6 +23,10 @@ export default {
     BuiltinSelect
   },
   props: {
+    top: {
+      type: Boolean,
+      default: false
+    },
     children: {
       type: Array,
       default: () => []
@@ -36,12 +41,21 @@ export default {
     return { rect }
   },
   computed: {
-    wrapperStyle() {
-      return {
-        position: 'relative',
+    groupStyle() {
+      const style = {
         width: this.rect.w + 'px',
         height: this.rect.h + 'px'
       }
+
+      if (this.top) {
+        style.position = 'reactive'
+      } else {
+        style.position = 'absolute'
+        style.left = this.position.x + 'px'
+        style.top = this.position.y + 'px'
+      }
+
+      return style
     }
   }
 }

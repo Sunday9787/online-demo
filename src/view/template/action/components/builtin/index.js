@@ -2,248 +2,260 @@ import { createComponent, createGroupComponent } from '@/view/template/utils'
 import { usePosition, useSize } from '@/view/template/hooks/useProperty'
 
 /**
+ * @param {string} namespace
+ * @param {Template.Builtin[]} components
+ */
+function initBuiltinComponent(namespace, components) {
+  components.forEach(function (item, index) {
+    item.id = namespace + '-' + index
+  })
+
+  return components
+}
+
+/**
  * @type {Template.Builtin[]}
  */
-export const basicBuiltinComponent = [
+export const basicBuiltinComponent = initBuiltinComponent('basicBuiltinComponent', [
   {
-    id: 'basicBuiltinComponent-0',
+    id: '',
     label: '病例名称',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'basicBuiltinComponent-1',
+    id: '',
     label: '产前编号',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'basicBuiltinComponent-2',
+    id: '',
     label: '姓名',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'basicBuiltinComponent-3',
+    id: '',
     label: '姓名组',
     create() {
-      return createGroupComponent({ props: { label: this.label, position: usePosition(0, 20) } }, [
+      return createGroupComponent({ builtin: true, props: { label: this.label, position: usePosition(0, 20) } }, [
         createComponent({ props: { label: '姓名1' } }),
         createComponent({ props: { label: '姓名2', position: usePosition(20, 20) } })
       ])
     }
   }
-]
+])
 
 /**
  * @type {Template.Builtin[]}
  */
-export const resultsAnalysisBuiltinComponent = [
+export const resultsAnalysisBuiltinComponent = initBuiltinComponent('resultsAnalysisBuiltinComponent', [
   {
-    id: 'resultsAnalysisBuiltinComponent-0',
+    id: '',
     label: '核型表达式',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'resultsAnalysisBuiltinComponent-1',
+    id: '',
     label: '排列图',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'resultsAnalysisBuiltinComponent-2',
+    id: '',
     label: '中期分裂图',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'resultsAnalysisBuiltinComponent-3',
+    id: '',
     label: '所有细胞数',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'resultsAnalysisBuiltinComponent-4',
+    id: '',
     label: '计数细胞数',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'resultsAnalysisBuiltinComponent-5',
+    id: '',
     label: '排列细胞数',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   }
-]
+])
 
 /**
  * @type {Template.Builtin[]}
  */
-export const otherBuiltinComponent = [
+export const otherBuiltinComponent = initBuiltinComponent('otherBuiltinComponent', [
   {
-    id: 'otherBuiltinComponent-0',
+    id: '',
     label: '机构名称',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-1',
+    id: '',
     label: '样本类型',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-2',
+    id: '',
     label: '采集日期',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-3',
+    id: '',
     label: '接收日期',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-4',
+    id: '',
     label: '检查方法',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-5',
+    id: '',
     label: '报告日期',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-6',
+    id: '',
     label: '审核日期',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-7',
+    id: '',
     label: '接收医师',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'otherBuiltinComponent-8',
+    id: '',
     label: '审核医师',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   }
-]
+])
 
 /**
  * @type {Template.Builtin[]}
  */
-export const customBuiltinComponent = [
+export const customBuiltinComponent = initBuiltinComponent('customBuiltinComponent', [
   {
-    id: 'customBuiltinComponent-0',
+    id: '',
     label: '输入框',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-1',
+    id: '',
     label: '下拉框',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-2',
+    id: '',
     label: '日期',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-3',
+    id: '',
     label: '电子签名',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-4',
+    id: '',
     label: '文本域',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-5',
+    id: '',
     label: '图片',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-6',
+    id: '',
     label: '矩形',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-7',
+    id: '',
     label: '矩形1',
     create() {
       return createComponent({ props: { label: this.label, size: useSize({ w: 120, h: 60 }) } })
     }
   },
   {
-    id: 'customBuiltinComponent-8',
+    id: '',
     label: '矩形2',
     create() {
       return createComponent({ props: { label: this.label, size: useSize({ w: 60, h: 120 }) } })
     }
   },
   {
-    id: 'customBuiltinComponent-9',
+    id: '',
     label: '横线',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-10',
+    id: '',
     label: '竖线',
     create() {
       return createComponent({ props: { label: this.label } })
     }
   },
   {
-    id: 'customBuiltinComponent-11',
+    id: '',
     label: '筛选项',
     create() {
       return createComponent({ props: { label: this.label } }, 'builtin-select')
     }
   }
-]
+])
 
 /**
  * @type {Map<string, Template.Builtin>}

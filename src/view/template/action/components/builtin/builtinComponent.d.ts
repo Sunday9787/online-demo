@@ -117,6 +117,7 @@ declare namespace Template {
     /** 组件名称 */
     name: BuiltinComponentName
     props: BuiltinComponentProps
+    builtin: boolean
     children?: BuiltinComponent[]
   }
 

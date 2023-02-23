@@ -14,7 +14,12 @@ function isInnerBorderComponent(componentName) {
  * @type {Vue.ComponentOptions<Vue>}
  */
 const mixin = {
+  inheritAttrs: false,
   props: {
+    lock: {
+      type: Boolean,
+      required: true
+    },
     mode: {
       type: String,
       default: 'shape'

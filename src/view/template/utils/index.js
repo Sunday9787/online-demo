@@ -175,9 +175,10 @@ export function createComponent(...args) {
    */
   const result = {
     id: '',
+    uid: -1,
     name: type,
     visible: false,
-    uid: -1,
+    builtin: false,
     props: {
       lock: false,
       required: false,

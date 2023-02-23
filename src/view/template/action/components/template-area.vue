@@ -93,11 +93,6 @@ export default {
       if (components.size) {
         const data = Array.from(components.values())
 
-        if (data.every(item => item.name === 'builtin-group')) {
-          components.clear()
-          return
-        }
-
         context.emit('area', data)
         components.clear()
 

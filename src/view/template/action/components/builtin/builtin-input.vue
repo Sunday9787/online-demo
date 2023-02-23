@@ -14,15 +14,10 @@ import mixin from './mixins'
 export default {
   name: 'BuiltinInput',
   mixins: [mixin],
-  inheritAttrs: false,
   props: {
     value: {
       type: String,
       required: true
-    },
-    group: {
-      type: Boolean,
-      default: false
     }
   }
 }
