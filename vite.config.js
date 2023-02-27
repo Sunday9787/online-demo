@@ -1,6 +1,7 @@
 import path from 'path'
 import { defineConfig } from 'vite'
 import vue2Plugin from '@vitejs/plugin-vue2'
+import vue2Jsx from '@vitejs/plugin-vue2-jsx'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import legacy from '@vitejs/plugin-legacy'
 import viteCompression from 'vite-plugin-compression'
@@ -31,6 +32,7 @@ export default defineConfig({
         }
       }
     }),
+    vue2Jsx(),
     createHtmlPlugin({
       minify: true,
       entry: '/src/main.js',
@@ -86,11 +88,6 @@ export default defineConfig({
         entryFileNames: 'static/js/[name]-[hash].js'
       }
     }
-  },
-  esbuild: {
-    jsxFactory: 'h',
-    jsxFragment: 'Fragment',
-    pure: ['console.log']
   },
   css: {
     devSourcemap: true,

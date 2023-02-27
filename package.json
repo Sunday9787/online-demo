@@ -29,6 +29,8 @@
     "@types/node": "^18.11.17",
     "@vitejs/plugin-legacy": "^3.0.1",
     "@vitejs/plugin-vue2": "^2.2.0",
+    "@vitejs/plugin-vue2-jsx": "^1.1.0",
+    "@vue/babel-helper-vue-jsx-merge-props": "^1.4.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-standard": "^8.0.1",
     "cssnano": "^5.1.14",
