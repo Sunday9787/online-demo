@@ -7,7 +7,7 @@
           li.template-property-list-item(ref="item" v-for="(item, index) in current.options" :key="item.key")
             el-input(
               v-model="item.value"
-              size="small"
+              size="mini"
               @hook:mounted="inputMounted"
               @keyup.native.enter="() => current[optionItem.type].add()")
             div(style="width: 14px; text-align: center")

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { cloneDeep, merge } from 'lodash-es'
-import { useFont, useSize, usePosition } from '@/view/template/hooks/useProperty'
+import { useFont, useSize, usePosition, useFontSize } from '@/view/template/hooks/useProperty'
 
 /**
  * @type {Template.TemplateProperty}
@@ -121,6 +121,7 @@ export function getBorderSize(el) {
  */
 export function createComponent(...args) {
   const { font } = useFont()
+  const { fontSize } = useFontSize()
   /**
    * @type {Template.BuiltinComponent}
    */
@@ -145,6 +146,7 @@ export function createComponent(...args) {
     display: new TemplateProperty({ value: 'flex' }),
     color: new TemplateProperty({ value: '#333' }),
     fontFamily: new TemplateProperty({ value: font.value }),
+    fontSize: new TemplateProperty({ value: fontSize.value, unit: 'px' }),
     lineHeight: new TemplateProperty({ value: 25, unit: 'px' }),
     borderWidth: new TemplateProperty({ value: 1, unit: 'px' }),
     borderStyle: new TemplateProperty({

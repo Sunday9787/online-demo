@@ -72,3 +72,15 @@ export function useFont() {
 
   return { font: fonts[0], fonts }
 }
+
+export function useFontSize() {
+  const fontSizes = [
+    { label: '12px', value: 12 },
+    { label: '14px', value: 14 },
+    { label: '18px', value: 18 },
+    { label: '22px', value: 22 },
+    { label: '32px', value: 32 }
+  ]
+
+  return { fontSizes, fontSize: fontSizes[0] }
+}

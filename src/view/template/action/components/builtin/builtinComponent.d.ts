@@ -17,6 +17,7 @@ declare namespace Template {
     'component:move'|
     'component:move:end'|
     'component:font:change'|
+    'component:fontSize:change'|
     'component:resize:start'|
     'component:resize'|
     'component:resize:end'
