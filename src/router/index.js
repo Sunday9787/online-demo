@@ -13,15 +13,20 @@ export default new Router({
   mode: 'history',
   base: import.meta.env.BASE_URL,
   routes: [
+    dashboardRoute,
+    organizationRoute,
+    consultationRoute,
+    userRoute,
+    templateRoute,
     {
       path: '/login',
       name: 'Login',
       component: () => import('@/view/login/index.vue')
     },
-    dashboardRoute,
-    organizationRoute,
-    consultationRoute,
-    userRoute,
-    templateRoute
+    {
+      path: '/',
+      name: 'AppIndex',
+      component: () => import('@/view/index.vue')
+    }
   ]
 })
