@@ -4,12 +4,21 @@
       div.template-property-item
         section.flex1
           h1 字体
-          el-select(
-            v-model="current.property.fontFamily.value"
-            :popper-append-to-body="false"
-            size="small"
-            @change="componentFontChange(currentComponent)")
-            el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
+          div.template-property-item
+            el-select.flex1(
+              v-model="current.property.fontFamily.value"
+              :popper-append-to-body="false"
+              size="mini"
+              @change="componentFontChange(currentComponent)")
+              el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
+            el-select(
+              v-model="current.property.fontSize.value"
+              :popper-append-to-body="false"
+              size="mini"
+              style="width: 74px"
+              @change="componentFontSizeChange(currentComponent)")
+              el-option(v-for="(fontSiz, k) in fontSizes" :key="k" :label="fontSiz.label" :value="fontSiz.value")
+
       div.template-property-item
         label 控件名称
         span {{ current.label }}
@@ -18,7 +27,7 @@
         ol.template-property-grid.flex1
           li.template-property-list-item
             el-input-number.flex1(
-              size="small"
+              size="mini"
               :disabled="current.lock"
               :min="0"
               :precision="0"
@@ -28,7 +37,7 @@
             span X
           li.template-property-list-item
             el-input-number.flex1(
-              size="small"
+              size="mini"
               :disabled="current.lock"
               :min="0"
               :precision="0"
@@ -41,7 +50,7 @@
         ol.template-property-grid.flex1
           li.template-property-list-item
             el-input-number.flex1(
-              size="small"
+              size="mini"
               :min="0"
               :precision="0"
               :controls="false"
@@ -50,7 +59,7 @@
             span W
           li.template-property-list-item
             el-input-number.flex1(
-              size="small"
+              size="mini"
               :min="0"
               :precision="0"
               :controls="false"
@@ -86,7 +95,7 @@
 <script>
 import { computed, inject } from 'vue'
 import { useSetting } from '@/view/template/hooks/useSetting'
-import { useFont } from '@/view/template/hooks/useProperty'
+import { useFont, useFontSize } from '@/view/template/hooks/useProperty'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { TemplateEvent } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
@@ -102,6 +111,7 @@ export default {
      */
     const store = inject(storeSymbol)
     const { fonts } = useFont()
+    const { fontSizes } = useFontSize()
     /**
      * @type {import('vue').Ref<Template.BuiltinComponent>}
      */
@@ -116,7 +126,7 @@ export default {
       return null
     })
 
-    return { currentComponent, fonts, current, property }
+    return { currentComponent, fonts, fontSizes, current, property }
   },
   methods: {
     /**
@@ -139,6 +149,16 @@ export default {
     componentFontChange(component) {
       const event = new TemplateEvent(templateChannel.componentFontChange, { detail: component, target: 'property' })
       eventBus.$emit(templateChannel.componentFontChange, event)
+    },
+    /**
+     * @param {Template.BuiltinComponent} component
+     */
+    componentFontSizeChange(component) {
+      const event = new TemplateEvent(templateChannel.componentFontSizeChange, {
+        detail: component,
+        target: 'property'
+      })
+      eventBus.$emit(templateChannel.componentFontSizeChange, event)
     }
   }
 }

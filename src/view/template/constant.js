@@ -47,6 +47,8 @@ export const templateChannel = readonly({
   componentMoveEnd: 'component:move:end',
   /** 组件 字体变化 */
   componentFontChange: 'component:font:change',
+  /** 组件 字体大小变化 */
+  componentFontSizeChange: 'component:font:size:change',
   /** 组件 大小变化开始 */
   componentResizeStart: 'component:resize:start',
   /** 组件 大小变化 */
@@ -90,6 +92,8 @@ export const recordChannel = readonly({
   componentMoveEnd: nameSpace('record', templateChannel.componentMoveEnd),
   /** 组件 字体变化 */
   componentFontChange: nameSpace('record', templateChannel.componentFontChange),
+  /** 组件 字体变化 */
+  componentFontSizeChange: nameSpace('record', templateChannel.componentFontSizeChange),
   /** 组件 大小变化开始 */
   componentResizeStart: nameSpace('record', templateChannel.componentResizeStart),
   /** 组件 大小变化 */
@@ -117,6 +121,7 @@ export const recordTypeMap = readonly({
   [templateChannel.componentMove]: '组件 定位变化',
   [templateChannel.componentMoveEnd]: '组件 定位变化结束',
   [templateChannel.componentFontChange]: '组件 字体变化',
+  [templateChannel.componentFontSizeChange]: '组件 字体大小变化',
   [templateChannel.componentResizeStart]: '组件 大小变化开始',
   [templateChannel.componentResize]: '组件 大小变化',
   [templateChannel.componentResizeEnd]: '组件 大小变化结束'
