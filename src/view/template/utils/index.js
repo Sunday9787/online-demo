@@ -7,11 +7,11 @@ import { useFont, useSize, usePosition } from '@/view/template/hooks/useProperty
  */
 export class TemplateProperty {
   /**
-   * @param {Template.TemplatePropertyOptions} options
+   * @param {Template.TemplateProperty} options
    */
   constructor(options) {
     /**
-     * @type {Template.TemplatePropertyOptions}
+     * @type {Template.TemplateProperty}
      */
     const opt = Object.assign({}, TemplateProperty.options, options)
 
@@ -180,6 +180,7 @@ export function createComponent(...args) {
     visible: false,
     builtin: false,
     props: {
+      zIndex: 1,
       lock: false,
       required: false,
       label: '',

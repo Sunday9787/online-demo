@@ -27,14 +27,21 @@ declare namespace Template {
 
   type EventTarget = 'stage'|'property'|'toolbar'
 
-  interface Event<T extends unknown> {
+  interface Event<T = null, T extends unknown> {
     target: EventTarget
     detail: T
     timestamp: number
     type: BuiltinComponentType
   }
 
-  interface TemplatePropertyOptions {
+  interface TemplatePropertyValue {
+    value: string | number | boolean
+  }
+
+  declare class TemplateProperty {
+    constructor(opt: TemplateProperty)
+    static format(this: TemplateProperty): string
+    static options: TemplateProperty
     value: string | number | boolean
     unit?: string
     trueValue?: string | number
@@ -44,33 +51,22 @@ declare namespace Template {
     indeterminateFalseValue?: string | number
   }
 
-  class TemplateProperty {
-    static options: Omit<TemplatePropertyOptions, 'value'>
-    static format(): string | void
-
-    constructor(options: TemplatePropertyOptions)
-    public property: string
-    public unit: string
-    public trueValue: string | number
-    public falseValue: string | number
-    public value: string | number | boolean
-    public indeterminate: boolean | null
-    public indeterminateTrueValue: string | number | null
-    public indeterminateFalseValue: string | number | null
-  }
-
   interface Property {
-    underline: boolean
-    lineHeight: TemplateProperty
-    color: TemplateProperty
-    fontFamily: TemplateProperty
-    letterSpacing: TemplateProperty
-    [key: string]: TemplateProperty | boolean
+    display: TemplatePropertyValue
+    color: TemplatePropertyValue
+    fontFamily: TemplatePropertyValue
+    fontSize: TemplatePropertyValue
+    lineHeight: TemplatePropertyValue
+    borderWidth: TemplatePropertyValue
+    borderStyle: TemplatePropertyValue
+    borderColor: TemplatePropertyValue
+    [key: string]: TemplatePropertyValue
   }
 
   interface BuiltinComponentProps {
     lock: boolean
     label: string
+    zIndex: number
     property: Property
     position: {
       x: number

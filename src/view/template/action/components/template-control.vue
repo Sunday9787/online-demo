@@ -333,6 +333,10 @@ export default {
   name: 'TemplateControl',
   inject: ['stageInstance'],
   props: {
+    zIndex: {
+      type: Number,
+      required: true
+    },
     scale: {
       type: Number,
       default: 1
@@ -513,6 +517,7 @@ export default {
   computed: {
     wrapperStyle() {
       return {
+        zIndex: this.zIndex,
         left: this.data.x + 'px',
         top: this.data.y + 'px',
         width: this.data.w ? this.data.w + 'px' : 'auto',

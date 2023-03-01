@@ -20,6 +20,7 @@
       :key="component.id"
       :scale="scale"
       :lock="component.props.lock"
+      :zIndex="component.props.zIndex"
       :position.sync="component.props.position"
       :size.sync="component.props.size"
       @moveStart="moveStart(component)"

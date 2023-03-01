@@ -4,8 +4,8 @@
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('del')") 删除
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('unlock')" v-if="current.lock") 取消锁定
       a.template-contextmenu-item(href="javascript:;" @pointerdown="command('lock')" v-else) 锁定
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toTop')") 置于顶层
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toBottom')") 置于底层
+      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toTop')") 置于上层
+      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toBottom')") 置于下层
     a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toPaste')" v-else) 粘贴
 </template>
 
@@ -33,8 +33,12 @@ const commandHandle = {
   unlock() {
     this.props.lock = false
   },
-  toTop() {},
-  toBottom() {},
+  toTop() {
+    this.props.zIndex += 1
+  },
+  toBottom() {
+    this.props.zIndex -= 1
+  },
   toPaste() {}
 }
 
