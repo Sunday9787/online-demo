@@ -1,6 +1,6 @@
 <template lang="pug">
-  aside.template-property(key="1" @pointerdown.stop="noop" v-if="currentComponent")
-    section.template-property-container
+  aside.template-property
+    section.template-property-container(@pointerdown.stop="noop" v-if="currentComponent")
       div.template-property-item
         section.flex1
           h1 字体
@@ -89,7 +89,14 @@
               v-if="item.type === 'required'") {{ item.label }}
 
       TemplatePropertyOption(v-if="property && property.option" :option="property.option" :current="current")
-  aside.template-property(key="2" v-else)
+
+    div.flex1
+
+    section.template-property-action
+      div
+        el-button.fluid(type="primary" size="small" @click="print()") 打印预览
+      div
+        el-button.fluid(type="primary" size="small" @click="save()") 保存并导出
 </template>
 
 <script>
@@ -159,16 +166,31 @@ export default {
         target: 'property'
       })
       eventBus.$emit(templateChannel.componentFontSizeChange, event)
-    }
+    },
+    print() {
+      eventBus.$emit(templateChannel.editorToHtml)
+    },
+    save() {}
   }
 }
 </script>
 
 <style lang="scss">
 .template-property {
+  display: flex;
+  flex-direction: column;
   width: 242px;
   padding: 0 10px;
   font-size: 12px;
+}
+
+.template-property-action {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin: 0 -10px;
+  padding: 20px 20px 30px;
+  box-shadow: 0 0 4px 1px #bfbfbf;
 }
 
 .template-property-container {

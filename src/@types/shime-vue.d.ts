@@ -4,5 +4,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     _uid: number
     loadAssets(path: string): string
+    toHtml(): HTMLElement
   }
 }

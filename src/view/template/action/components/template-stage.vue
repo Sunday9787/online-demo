@@ -33,11 +33,16 @@
       component(
         top
         group
+        ref="builtinGroupComponentRef"
         :is="component.name"
         :children="component.children"
         v-bind="component.props"
         v-if="component.name === 'builtin-group'")
-      component(:is="component.name" v-bind="component.props" v-else)
+      component(
+        ref="builtinComponentRef"
+        :is="component.name"
+        v-bind="component.props"
+        v-else)
 </template>
 
 <script>
@@ -295,6 +300,48 @@ export default {
       }
 
       this.selectComponent(data[0])
+    },
+    toHtml() {
+      /**
+       * @type {Vue[]}
+       */
+      const builtinGroupComponentRef = Array.isArray(this.$refs.builtinGroupComponentRef)
+        ? this.$refs.builtinGroupComponentRef
+        : [this.$refs.builtinGroupComponentRef]
+
+      /**
+       * @type {Vue[]}
+       */
+      const builtinComponentRef = Array.isArray(this.$refs.builtinComponentRef)
+        ? this.$refs.builtinComponentRef
+        : [this.$refs.builtinComponentRef]
+
+      /**
+       * @type {HTMLElement}
+       */
+      const root = this.$el.cloneNode()
+      const fragment = document.createDocumentFragment()
+      const style = window.getComputedStyle(this.$el)
+
+      root.style.left = ''
+      root.style.top = ''
+      root.style.transform = ''
+      root.style.position = 'relative'
+      root.style.border = style.border
+      root.style.boxShadow = style.boxShadow
+      root.style.backgroundImage = style.backgroundImage
+      root.style.backgroundRepeat = style.backgroundRepeat
+
+      builtinGroupComponentRef
+        .concat(builtinComponentRef)
+        .filter(Boolean)
+        .forEach(function (item) {
+          fragment.append(item.toHtml())
+        })
+
+      root.appendChild(fragment)
+
+      return root
     }
   },
   watch: {

@@ -1,7 +1,7 @@
 <template lang="pug">
   main.template-editor
     section.template-canvas(ref="canvas")
-      TemplateStage(:scale="scale.value")
+      TemplateStage(:scale="scale.value" ref="refComponent")
     app-scale(
       :scale.sync="scale.value"
       :max-scale="scale.max"
@@ -12,6 +12,8 @@
 <script>
 import { getCurrentInstance, onBeforeUnmount, onMounted, reactive } from 'vue'
 import TemplateStage from './template-stage.vue'
+
+import { useToHtml } from '@/view/template/hooks/useToHtml'
 
 export default {
   name: 'TemplateEditor',
@@ -25,6 +27,7 @@ export default {
   },
   setup() {
     const vm = getCurrentInstance().proxy
+    const { refComponent } = useToHtml()
     /** 缩放比例 */
     const scale = reactive({ step: 5, value: 100, max: 200, mini: 20 })
 
@@ -52,7 +55,7 @@ export default {
       vm.$el.removeEventListener('mousewheel', mousewheel)
     })
 
-    return { scale }
+    return { scale, refComponent }
   }
 }
 </script>

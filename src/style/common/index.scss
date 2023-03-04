@@ -16,3 +16,7 @@
 .themed {
   @include themed;
 }
+
+.fluid {
+  width: 100%;
+}

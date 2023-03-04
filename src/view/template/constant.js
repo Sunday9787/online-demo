@@ -11,6 +11,7 @@ function nameSpace(namespace, event) {
 export const storeSymbol = Symbol('store')
 
 export const templateChannel = readonly({
+  editorToHtml: 'template:to:html',
   /** 画布 缩放变化 */
   stageScaleChange: 'template:scale:change',
   /** 画布 大小变化 */

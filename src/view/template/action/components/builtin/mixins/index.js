@@ -104,6 +104,22 @@ const mixin = {
 
       return null
     }
+  },
+  methods: {
+    toHtml() {
+      /**
+       * @type {HTMLDivElement}
+       */
+      const el = this.$el.cloneNode(true)
+
+      el.style.position = 'absolute'
+      el.style.left = this.position.x + 'px'
+      el.style.top = this.position.y + 'px'
+      el.style.width = this.size.w + 'px'
+      el.style.height = this.size.h + 'px'
+
+      return el
+    }
   }
 }
 
