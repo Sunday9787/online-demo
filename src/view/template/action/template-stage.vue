@@ -47,7 +47,7 @@
 
 <script>
 import { inject } from 'vue'
-import { builtinComponent } from './builtin'
+import { builtinComponent } from '../components/builtin'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import { useMarkLine } from '@/view/template/hooks/useMarkLine'
 import { TemplateEvent, shapeLocation } from '@/view/template/utils'
@@ -56,13 +56,13 @@ import eventBus from '@/util/eventBus'
 export default {
   name: 'TemplateStage',
   components: {
-    BuiltinInput: () => import('./builtin/builtin-input.vue'),
-    BuiltinGroup: () => import('./builtin/builtin-group.vue'),
-    BuiltinSelect: () => import('./builtin/builtin-select.vue'),
-    TemplateControl: () => import('./template-control.vue'),
-    TemplateMarkLine: () => import('./template-mark-line.vue'),
-    TemplateArea: () => import('./template-area.vue'),
-    TemplateContextmenu: () => import('./template-contextmenu.vue')
+    BuiltinInput: () => import('../components/builtin/builtin-input.vue'),
+    BuiltinGroup: () => import('../components/builtin/builtin-group.vue'),
+    BuiltinSelect: () => import('../components/builtin/builtin-select.vue'),
+    TemplateControl: () => import('../components/template-control.vue'),
+    TemplateMarkLine: () => import('../components/template-mark-line.vue'),
+    TemplateArea: () => import('../components/template-area.vue'),
+    TemplateContextmenu: () => import('../components/template-contextmenu.vue')
   },
   props: {
     scale: {

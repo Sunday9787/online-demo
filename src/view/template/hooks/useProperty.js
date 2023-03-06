@@ -11,12 +11,12 @@ export function usePosition(x = 0, y = 0) {
  * @param {object} options
  * @param {number} [options.w]
  * @param {number} [options.h]
- * @param {Template.BuiltinComponentName} [options.type]
+ * @param {Template.BuiltinComponentName} [options.name]
  */
-export function useSize(options = { w: 0, h: 0, type: '' }) {
+export function useSize(options = { w: 0, h: 0, name: '' }) {
   const state = { w: options.w, h: options.h }
 
-  switch (options.type) {
+  switch (options.name) {
     case 'builtin-input':
     case 'builtin-select':
       state.w = 240

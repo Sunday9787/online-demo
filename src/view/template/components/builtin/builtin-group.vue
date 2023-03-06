@@ -1,11 +1,13 @@
 <template lang="pug">
   div.builtin-group(:style="groupStyle")
     component(
+      ref="builtinComponentRef"
       v-for="(component) in children"
       v-bind="component.props"
-      ref="builtinComponentRef"
+      v-model="component.value"
+      :mode="mode"
       :children="component.children"
-      :key="component.uid"
+      :key="component.id"
       :is="component.name"
       group)
 </template>

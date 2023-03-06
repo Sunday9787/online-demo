@@ -3,7 +3,7 @@ import {
   basicBuiltinComponent,
   otherBuiltinComponent,
   customBuiltinComponent
-} from '@/view/template/action/components/builtin'
+} from '@/view/template/components/builtin'
 import { storeSymbol, templateChannel } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 

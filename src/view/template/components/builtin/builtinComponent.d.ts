@@ -35,9 +35,7 @@ declare namespace Template {
     type: BuiltinComponentType
   }
 
-  interface TemplatePropertyValue {
-    value: string | number | boolean
-  }
+  type TemplatePropertyValue = Pick<TemplateProperty, 'value'>
 
   declare class TemplateProperty {
     constructor(opt: TemplateProperty)
@@ -68,6 +66,7 @@ declare namespace Template {
     lock: boolean
     label: string
     zIndex: number
+    required: boolean
     property: Property
     position: {
       x: number
@@ -103,7 +102,7 @@ declare namespace Template {
     /** 组件id */
     id: string
     label: string
-    create(): Template.BuiltinComponent
+    create(init: boolean): Template.BuiltinComponent
   }
 
   interface BuiltinComponent {
@@ -111,10 +110,11 @@ declare namespace Template {
     id: string
     uid: number
     visible: boolean
+    builtin: boolean
+    value: string
     /** 组件名称 */
     name: BuiltinComponentName
     props: BuiltinComponentProps
-    builtin: boolean
     children?: BuiltinComponent[]
   }
 
@@ -140,7 +140,7 @@ declare namespace Template {
   }
 
   interface Size {
-    name: string
+    name: 'A4'|'A5'
     width: number
     height: number
   }
@@ -149,7 +149,7 @@ declare namespace Template {
     name: string
     get changes(): number
     set changes(): number
-    get size(): Readonly<Size>
+    get size(): Size
     direction: 'vertical' | 'horizontal'
     padding: Padding
     currentComponent: BuiltinComponent
@@ -159,5 +159,40 @@ declare namespace Template {
     record: BuiltinComponentRecord[]
     /** 恢复队列 */
     restore: BuiltinComponentRecord[]
+  }
+}
+
+declare namespace Document {
+  /**
+   * `init` 初始化 `document` 模板数据 `normal` 普通初始化
+   */
+  type CreateBuiltinComponentType = 'init'|'document'|'normal'
+
+  interface Data {
+    size: 'A4'|'A5'
+    padding: Padding
+    components: BuiltinComponent[]
+  }
+
+  interface  BuiltinComponentProps extends Omit<Template.BuiltinComponentProps, 'option'|'options'> {
+    options: Template.BuiltinComponentPropsOptions[]
+    property: Property
+  }
+
+  interface Property {
+    display: Template.TemplateProperty
+    color: Template.TemplateProperty
+    fontFamily: Template.TemplateProperty
+    fontSize: Template.TemplateProperty
+    lineHeight: Template.TemplateProperty
+    borderWidth: Template.TemplateProperty
+    borderStyle: Template.TemplateProperty
+    borderColor: Template.TemplateProperty
+    [key: string]: Template.TemplateProperty
+  }
+
+  interface BuiltinComponent extends Omit<Template.BuiltinComponent, 'props'> {
+    props: BuiltinComponentProps
+    children?: BuiltinComponent[]
   }
 }

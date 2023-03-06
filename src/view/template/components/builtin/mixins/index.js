@@ -68,14 +68,18 @@ const mixin = {
     isShape() {
       return this.mode === 'shape'
     },
+    isElement() {
+      return this.mode === 'element'
+    },
     style() {
       return formatComponentStyle(this.property)
     },
     containerStyle() {
       /**
-       * @type {import('vue/types/jsx').StyleValue}
+       * @type {import('vue/types/jsx').CSSProperties}
        */
       const style = Object.assign(Object.create(null), this.style)
+      style.columnGap = '5px'
 
       if (isInnerBorderComponent(this.name)) {
         delete style.borderWidth
@@ -83,7 +87,7 @@ const mixin = {
         delete style.borderStyle
       }
 
-      if (this.group) {
+      if (this.group || this.isElement) {
         style.position = 'absolute'
         style.left = this.position.x + 'px'
         style.top = this.position.y + 'px'

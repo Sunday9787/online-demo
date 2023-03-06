@@ -5,6 +5,7 @@
         <router-link to="/template/action?type=create">
           <el-button size="small" type="primary">创建模板</el-button>
         </router-link>
+        <el-button type="primary" size="small" @click="editDocument()" style="margin-left: 10px">编辑模板</el-button>
       </template>
 
       <el-table ref="table" :data="table.data" v-loading="table.loading" height="100%" stripe>
@@ -19,6 +20,7 @@
 <script>
 import { request } from '@/util/net'
 import pageMixin from '@/mixins/page'
+import templateDocumentPrompt from '@/view/template/components/template-document'
 
 function getData(param) {
   console.log(param)
@@ -48,6 +50,11 @@ export default {
   created() {
     this.form.mechanismId = this.currentMechanism.mechanismId
     this.search()
+  },
+  methods: {
+    editDocument() {
+      return templateDocumentPrompt()
+    }
   }
 }
 </script>

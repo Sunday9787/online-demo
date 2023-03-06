@@ -17,8 +17,15 @@ export function useToHtml() {
         <head>
           <meta charset="utf-8" />
           <title>模板预览</title>
+          <style>
+            * {
+              padding: 0;
+              margin: 0;
+              box-sizing: border-box;
+            }
+          </style>
         </head>
-        <body style="margin: 0; padding: 20px 0;background-color: #fafafa">
+        <body style="padding: 20px 0;background-color: #fafafa">
           ${node.outerHTML}
         </body>
       </html>

@@ -5,7 +5,7 @@
 
   div(v-else :style="containerStyle")
     label(:for="id") {{ label }}
-    el-input(v-model="formValue" :id="id" style="flex: 1")
+    div.flex1(:style="valueStyle" style="flex: 1") {{ formValue }}
 </template>
 
 <script>

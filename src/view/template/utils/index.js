@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { cloneDeep, merge } from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 import { useFont, useSize, usePosition, useFontSize } from '@/view/template/hooks/useProperty'
 
 /**
@@ -114,50 +114,84 @@ export function getBorderSize(el) {
   return [0, 0]
 }
 
-/**
- * @param {[Template.BuiltinComponent]|
- * [Template.BuiltinComponentName]|
- * [Template.BuiltinComponent, Template.BuiltinComponentName]} args
- */
-export function createComponent(...args) {
-  const { font } = useFont()
-  const { fontSize } = useFontSize()
-  /**
-   * @type {Template.BuiltinComponent}
-   */
-  let component = null
-  /**
-   * @type {Template.BuiltinComponentName}
-   */
-  let type = 'builtin-input'
+const { font } = useFont()
+const { fontSize } = useFontSize()
 
-  if (args.length === 2) {
-    component = args[0]
-    type = args[1]
-  } else {
-    if (typeof args[0] === 'string') {
-      type = args[0]
-    } else {
-      component = args[0]
+/**
+ * @type {Record<string, Template.TemplateProperty>}
+ */
+const defaultProperty = {
+  display: { value: 'flex' },
+  color: { value: '#333' },
+  fontFamily: { value: font.value },
+  fontSize: { value: fontSize.value, unit: 'px' },
+  lineHeight: { value: 25, unit: 'px' },
+  borderWidth: { value: 1, unit: 'px' },
+  borderStyle: {
+    value: false,
+    trueValue: 'dashed',
+    falseValue: 'solid',
+    indeterminate: true,
+    indeterminateTrueValue: 'solid',
+    indeterminateFalseValue: 'none'
+  }
+}
+
+/**
+ * @param {Document.BuiltinComponentProps} props
+ * @param {Template.BuiltinComponentName} name
+ * @param {'init'|'document'|'normal'} type `init` 初始化 `document` 模板数据 `normal` 普通初始化
+ */
+export function initBuiltinComponentProps(props, name, type) {
+  /**
+   * @type {Template.BuiltinComponentProps}
+   */
+  const result = {
+    zIndex: props.zIndex ?? 1,
+    required: props.required ?? false,
+    lock: props.lock ?? false,
+    label: props.label ?? '',
+    value: props.value ?? '',
+    property: initBuiltinComponentProperty(props.property ?? defaultProperty),
+    position: props.position ?? usePosition(),
+    size: props.size ?? useSize({ name }),
+    option: {
+      value: Vue.observable(props.options ?? []),
+      add() {
+        if (this.value.length) {
+          // 当最后一项不为空时 才可以 新增项
+          if (this.value[this.value.length - 1].value) {
+            this.value.push({ value: '', key: Date.now() })
+          }
+          return
+        }
+
+        this.value.push({ value: '', key: Date.now() })
+      },
+      del(index) {
+        this.value.splice(index, 1)
+      }
+    },
+    get options() {
+      return this.option.value
     }
   }
 
-  const property = {
-    display: new TemplateProperty({ value: 'flex' }),
-    color: new TemplateProperty({ value: '#333' }),
-    fontFamily: new TemplateProperty({ value: font.value }),
-    fontSize: new TemplateProperty({ value: fontSize.value, unit: 'px' }),
-    lineHeight: new TemplateProperty({ value: 25, unit: 'px' }),
-    borderWidth: new TemplateProperty({ value: 1, unit: 'px' }),
-    borderStyle: new TemplateProperty({
-      value: false,
-      trueValue: 'dashed',
-      falseValue: 'solid',
-      indeterminate: true,
-      indeterminateTrueValue: 'solid',
-      indeterminateFalseValue: 'none'
-    }),
-    borderColor: new TemplateProperty({ value: '#333' }),
+  if (type !== 'document' && !result.options.length) {
+    result.option.add()
+  }
+
+  return result
+}
+
+/**
+ * @param {Document.Property} property
+ */
+export function initBuiltinComponentProperty(property) {
+  /**
+   * @type {Document.Property}
+   */
+  const result = {
     get dashed() {
       return this.borderStyle.value
     },
@@ -172,109 +206,95 @@ export function createComponent(...args) {
     }
   }
 
-  /**
-   * @type {Template.BuiltinComponent}
-   */
-  const result = {
-    id: '',
-    uid: -1,
-    name: type,
-    visible: false,
-    builtin: false,
-    props: {
-      zIndex: 1,
-      lock: false,
-      required: false,
-      label: '',
-      value: '',
-      property,
-      position: usePosition(),
-      size: useSize({ type }),
-      option: {
-        value: Vue.observable([]),
-        add() {
-          if (this.value.length) {
-            // 当最后一项不为空时 才可以 新增项
-            if (this.value[this.value.length - 1].value) {
-              this.value.push({ value: '', key: Date.now() })
-            }
-            return
-          }
-
-          this.value.push({ value: '', key: Date.now() })
-        },
-        del(index) {
-          this.value.splice(index, 1)
-        }
-      },
-      get options() {
-        return this.option.value
-      }
-    }
-  }
-
-  // 初始化选项
-  result.props.option.add()
-
-  if (component) {
-    merge(result, component)
+  for (const [key, item] of Object.entries(property)) {
+    result[key] = new TemplateProperty(item)
   }
 
   return result
 }
 
 /**
- * @param {[Template.BuiltinComponent, Template.BuiltinComponent[]]|[Template.BuiltinComponent[]]} args
+ * @param {Document.BuiltinComponent} data
+ * @param {'init'|'document'|'normal'} type `init` 初始化 `document` 模板数据 `normal` 普通初始化
  */
-export function createGroupComponent(...args) {
-  const component =
-    args.length === 2
-      ? createComponent(args[0], 'builtin-group')
-      : createComponent({ label: '自定义组' }, 'builtin-group')
-  const children = args.length === 2 ? args[1] : args[0]
+export function createBuiltinComponent(data, type = 'normal') {
+  const name = data.name ?? 'builtin-input'
 
-  const rects = children.map(getRect)
-
-  component.props.position.x = Math.min.apply(
-    null,
-    rects.map(item => item.left)
-  )
-
-  component.props.position.y = Math.min.apply(
-    null,
-    rects.map(item => item.top)
-  )
-
-  component.props.size.w = Math.abs(
-    Math.min.apply(
-      null,
-      rects.map(item => item.left)
-    ) -
-      Math.max.apply(
-        null,
-        rects.map(item => item.right)
-      )
-  )
-
-  component.props.size.h = Math.abs(
-    Math.min.apply(
-      null,
-      rects.map(item => item.top)
-    ) -
-      Math.max.apply(
-        null,
-        rects.map(item => item.bottom)
-      )
-  )
-
-  children.forEach(item => {
-    item.props.position.x -= component.props.position.x
-    item.props.position.y -= component.props.position.y
-  })
-
-  component.children = children
+  /**
+   * @type {Template.BuiltinComponent}
+   */
+  const component = {
+    id: data.id ?? '',
+    uid: data.uid ?? -1,
+    name,
+    value: data.value ?? '',
+    visible: data.visible ?? false,
+    builtin: data.builtin ?? false,
+    props: initBuiltinComponentProps(data.props ?? {}, name, type)
+  }
 
   return component
+}
+
+/**
+ * @param {[Document.BuiltinComponent, Document.BuiltinComponent[], Document.CreateBuiltinComponentType]|
+ * [Document.BuiltinComponent[], Document.CreateBuiltinComponentType]} args
+ */
+export function createBuiltinComponentGroup(...args) {
+  /**
+   * @type {Document.CreateBuiltinComponentType}
+   */
+  let type = 'normal'
+  /**
+   * @type {Document.BuiltinComponent}
+   */
+  let group = null
+  /**
+   * @type {Document.BuiltinComponent[]}
+   */
+  let children = []
+
+  if (Array.isArray(args[0])) {
+    type = args[1]
+    children = args[0]
+    group = createBuiltinComponent({ name: 'builtin-group' }, type)
+  } else {
+    type = args[2]
+    children = args[1]
+    group = createBuiltinComponent({ name: 'builtin-group', ...args[0] }, type)
+  }
+
+  /**
+   * @type {[number[],number[],number[],number[]]}
+   */
+  const [left, top, right, bottom] = children.map(getRect).reduce(
+    function (previousValue, currentValue) {
+      const [left, top, right, bottom] = previousValue
+
+      left.push(currentValue.left)
+      top.push(currentValue.top)
+      right.push(currentValue.right)
+      bottom.push(currentValue.bottom)
+      return [].concat([left], [top], [right], [bottom])
+    },
+    [[], [], [], []]
+  )
+
+  group.props.position.x = Math.min.apply(null, left)
+  group.props.position.y = Math.min.apply(null, top)
+  group.props.size.w = Math.abs(Math.min.apply(null, left) - Math.max.apply(null, right))
+  group.props.size.h = Math.abs(Math.min.apply(null, top) - Math.max.apply(null, bottom))
+
+  if (type !== 'document') {
+    children.forEach(item => {
+      item.props.position.x -= group.props.position.x
+      item.props.position.y -= group.props.position.y
+    })
+  }
+
+  group.children = children
+
+  return group
 }
 
 /**

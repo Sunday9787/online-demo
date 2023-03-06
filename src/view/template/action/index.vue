@@ -13,21 +13,37 @@ import { useStore } from '@/view/template/hooks/useStore'
 import { useRecord } from '@/view/template/hooks/useRecord'
 import { recordHandle } from '@/view/template/utils/record'
 import { recordChannel, templateChannel, storeSymbol } from '@/view/template/constant'
-import { createId, createGroupComponent, removeGroupComponent, TemplateEvent } from '@/view/template/utils'
+import { createId, removeGroupComponent, createBuiltinComponentGroup, TemplateEvent } from '@/view/template/utils'
 import eventBus from '@/util/eventBus'
 
-import TemplateAside from './components/template-aside.vue'
-import TemplateToolbar from './components/template-toolbar.vue'
-import TemplateEditor from './components/template-editor.vue'
-import TemplateProperty from './components/template-property.vue'
+import TemplateAside from './template-aside.vue'
+import TemplateToolbar from './template-toolbar.vue'
+import TemplateEditor from './template-editor.vue'
+import TemplateProperty from './template-property.vue'
+
+const type = ['create', 'edit']
 
 export default {
   name: 'TemplateAction',
+  beforeRouteEnter(to, from, next) {
+    if (type.indexOf(to.query.type) > -1) {
+      next()
+      return
+    }
+
+    next({ path: '/template/action?type=create', replace: true })
+  },
   components: {
     TemplateAside,
     TemplateToolbar,
     TemplateEditor,
     TemplateProperty
+  },
+  props: {
+    type: {
+      type: String,
+      required: true
+    }
   },
   setup() {
     const store = useStore()
@@ -51,6 +67,7 @@ export default {
       if (component.children) {
         component.children.forEach(function (item) {
           item.uid = index.value++
+          item.id = createId(item.uid)
         })
       }
 
@@ -163,7 +180,7 @@ export default {
      * @param {Template.Event<Template.BuiltinComponent>} e
      */
     const groupPack = function (e) {
-      const groupComponent = createGroupComponent(e.detail)
+      const groupComponent = createBuiltinComponentGroup(e.detail)
 
       groupComponent.children.forEach(item => {
         store.components.delete(item.uid)
