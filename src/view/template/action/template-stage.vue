@@ -199,6 +199,7 @@ export default {
 
       component.props.position.x = x - data.offset.x
       component.props.position.y = y - data.offset.y
+      component.shapeId = data.id
 
       const event = new TemplateEvent(templateChannel.componentAdd, {
         detail: component,
@@ -206,10 +207,6 @@ export default {
       })
 
       eventBus.$emit(templateChannel.componentAdd, event)
-      eventBus.$emit(
-        templateChannel.componentAddFinish,
-        new TemplateEvent(templateChannel.componentAddFinish, { detail: data.id })
-      )
     },
     /**
      * @param {Template.BuiltinComponent} component

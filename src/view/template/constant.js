@@ -18,7 +18,7 @@ export const templateChannel = readonly({
   stageSizeChange: 'template:size:change',
   /** 画布 边距变化 */
   stagePaddingChange: 'template:padding:change',
-  /** 画布 边距变化 */
+  /** 画布 清除 */
   stageClear: 'template:clear',
   /** 画布 撤销 */
   stageUndo: 'template:undo',
@@ -32,8 +32,6 @@ export const templateChannel = readonly({
   groupUn: 'group:un',
   /** 组件 添加 */
   componentAdd: 'component:add',
-  /** 组件 添加完成 */
-  componentAddFinish: 'component:add:finish',
   /** 组件 删除 */
   componentDel: 'component:del',
   /** 组件 选择 */

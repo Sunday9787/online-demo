@@ -226,6 +226,7 @@ export function createBuiltinComponent(data, type = 'normal') {
   const component = {
     id: data.id ?? '',
     uid: data.uid ?? -1,
+    shapeId: data.shapeId,
     name,
     value: data.value ?? '',
     visible: data.visible ?? false,

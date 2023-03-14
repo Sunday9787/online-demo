@@ -109,6 +109,7 @@ declare namespace Template {
     /** 组件id */
     id: string
     uid: number
+    shapeId: string
     visible: boolean
     builtin: boolean
     value: string

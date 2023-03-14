@@ -1,10 +1,10 @@
-import { reactive, inject, watch, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, onMounted, onBeforeUnmount } from 'vue'
 import {
   basicBuiltinComponent,
   otherBuiltinComponent,
   customBuiltinComponent
 } from '@/view/template/components/builtin'
-import { storeSymbol, templateChannel } from '@/view/template/constant'
+import { templateChannel } from '@/view/template/constant'
 import eventBus from '@/util/eventBus'
 
 const builtinComponents = [basicBuiltinComponent, otherBuiltinComponent, customBuiltinComponent]
@@ -39,39 +39,42 @@ export function useBuiltinComponent() {
   })
 
   /**
-   * @type {Template.Store}
+   * @param {Template.Event} e
    */
-  const store = inject(storeSymbol)
-
-  watch(
-    () => store.componentsData,
-    function (val) {
-      if (val.length < 1) {
-        builtinComponent.forEach(function (value) {
-          value.items.forEach(function (item) {
-            item.used = false
-          })
-        })
-      }
-    }
-  )
+  const stageClear = function (e) {
+    builtinComponent.forEach(function (value) {
+      value.items.forEach(function (item) {
+        item.used = false
+      })
+    })
+  }
 
   /**
-   * @param {Template.Event<string>} e
+   * @param {Template.Event<Template.BuiltinComponent>} e
    */
-  const componentAddFinish = function (e) {
-    if (builtinComponentMap.has(e.detail)) {
-      const item = builtinComponentMap.get(e.detail)
-      item.used = true
-    }
+  const componentAdd = function (e) {
+    const item = builtinComponentMap.get(e.detail.shapeId)
+    item.used = true
+  }
+
+  /**
+   * @param {Template.Event<Template.BuiltinComponent>} e
+   */
+  const componentDel = function (e) {
+    const item = builtinComponentMap.get(e.detail.shapeId)
+    item.used = false
   }
 
   onMounted(function () {
-    eventBus.$on(templateChannel.componentAddFinish, componentAddFinish)
+    eventBus.$on(templateChannel.componentAdd, componentAdd)
+    eventBus.$on(templateChannel.componentDel, componentDel)
+    eventBus.$on(templateChannel.stageClear, stageClear)
   })
 
   onBeforeUnmount(function () {
-    eventBus.$off(templateChannel.componentAddFinish, componentAddFinish)
+    eventBus.$off(templateChannel.componentAdd, componentAdd)
+    eventBus.$off(templateChannel.componentDel, componentDel)
+    eventBus.$off(templateChannel.stageClear, stageClear)
   })
 
   return { builtinComponent }
