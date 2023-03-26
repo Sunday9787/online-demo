@@ -6,6 +6,7 @@ import organizationRoute from './module/organizationRoute'
 import consultationRoute from './module/consultationRoute'
 import userRoute from './module/userRoute'
 import templateRoute from './module/templateRoute'
+import productRoute from './module/productRoute'
 
 Vue.use(Router)
 
@@ -18,6 +19,7 @@ export default new Router({
     consultationRoute,
     userRoute,
     templateRoute,
+    productRoute,
     {
       path: '/login',
       name: 'Login',
