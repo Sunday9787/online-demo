@@ -25,5 +25,9 @@ router.beforeEach(async (to, form, next) => {
 })
 
 router.afterEach((to, from) => {
+  if (to.meta.title) {
+    document.title = to.meta.title || import.meta.env.VITE_APP_TITLE
+  }
+
   NP.done()
 })

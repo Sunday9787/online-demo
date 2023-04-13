@@ -11,8 +11,8 @@
 html,
 body,
 #app {
-   height: 100%;
-   overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -23,7 +23,6 @@ body {
   @extend %themed;
 }
 
-
 a {
   color: inherit;
   text-decoration: none;
@@ -32,7 +31,12 @@ a {
 }
 
 img {
+  display: inline-block;
   max-width: 100%;
+}
+
+svg {
+  display: inline-block;
 }
 
 ul,

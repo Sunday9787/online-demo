@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import 'virtual:svg-icons-register'
 
 import './router/permission'
 import './style/index.scss'
