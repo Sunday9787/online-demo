@@ -12,36 +12,8 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, ref } from 'vue'
-
-function usePatientPopover() {
-  /**
-   * @type {import('vue').Ref<HTMLElement>}
-   */
-  const iconRef = ref(null)
-  const visible = ref(false)
-  const toggleIcon = computed(() => (visible.value ? 'bottom' : 'top'))
-
-  /**
-   * @param {PointerEvent} e
-   */
-  const toggle = function (e) {
-    if (e.target !== iconRef.value) {
-      visible.value = false
-      return
-    }
-
-    visible.value = !visible.value
-  }
-
-  document.body.addEventListener('pointerdown', toggle)
-
-  onBeforeUnmount(function () {
-    document.body.removeEventListener('pointerdown', toggle)
-  })
-
-  return { visible, toggleIcon, toggle, iconRef }
-}
+import { computed, getCurrentInstance, onBeforeUnmount, onMounted, ref } from 'vue'
+import popoverManage from './popoverManage'
 
 /**
  * @param {string|number} value
@@ -68,7 +40,37 @@ export default {
     }
   },
   setup() {
-    const { visible, toggleIcon, toggle, iconRef } = usePatientPopover()
+    /**
+     * @type {import('vue').Ref<HTMLElement>}
+     */
+    const iconRef = ref(null)
+    const visible = ref(false)
+    const vm = getCurrentInstance().proxy
+    const toggleIcon = computed(() => (visible.value ? 'bottom' : 'top'))
+
+    /**
+     * @param {PointerEvent} e
+     */
+    const toggle = function (e) {
+      if (e.target !== iconRef.value) {
+        visible.value = false
+        return
+      }
+
+      popoverManage.show(vm._uid)
+      visible.value = !visible.value
+    }
+
+    onMounted(function () {
+      popoverManage.register(vm._uid, vm)
+      document.body.addEventListener('pointerdown', toggle)
+    })
+
+    onBeforeUnmount(function () {
+      popoverManage.deregister(vm._uid)
+      document.body.removeEventListener('pointerdown', toggle)
+    })
+
     return { visible, toggleIcon, toggle, iconRef }
   },
   computed: {
