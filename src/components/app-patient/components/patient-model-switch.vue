@@ -39,16 +39,16 @@ export default {
 
 <style lang="scss">
 .patient-model-switch {
-  overflow: hidden;
   display: flex;
   align-items: center;
-  margin-left: auto;
   width: 68px;
   height: 24px;
-  border-radius: 4px;
+  margin-left: auto;
+  overflow: hidden;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  border-radius: 4px;
 
   &.is-light {
     background-image: url('@/image/components/app-patient/thumbnail-list-light.svg');

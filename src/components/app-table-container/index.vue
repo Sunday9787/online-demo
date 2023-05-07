@@ -16,15 +16,15 @@ export default {
 <style lang="scss">
 .app-table-container {
   position: relative;
-  overflow: hidden;
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .app-table__inner {
-  overflow: hidden;
   flex: 1;
+  overflow: hidden;
 }
 
 .app-table-container + .app-pagination,

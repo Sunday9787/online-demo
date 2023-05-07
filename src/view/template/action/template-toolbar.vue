@@ -178,8 +178,8 @@ export default {
 
 <style lang="scss">
 .template-toolbar {
-  z-index: 1;
   position: relative;
+  z-index: 1;
   display: flex;
   padding: 8px 20px;
   box-shadow: 0 0 8px 1px #bfbfbf;
@@ -189,10 +189,10 @@ export default {
   display: inline-grid;
   grid-template-columns: repeat(2, 1fr);
   grid-auto-rows: max-content;
-  margin: 0 40px 0 0;
-  padding: 0;
-  column-gap: 10px;
   row-gap: 10px;
+  column-gap: 10px;
+  padding: 0;
+  margin: 0 40px 0 0;
   color: var(--color-text-regular);
 }
 

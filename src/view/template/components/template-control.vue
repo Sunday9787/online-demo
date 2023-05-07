@@ -559,6 +559,83 @@ export default {
 </script>
 
 <style lang="scss">
+.template-control-mask {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.template-control-mask,
+.template-control-point {
+  border: 1px solid transparent;
+}
+
+.template-control-point {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+
+  &.top-left {
+    top: 0;
+    left: 0;
+    cursor: nwse-resize;
+    transform: translate(-50%, -50%);
+  }
+
+  &.top-center {
+    top: 0;
+    left: 50%;
+    cursor: ns-resize;
+    transform: translate(-50%, -50%);
+  }
+
+  &.top-right {
+    top: 0;
+    right: 0;
+    cursor: nesw-resize;
+    transform: translate(50%, -50%);
+  }
+
+  &.center-left {
+    top: 50%;
+    left: 0;
+    cursor: ew-resize;
+    transform: translate(-50%, -50%);
+  }
+
+  &.center-right {
+    top: 50%;
+    right: 0;
+    cursor: ew-resize;
+    transform: translate(50%, -50%);
+  }
+
+  &.bottom-left {
+    bottom: 0;
+    left: 0;
+    cursor: nesw-resize;
+    transform: translate(-50%, 50%);
+  }
+
+  &.bottom-center {
+    bottom: 0;
+    left: 50%;
+    cursor: ns-resize;
+    transform: translate(-50%, 50%);
+  }
+
+  &.bottom-right {
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+    transform: translate(50%, 50%);
+  }
+}
+
 .template-control {
   position: absolute;
   user-select: none;
@@ -582,83 +659,6 @@ export default {
 
   &:not(.lock):active {
     cursor: grab;
-  }
-}
-
-.template-control-mask,
-.template-control-point {
-  border: 1px solid transparent;
-}
-
-.template-control-mask {
-  position: absolute;
-  z-index: 1;
-  height: 100%;
-  width: 100%;
-}
-
-.template-control-point {
-  position: absolute;
-  z-index: 2;
-  display: block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-
-  &.top-left {
-    left: 0;
-    top: 0;
-    transform: translate(-50%, -50%);
-    cursor: nwse-resize;
-  }
-
-  &.top-center {
-    left: 50%;
-    top: 0;
-    transform: translate(-50%, -50%);
-    cursor: ns-resize;
-  }
-
-  &.top-right {
-    right: 0;
-    top: 0;
-    transform: translate(50%, -50%);
-    cursor: nesw-resize;
-  }
-
-  &.center-left {
-    left: 0;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    cursor: ew-resize;
-  }
-
-  &.center-right {
-    right: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
-    cursor: ew-resize;
-  }
-
-  &.bottom-left {
-    left: 0;
-    bottom: 0;
-    transform: translate(-50%, 50%);
-    cursor: nesw-resize;
-  }
-
-  &.bottom-center {
-    left: 50%;
-    bottom: 0;
-    transform: translate(-50%, 50%);
-    cursor: ns-resize;
-  }
-
-  &.bottom-right {
-    right: 0;
-    bottom: 0;
-    transform: translate(50%, 50%);
-    cursor: nwse-resize;
   }
 }
 </style>

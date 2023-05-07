@@ -80,9 +80,9 @@ export default {
 .app-patient__line {
   width: 12px;
   height: 100%;
-  border: none;
   margin: 0;
   background-color: var(--color-background-deep);
+  border: none;
   @extend %themed;
 }
 
@@ -90,7 +90,7 @@ export default {
   position: relative;
   display: flex;
   flex: 1;
-  overflow: hidden;
   margin-top: 10px;
+  overflow: hidden;
 }
 </style>

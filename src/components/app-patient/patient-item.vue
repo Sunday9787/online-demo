@@ -157,11 +157,11 @@ export default Vue.extend({
 }
 
 .patient-pane-org {
-  overflow-y: auto;
   width: 48px;
   height: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
+  overflow-y: auto;
 }
 
 .patient-pane-org__item {
@@ -182,16 +182,17 @@ export default Vue.extend({
 }
 
 .patient-advanced-search {
-  padding-top: 20px;
   height: 100%;
+  padding-top: 20px;
   border-right: 2px solid var(--color-background-deep);
 }
 
 .patient-advanced-search__items {
-  margin: 0;
   padding: 0 20px;
+  margin: 0;
 }
 
+/* stylelint-disable-next-line block-no-empty */
 .patient-advanced-search__item {
 }
 
@@ -202,9 +203,9 @@ export default Vue.extend({
 .patient-advanced-search__inner {
   display: flex;
   flex-wrap: wrap;
+  row-gap: 8px;
   padding: 0;
   margin: 0;
-  row-gap: 8px;
 }
 
 .patient-pane__search {
@@ -231,16 +232,16 @@ export default Vue.extend({
   position: relative;
   display: block;
   flex: 1;
-  margin: 0;
   padding: 0;
+  margin: 0;
   overflow-y: auto;
 }
 
 .patient-pane-list-item {
   display: flex;
   align-items: center;
-  padding: 0 15px;
   height: 40px;
+  padding: 0 15px;
 
   &:hover {
     background-color: var(--color-primary-light-9);
@@ -251,9 +252,9 @@ export default Vue.extend({
 
 .patient-pane__name {
   flex: 1;
-  margin-left: 4px;
-  margin-right: 10px;
   width: 0;
+  margin-right: 10px;
+  margin-left: 4px;
   cursor: pointer;
   @extend %ellipsis;
 }

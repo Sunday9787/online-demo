@@ -96,8 +96,8 @@ export default {
 
 .app-scale__button {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
   border-radius: 50%;

@@ -131,16 +131,16 @@ export default {
 <style lang="scss">
 .template-contextmenu {
   position: absolute;
-  visibility: hidden;
+  top: 0;
+  left: 0;
   z-index: 999;
   width: 98px;
-  margin: 0;
   padding: 0;
-  left: 0;
-  top: 0;
-  border-radius: 4px;
+  margin: 0;
+  visibility: hidden;
   background-color: #fff;
   border: 1px solid #e4e7ed;
+  border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
 
   &.visible {

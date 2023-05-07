@@ -46,8 +46,8 @@ export default {
 <style lang="scss">
 .template-mark-line {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   opacity: 0;
 
   &.visible {

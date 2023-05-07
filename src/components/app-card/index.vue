@@ -37,10 +37,10 @@ export default {
 
 <style lang="scss">
 .app-card {
-  overflow: hidden;
   padding: 16px;
-  border-radius: 10px;
+  overflow: hidden;
   background-color: var(--color-background);
+  border-radius: 10px;
   @extend %themed;
 
   & + & {

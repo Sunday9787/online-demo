@@ -34,11 +34,11 @@ export default {
 <style lang="scss">
 .spec-item {
   width: 60px;
-  text-align: center;
   line-height: 28px;
-  border-radius: 4px;
+  text-align: center;
   background-color: var(--color-background-light);
   border: 1px solid var(--color-background-light-gray-1);
+  border-radius: 4px;
   @extend %themed;
 
   &--disabled {

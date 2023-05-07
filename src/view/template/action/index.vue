@@ -275,8 +275,8 @@ export default {
 <style lang="scss">
 .template-container {
   display: flex;
-  height: inherit;
   flex-direction: column;
+  height: inherit;
   background-color: var(--color-background);
 }
 

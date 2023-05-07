@@ -127,9 +127,9 @@ export default {
 <style lang="scss">
 .table-widget-popper {
   padding-top: 0;
+  padding-right: 0;
   padding-bottom: 10px;
   padding-left: 1px;
-  padding-right: 0;
 }
 
 .table-widget {
@@ -147,8 +147,9 @@ export default {
 
   &__icon {
     display: inline-block;
-    height: 24px;
     width: 8px;
+    height: 24px;
+    margin-right: 6px;
     line-height: 24px;
     color: inherit;
     border-radius: 4px;
@@ -160,28 +161,28 @@ export default {
 
   &__title {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     height: 32px;
-    line-height: 32px;
-    padding-left: 10px;
     padding-right: 14px;
+    padding-left: 10px;
+    line-height: 32px;
     user-select: none;
+    border-bottom-color: var(--color-border-light);
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-bottom-color: var(--color-border-light);
     @extend %themed;
   }
 
   &__item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    border-radius: 6px;
+    justify-content: space-between;
     height: 32px;
-    line-height: 32px;
-    padding-left: 10px;
     padding-right: 14px;
+    padding-left: 10px;
+    line-height: 32px;
+    border-radius: 6px;
 
     &:hover {
       @include themeify {
@@ -199,10 +200,6 @@ export default {
     margin-right: 30px;
     @include ellipsis;
   }
-
-  &__icon {
-    margin-right: 6px;
-  }
 }
 
 .table-widget-head {
@@ -214,8 +211,8 @@ export default {
   }
 
   .icon {
-    color: #3a8ee6;
     font-size: 18px;
+    color: #3a8ee6;
   }
 }
 </style>

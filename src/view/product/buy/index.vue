@@ -101,11 +101,11 @@ export default {
 
 <style lang="scss">
 .good-container {
-  width: 600px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   row-gap: 12px;
+  width: 600px;
+  margin: 0 auto;
 }
 
 .good-title {
@@ -113,11 +113,11 @@ export default {
 }
 
 .good-spec {
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   row-gap: 12px;
+  padding: 0;
+  margin: 0;
 }
 
 .good-spec__item {

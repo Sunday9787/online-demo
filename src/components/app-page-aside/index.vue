@@ -55,22 +55,22 @@ export default {
 .app-page-aside {
   width: 120px;
   padding: 0 10px;
-  border-radius: 12px;
   background-color: var(--color-background);
+  border-radius: 12px;
   @extend %themed;
 }
 
 .app-page-aside__head {
-  font-size: 14px;
   margin-top: 18px;
   margin-bottom: 14px;
+  font-size: 14px;
   text-align: center;
 }
 
 .app-page-aside__menu {
   position: relative;
-  margin: 0 -17px 0 0;
   padding: 0;
+  margin: 0 -17px 0 0;
 }
 
 .app-page-aside__menu__item {
@@ -84,11 +84,11 @@ export default {
 
   &::after {
     position: absolute;
-    right: 0;
     top: -5px;
+    right: 0;
     content: '';
-    border-bottom: 5px solid transparent;
     border-right: 7px solid transparent;
+    border-bottom: 5px solid transparent;
     @extend %themed;
   }
 
@@ -103,11 +103,11 @@ export default {
 }
 
 .app-page-aside__gap {
-  border: none;
-  margin: 0;
   height: 1px;
+  margin: 0;
   margin: 10px 0;
   background-color: var(--color-toolbar-gap);
+  border: none;
   @extend %themed;
 }
 </style>

@@ -75,29 +75,29 @@ export default {
 .template-aside-title {
   display: flex;
   align-items: center;
-  font-weight: normal;
-  font-size: 14px;
-  margin: 0;
   height: 22px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: normal;
 }
 
 .template-component-group {
-  overflow: hidden;
   position: relative;
   display: grid;
-  grid-auto-rows: max-content;
   grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: max-content;
   gap: 10px;
   padding: 8px;
   margin: 12px 0 0;
+  overflow: hidden;
   border: 1px solid var(--color-border-light);
 }
 
 .template-component-item {
-  font-size: 12px;
   padding: 6px;
-  cursor: grab;
+  font-size: 12px;
   text-align: center;
+  cursor: grab;
   user-select: none;
   border: 1px solid var(--color-border-light);
 

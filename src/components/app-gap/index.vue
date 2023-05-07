@@ -57,8 +57,8 @@ export default {
 <style lang="scss">
 .app-gap {
   margin: 0;
-  border: none;
   background-color: var(--color-background-deep);
+  border: none;
   @extend %themed;
 }
 </style>

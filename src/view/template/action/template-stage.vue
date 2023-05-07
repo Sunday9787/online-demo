@@ -373,11 +373,11 @@ export default {
 <style lang="scss">
 .template-stage {
   position: absolute;
-  outline: none;
-  transform-origin: center;
-  background-repeat: repeat;
   background-image: url('@/view/template/action/image/sprite.svg');
+  background-repeat: repeat;
   border: 0 solid #f2f2f2;
+  outline: none;
   box-shadow: 0 0 8px 1px darken($color: #f2f2f2, $amount: 20%);
+  transform-origin: center;
 }
 </style>

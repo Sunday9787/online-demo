@@ -69,8 +69,8 @@ export default {
   display: grid;
   grid-auto-rows: max-content;
   gap: 10px;
-  margin: 0;
   width: 100%;
+  margin: 0;
   overflow-y: auto;
 }
 
@@ -83,8 +83,8 @@ export default {
 .patient-item__image {
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
   height: 0;
+  padding-bottom: 100%;
 
   > img {
     position: absolute;

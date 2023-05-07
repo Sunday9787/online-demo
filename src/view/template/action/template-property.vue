@@ -188,15 +188,15 @@ export default {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  margin: 0 -10px;
   padding: 20px 20px 30px;
+  margin: 0 -10px;
   box-shadow: 0 0 4px 1px #bfbfbf;
 }
 
 .template-property-container {
   display: flex;
-  row-gap: 15px;
   flex-direction: column;
+  row-gap: 15px;
 }
 
 .template-property-item {
@@ -218,13 +218,13 @@ export default {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .template-property-list-item {
   display: flex;
-  align-items: center;
   column-gap: 10px;
+  align-items: center;
 }
 </style>

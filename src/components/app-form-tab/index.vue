@@ -126,11 +126,11 @@ export default {
 .app-tabs-nav {
   position: relative;
   display: flex;
+  column-gap: 16px;
+  align-items: center;
+  height: 40px;
   padding: 0;
   margin: 0;
-  height: 40px;
-  align-items: center;
-  column-gap: 16px;
 }
 
 .app-tabs-nav__item {
@@ -148,23 +148,23 @@ export default {
 
 .app-tabs__line {
   height: 1px;
-  border: none;
   margin-top: 0;
+  margin-right: -16px;
   margin-bottom: 10px;
   margin-left: -16px;
-  margin-right: -16px;
+  background-color: var(--color-border-light);
+  border: none;
 
   @extend %themed;
-  background-color: var(--color-border-light);
 }
 
 .app-tabs__active-bar {
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: 1;
   height: 2px;
   background-color: var(--color-primary);
-  z-index: 1;
   transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 </style>

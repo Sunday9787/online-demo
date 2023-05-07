@@ -82,19 +82,19 @@ export default {
 
   > i {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     display: block;
-    height: 100%;
     width: 100%;
+    height: 100%;
     background-color: #dde1e5;
     border-radius: 6px 6px 0 0;
   }
 
   &.local {
-    padding: 0 50px 0 30px;
     left: 0;
     width: 200px;
+    padding: 0 50px 0 30px;
 
     > i {
       transform: perspective(2px) scale(1, 1.2) rotateX(0.5deg);
@@ -103,8 +103,8 @@ export default {
   }
 
   &.other {
-    padding: 0 30px 0 50px;
     right: 0;
+    padding: 0 30px 0 50px;
 
     > i {
       transform: perspective(2px) scale(1, 1.2) rotateX(0.5deg);
@@ -123,11 +123,11 @@ export default {
 }
 
 .patient-tab-content {
-  overflow: hidden;
   position: relative;
   display: flex;
-  border-radius: 0 12px 12px 12px;
+  overflow: hidden;
   background-color: var(--color-background);
+  border-radius: 0 12px 12px 12px;
   @extend %themed;
 }
 </style>

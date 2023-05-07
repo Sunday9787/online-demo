@@ -107,9 +107,9 @@ export default {
 
 .patient-popover__content {
   position: relative;
-  overflow-y: auto;
-  list-style: none;
   max-height: 50vh;
   margin: 0;
+  overflow-y: auto;
+  list-style: none;
 }
 </style>

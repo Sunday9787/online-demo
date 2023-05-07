@@ -77,14 +77,14 @@ export default {
 <style lang="scss">
 .patient-toolbar {
   padding: 10px;
-  border-radius: 12px;
   background-color: var(--color-background);
+  border-radius: 12px;
   @extend %themed;
 }
 
 .toolbar-gap {
-  margin: 12px 10px;
   width: 2px;
+  margin: 12px 10px;
   background-color: var(--color-toolbar-gap);
   @extend %themed;
 }
@@ -134,9 +134,9 @@ export default {
 }
 
 .glass-value {
-  padding-right: 10px;
-  height: 24px;
   width: 60px;
+  height: 24px;
+  padding-right: 10px;
   cursor: default;
   background-color: var(--color-background-deep);
   @extend %glass-label;

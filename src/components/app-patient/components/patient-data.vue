@@ -59,10 +59,10 @@ export default {
 
 .patient-data__desc {
   height: 330px;
-  border-top-width: 1px;
-  border-top-style: solid;
-  border-top-color: var(--color-border-light);
   background-color: var(--color-background);
+  border-top-color: var(--color-border-light);
+  border-top-style: solid;
+  border-top-width: 1px;
   @extend %themed;
 }
 </style>

@@ -90,8 +90,8 @@ $width: 180px;
 
 .app-form-collapse {
   position: relative;
-  overflow: hidden;
   padding-right: $width;
+  overflow: hidden;
   transition-duration: 0.2s;
 }
 
@@ -101,10 +101,10 @@ $width: 180px;
 
 .app-form-collapse__action {
   position: absolute;
+  right: 0;
   display: flex;
   align-items: flex-start;
-  right: 0;
-  height: 100%;
   width: $width;
+  height: 100%;
 }
 </style>

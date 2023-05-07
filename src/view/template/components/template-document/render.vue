@@ -175,8 +175,8 @@ export default {
 <style lang="scss">
 .template-document {
   position: relative;
-  outline: none;
   border: 0 solid #f2f2f2;
+  outline: none;
   box-shadow: 0 0 8px 1px darken($color: #f2f2f2, $amount: 20%);
 }
 </style>
