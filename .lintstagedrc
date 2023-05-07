@@ -1,0 +1,6 @@
+{
+  "*.{js,jsx,ts,tsx,vue}": ["npm run lint"],
+  "*.{css,scss,sass,less,stylus}": ["stylelint --fix"],
+  "*.json": ["prettier -w"],
+  "*.{html,vue}": ["stylelint --custom-syntax postcss-html --fix"]
+}
