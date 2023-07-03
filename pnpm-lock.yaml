@@ -1,6 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
+  '@antv/x6':
+    specifier: ^2.11.2
+    version: 2.11.2
   '@vueuse/core':
     specifier: ^9.13.0
     version: 9.13.0(vue@2.7.14)
@@ -172,6 +179,25 @@ packages:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
     dev: true
+
+  /@antv/x6-common@2.0.13:
+    resolution: {integrity: sha512-CXSV43WvgRvNPAemhzK0l5Sr4hzHN0xobl5HFo6EwKmqBI+MIpc9hiUPJgrtfxsfd/cTM5mOpADR1U4PJYup9g==}
+    dependencies:
+      lodash-es: 4.17.21
+      utility-types: 3.10.0
+    dev: false
+
+  /@antv/x6-geometry@2.0.5:
+    resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==}
+    dev: false
+
+  /@antv/x6@2.11.2:
+    resolution: {integrity: sha512-tlb1/1eGqVIGgK5qMRpiOlw4nFDO79YysuwV8v3/gHV0KuSI9awbAKV1LqTteJtVN6bLCz4UXn1o7VO1XuC2EQ==}
+    dependencies:
+      '@antv/x6-common': 2.0.13
+      '@antv/x6-geometry': 2.0.5
+      utility-types: 3.10.0
+    dev: false
 
   /@babel/code-frame@7.21.4:
     resolution: {integrity: sha512-LYvhNKfwWSPpocw8GI7gpK2nq3HSDuEPC/uSYaALSJu9xjsalaaYFOq0Pwt5KmVqwEbZlDu81aLXwBOmD/Fv9g==}
@@ -6975,6 +7001,11 @@ packages:
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
+
+  /utility-types@3.10.0:
+    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+    engines: {node: '>= 4'}
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}

@@ -21,6 +21,12 @@ const route = {
       name: 'ProductBuy',
       props: route => ({ id: Number(route.params.id) }),
       component: () => import(/* webpackChunkName: "productBuy" */ '@/view/product/buy/index.vue')
+    },
+    {
+      path: 'graphic',
+      name: 'ProductGraphic',
+      props: route => ({ type: route.query.type }),
+      component: () => import('@/view/product/graphic/index.vue')
     }
   ]
 }

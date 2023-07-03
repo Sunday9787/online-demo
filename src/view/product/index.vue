@@ -75,6 +75,9 @@
       <router-link to="buy/1">
         <el-button type="primary">购买</el-button>
       </router-link>
+      <router-link to="/product/graphic?type=create">
+        <el-button type="primary">绘制</el-button>
+      </router-link>
     </app-card>
   </div>
 </template>
