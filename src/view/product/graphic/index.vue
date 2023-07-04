@@ -7,6 +7,7 @@
 <script>
 import { Graph } from '@antv/x6'
 import { onMounted, ref } from 'vue'
+import './components/builtin'
 
 export default {
   name: 'GraphicIndex',
@@ -46,6 +47,23 @@ export default {
         }
       })
 
+      graph.on('edge:connected', ({ isNew, edge }) => {
+        if (isNew) {
+          const source = edge.getSourceCell()
+          const target = edge.getTargetCell()
+
+          if (target.data.length === 2) {
+            return
+          }
+
+          /**
+           * @type {{input: number[]}}
+           */
+          const targetData = target.getData()
+          target.setData({ input: targetData.input.concat(source.data.value) })
+        }
+      })
+
       graph.addNode({
         x: 60,
         y: 60,
@@ -70,6 +88,24 @@ export default {
           { id: 'port2', attrs: { circle: { r: 12, magnet: true } } },
           { id: 'port3' }
         ]
+      })
+
+      graph.addNode({
+        shape: 'shape-builtin-input',
+        x: 380,
+        y: 120
+      })
+
+      graph.addNode({
+        shape: 'shape-builtin-input',
+        x: 380,
+        y: 200
+      })
+
+      graph.addNode({
+        shape: 'shape-builtin-plus',
+        x: 650,
+        y: 160
       })
     })
 
