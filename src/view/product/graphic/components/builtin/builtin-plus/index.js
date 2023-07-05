@@ -9,13 +9,27 @@ const node = {
       width: 150,
       height: 50,
       data: {
-        input: []
+        input: Object.create(null),
+        output: null
       },
       ports: {
-        items: [{ id: 'port_1', group: 'left', name: 'value' }],
+        items: [
+          { id: `${component.name}-input-1`, group: 'input', key: 'input' },
+          { id: `${component.name}-output-1`, group: 'output', key: 'output' }
+        ],
         groups: {
-          left: {
+          input: {
             position: 'left',
+            attrs: {
+              circle: {
+                magnet: true,
+                stroke: '#8f8f8f',
+                r: 6
+              }
+            }
+          },
+          output: {
+            position: 'right',
             attrs: {
               circle: {
                 magnet: true,

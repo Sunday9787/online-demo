@@ -15,9 +15,9 @@ const node = {
         value: 10
       },
       ports: {
-        items: [{ id: 'port_1', group: 'right', name: 'value' }],
+        items: [{ id: `${component.name}-output-1`, group: 'output', key: 'value' }],
         groups: {
-          right: {
+          output: {
             position: 'right',
             attrs: {
               circle: {

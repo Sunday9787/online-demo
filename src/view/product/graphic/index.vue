@@ -7,6 +7,7 @@
 <script>
 import { Graph } from '@antv/x6'
 import { onMounted, ref } from 'vue'
+import { cloneDeep } from 'lodash-es'
 import './components/builtin'
 
 export default {
@@ -25,7 +26,6 @@ export default {
     onMounted(function () {
       const graph = new Graph({
         container: graphicRef.value,
-        selecting: true,
         height: 600,
         background: {
           color: '#f5f5f5' // 设置画布背景颜色
@@ -47,63 +47,60 @@ export default {
         }
       })
 
-      graph.on('edge:connected', ({ isNew, edge }) => {
-        if (isNew) {
-          const source = edge.getSourceCell()
-          const target = edge.getTargetCell()
+      graph.on('edge:connected', function (e) {
+        if (e.isNew) {
+          const source = e.edge.getSourceNode()
+          const target = e.edge.getTargetNode()
+          console.log(e)
+          console.group('edge:connected')
+          console.log(e.currentPort)
+          console.log('source.shape', source.shape, 'target.shape', target.shape)
+          console.log('source.id', source.id, 'target.id', target.id)
+          console.log('source.data', source.data)
+          console.log('target.data', target.data)
+          console.groupEnd()
 
-          if (target.data.length === 2) {
-            return
+          const port = target.getPort(e.currentPort)
+
+          if (source.data.type === 'variable') {
+            const data = cloneDeep(target.data[port.key])
+            console.log('cloneDeep', data)
+
+            data[source.id] = { id: source.id, value: source.data.value }
+            console.log(port.key, data)
+            console.log({ [port.key]: data })
+            target.setData({ [port.key]: data })
           }
-
-          /**
-           * @type {{input: number[]}}
-           */
-          const targetData = target.getData()
-          target.setData({ input: targetData.input.concat(source.data.value) })
         }
       })
 
       graph.addNode({
-        x: 60,
-        y: 60,
-        width: 160,
-        height: 80,
-        label: 'Rect With Ports',
-        ports: [
-          { id: 'port1', attrs: { circle: { r: 12, magnet: true } } },
-          { id: 'port2', attrs: { circle: { r: 12, magnet: true } } },
-          { id: 'port3' }
-        ]
-      })
-
-      graph.addNode({
-        x: 120,
-        y: 120,
-        width: 160,
-        height: 80,
-        label: 'Vue With Ports',
-        ports: [
-          { id: 'port1', attrs: { circle: { r: 12, magnet: true } } },
-          { id: 'port2', attrs: { circle: { r: 12, magnet: true } } },
-          { id: 'port3' }
-        ]
-      })
-
-      graph.addNode({
         shape: 'shape-builtin-input',
+        data: {
+          type: 'variable',
+          value: 11
+        },
         x: 380,
         y: 120
       })
 
       graph.addNode({
         shape: 'shape-builtin-input',
+        data: {
+          type: 'variable',
+          value: 11
+        },
         x: 380,
         y: 200
       })
 
       graph.addNode({
         shape: 'shape-builtin-plus',
+        data: {
+          type: 'function',
+          input: Object.create(null),
+          output: null
+        },
         x: 650,
         y: 160
       })

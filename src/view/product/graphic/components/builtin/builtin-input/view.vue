@@ -1,40 +1,49 @@
 <template lang="pug">
-div.builtin-input
+.builtin-input
   el-input-number(size="small" v-model="value" @change="setData")
 </template>
 
 <script>
-import { ref, defineComponent, onMounted, inject, watch } from 'vue'
+import { defineComponent } from 'vue'
+import { useNode } from '../hooks/graphic'
 
 export default defineComponent({
   name: 'shape-builtin-input',
   setup() {
-    const value = ref(0)
+    const { node, graph } = useNode()
 
-    /**
-     * @type {()=> import('@antv/x6').Node}
-     */
-    const getNode = inject('getNode')
-    /**
-     * @type {import('vue').Ref<import('@antv/x6').Node>}
-     */
-    const node = ref(null)
-
-    watch(value, function (value) {
-      node.value.setData({ value })
-    })
-
-    onMounted(function () {
-      node.value = getNode()
-      const data = node.value.getData()
-
-      value.value = data.value
-    })
-
-    return { value, node }
+    return { node, graph }
+  },
+  data() {
+    return {
+      value: 0
+    }
   },
   methods: {
     setData(value) {
+      console.log('getEdges', this.graph.getEdges())
+      const context = this
+      const currentEdges = this.graph.getEdges().filter(function (edge) {
+        return edge.source.cell === context.node.id
+      })
+
+      currentEdges.forEach(function (edge) {
+        // const outputPort = edge.source.port
+        const targetNode = context.graph.getCellById(edge.target.cell)
+        const inputPort = context.node.getPort(edge.source.port)
+        const outputPort = targetNode.getPort(edge.target.port)
+
+        console.group('currentEdges')
+        console.log('inputPort', inputPort)
+        console.log('outputPort', outputPort)
+        console.log('targetNode', targetNode)
+        targetNode.setData({
+          [outputPort.key]: { [context.node.id]: { id: context.node.id, value: context[inputPort.key] } }
+        })
+        console.groupEnd()
+      })
+
+      console.log('currentEdges', currentEdges)
       this.node.setData({ value })
     }
   }

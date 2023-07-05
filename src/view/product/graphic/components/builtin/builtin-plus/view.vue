@@ -1,45 +1,33 @@
 <template lang="pug">
-div.builtin-plus
-  el-input-number(size="small" :value="value" :controls="false" disabled)
+.builtin-plus
+  el-input-number(size="small" :value="output" :controls="false" disabled)
 </template>
 
 <script>
-import { ref, defineComponent, computed, onMounted, inject, onBeforeUnmount } from 'vue'
+import { defineComponent } from 'vue'
+import { useNode } from '../hooks/graphic'
 
 export default defineComponent({
   name: 'shape-builtin-plus',
   setup() {
-    const input = ref([0, 0])
+    const { node } = useNode()
 
-    const value = computed(function () {
-      return input.value.reduce(function (previousValue, currentValue) {
-        return previousValue + currentValue
+    return { node }
+  },
+  data() {
+    return {
+      /**
+       * @type {Record<string, {id: string, value: number}}
+       */
+      input: Object.create(null)
+    }
+  },
+  computed: {
+    output() {
+      return Object.values(this.input).reduce(function (previousValue, currentValue) {
+        return previousValue + currentValue.value
       }, 0)
-    })
-
-    /**
-     * @type {()=> import('@antv/x6').Node}
-     */
-    const getNode = inject('getNode')
-    /**
-     * @type {import('vue').Ref<import('@antv/x6').Node>}
-     */
-    const node = ref(null)
-
-    onMounted(function () {
-      node.value = getNode()
-
-      node.value.on('change:data', function ({ current }) {
-        console.log('builtin-plus', current)
-        input.value = current.input
-      })
-    })
-
-    onBeforeUnmount(function () {
-      node.value.off('change:data')
-    })
-
-    return { value, node }
+    }
   }
 })
 </script>
