@@ -5,7 +5,11 @@
         <router-link to="/template/action?type=create">
           <el-button size="small" type="primary">创建模板</el-button>
         </router-link>
-        <el-button type="primary" size="small" @click="editDocument()" style="margin-left: 10px">编辑模板</el-button>
+        <router-link to="/graphic?type=create">
+          <el-button size="small" type="primary">绘制</el-button>
+        </router-link>
+
+        <el-button type="primary" size="small" @click="editDocument()">编辑模板</el-button>
       </template>
 
       <el-table ref="table" :data="table.data" v-loading="table.loading" height="100%" stripe>

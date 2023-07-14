@@ -7,6 +7,7 @@ import consultationRoute from './module/consultationRoute'
 import userRoute from './module/userRoute'
 import templateRoute from './module/templateRoute'
 import productRoute from './module/productRoute'
+import graphicRoute from './module/graphicRoute'
 
 Vue.use(Router)
 
@@ -20,6 +21,7 @@ export default new Router({
     userRoute,
     templateRoute,
     productRoute,
+    graphicRoute,
     {
       path: '/login',
       name: 'Login',

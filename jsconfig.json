@@ -1,4 +1,7 @@
 {
+  "vueCompilerOptions": {
+    "target": 2.7
+  },
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
@@ -20,6 +23,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
+      "app-graphic/*": ["./src/components/app-graphic/*"]
     },
     "lib": [
       "esnext",

@@ -1,6 +1,28 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
+  '@antv/x6':
+    specifier: ^2.11.2
+    version: 2.11.2
+  '@antv/x6-plugin-clipboard':
+    specifier: ^2.1.6
+    version: 2.1.6(@antv/x6@2.11.2)
+  '@antv/x6-plugin-history':
+    specifier: ^2.2.3
+    version: 2.2.3(@antv/x6@2.11.2)
+  '@antv/x6-plugin-keyboard':
+    specifier: ^2.2.1
+    version: 2.2.1(@antv/x6@2.11.2)
+  '@antv/x6-plugin-selection':
+    specifier: ^2.1.7
+    version: 2.1.7(@antv/x6@2.11.2)
+  '@antv/x6-vue-shape':
+    specifier: ^2.0.11
+    version: 2.0.11(@antv/x6@2.11.2)(vue@2.7.14)
   '@vueuse/core':
     specifier: ^9.13.0
     version: 9.13.0(vue@2.7.14)
@@ -11,8 +33,8 @@ dependencies:
     specifier: ^5.4.2
     version: 5.4.2
   element-ui:
-    specifier: 2.15.12
-    version: 2.15.12(vue@2.7.14)
+    specifier: 2.15.13
+    version: 2.15.13(vue@2.7.14)
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -172,6 +194,73 @@ packages:
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
     dev: true
+
+  /@antv/x6-common@2.0.13:
+    resolution: {integrity: sha512-CXSV43WvgRvNPAemhzK0l5Sr4hzHN0xobl5HFo6EwKmqBI+MIpc9hiUPJgrtfxsfd/cTM5mOpADR1U4PJYup9g==}
+    dependencies:
+      lodash-es: 4.17.21
+      utility-types: 3.10.0
+    dev: false
+
+  /@antv/x6-geometry@2.0.5:
+    resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==}
+    dev: false
+
+  /@antv/x6-plugin-clipboard@2.1.6(@antv/x6@2.11.2):
+    resolution: {integrity: sha512-roZPLnZx6PK8MBvee0QMo90fz/TXeF0WNe4EGin2NBq5M1I5XTWrYvA6N2XVIiWAAI67gjQeEE8TpkL7f8QdqA==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+    dependencies:
+      '@antv/x6': 2.11.2
+    dev: false
+
+  /@antv/x6-plugin-history@2.2.3(@antv/x6@2.11.2):
+    resolution: {integrity: sha512-yiv5e7CQKm1HrJe7je4iWjkzDzU+I0WsyL8En2j0UwXJrUNaKYyv4BkRg2tvyi52hydxidMgi3tNnNQHEZwoMg==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+    dependencies:
+      '@antv/x6': 2.11.2
+    dev: false
+
+  /@antv/x6-plugin-keyboard@2.2.1(@antv/x6@2.11.2):
+    resolution: {integrity: sha512-sqfN0h4txVO211uIeKBd3zQ/IN2zPzDThWNTEhRx7Lecg1fO7uRXWBbOA48j3EgpRFXVexdSzIEVJEx+IWUdYw==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+    dependencies:
+      '@antv/x6': 2.11.2
+      mousetrap: 1.6.5
+    dev: false
+
+  /@antv/x6-plugin-selection@2.1.7(@antv/x6@2.11.2):
+    resolution: {integrity: sha512-ODfYLNwKSaLgIYMYfMW4dYQ9KKFOVBEdH0BzvyG8mfRol+JtZuyrm4BRbAvMryQKHrSxs4JCYXTFd2F7ZTuxLQ==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+    dependencies:
+      '@antv/x6': 2.11.2
+    dev: false
+
+  /@antv/x6-vue-shape@2.0.11(@antv/x6@2.11.2)(vue@2.7.14):
+    resolution: {integrity: sha512-LYNkvL9AjbeAi6ZzA2/aNRKv0E0+bgR5nMQlcqC+75bYoZtCpd7ZkECcOQhDU4s/DE2+EyyPX8aI1e2pA39Y/A==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      '@antv/x6': 2.11.2
+      vue: 2.7.14
+      vue-demi: 0.14.5(vue@2.7.14)
+    dev: false
+
+  /@antv/x6@2.11.2:
+    resolution: {integrity: sha512-tlb1/1eGqVIGgK5qMRpiOlw4nFDO79YysuwV8v3/gHV0KuSI9awbAKV1LqTteJtVN6bLCz4UXn1o7VO1XuC2EQ==}
+    dependencies:
+      '@antv/x6-common': 2.0.13
+      '@antv/x6-geometry': 2.0.5
+      utility-types: 3.10.0
+    dev: false
 
   /@babel/code-frame@7.21.4:
     resolution: {integrity: sha512-LYvhNKfwWSPpocw8GI7gpK2nq3HSDuEPC/uSYaALSJu9xjsalaaYFOq0Pwt5KmVqwEbZlDu81aLXwBOmD/Fv9g==}
@@ -1508,7 +1597,7 @@ packages:
   /@vueuse/shared@9.13.0(vue@2.7.14):
     resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
     dependencies:
-      vue-demi: 0.14.0(vue@2.7.14)
+      vue-demi: 0.14.5(vue@2.7.14)
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -2977,8 +3066,8 @@ packages:
     resolution: {integrity: sha512-L9zlje9bIw0h+CwPQumiuVlfMcV4boxRjFIWDcLfFqTZNbkwOExBzfmswytHawObQX4OUhtNv8gIiB21kOurIg==}
     dev: true
 
-  /element-ui@2.15.12(vue@2.7.14):
-    resolution: {integrity: sha512-Y5FMT2BPOindU2GkDEQ5ZKUVxDawKONRNMh2eL3uBx1FOtvUJ+L6IxXLVsNxq4WnaX/UnVNgWXebl7DobygZMg==}
+  /element-ui@2.15.13(vue@2.7.14):
+    resolution: {integrity: sha512-LJoatEYX6WV74FqXBss8Xfho9fh9rjDSzrDrTyREdGb1h1R3uRvmLh5jqp2JU137aj4/BgqA3K06RQpQBX33Bg==}
     peerDependencies:
       vue: ^2.5.17
     dependencies:
@@ -4998,6 +5087,10 @@ packages:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
 
+  /mousetrap@1.6.5:
+    resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
+    dev: false
+
   /ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
     dev: true
@@ -6976,6 +7069,11 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
+  /utility-types@3.10.0:
+    resolution: {integrity: sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==}
+    engines: {node: '>= 4'}
+    dev: false
+
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
@@ -7114,6 +7212,21 @@ packages:
 
   /vue-demi@0.14.0(vue@2.7.14):
     resolution: {integrity: sha512-gt58r2ogsNQeVoQ3EhoUAvUsH9xviydl0dWJj7dabBC/2L4uBId7ujtCwDRD0JhkGsV1i0CtfLAeyYKBht9oWg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 2.7.14
+    dev: false
+
+  /vue-demi@0.14.5(vue@2.7.14):
+    resolution: {integrity: sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
