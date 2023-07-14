@@ -1,6 +1,6 @@
 <template lang="pug" functional>
   .app-table-container
-    el-row.app-table-action(v-if="$slots.action")
+    el-row.app-table-action(type="flex" v-if="$slots.action")
       slot(name='action')
 
     el-row.app-table__inner
@@ -25,6 +25,10 @@ export default {
 .app-table__inner {
   flex: 1;
   overflow: hidden;
+}
+
+.app-table-action {
+  column-gap: 10px;
 }
 
 .app-table-container + .app-pagination,

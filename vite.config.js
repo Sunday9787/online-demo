@@ -24,7 +24,8 @@ export default defineConfig(function (env) {
     },
     resolve: {
       alias: {
-        '@': path.resolve('./src')
+        '@': path.resolve('./src'),
+        'app-graphic': path.resolve('./src/components/app-graphic')
       }
     },
     plugins: [

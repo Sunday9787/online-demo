@@ -1,21 +1,24 @@
-import component from './view.vue'
+import view from './view.vue'
 
+/**
+ * @type {GtGraphic.NodeComponent}
+ */
 const node = {
-  label: '输入',
-  name: component.name,
-  /**
-   * @returns {import('@antv/x6-vue-shape').VueShapeConfig}
-   */
+  label: 'param-input',
+  shape: view.name,
   register() {
     return {
-      shape: component.name,
-      width: 150,
-      height: 50,
+      component: view,
+      shape: view.name,
+      size: {
+        width: 178,
+        height: 54
+      },
       data: {
-        value: 10
+        value: 11
       },
       ports: {
-        items: [{ id: `${component.name}-output-1`, group: 'output', key: 'value' }],
+        items: [{ id: `${view.name}-output-1`, group: 'output', key: 'value' }],
         groups: {
           output: {
             position: 'right',
@@ -28,8 +31,7 @@ const node = {
             }
           }
         }
-      },
-      component
+      }
     }
   }
 }
