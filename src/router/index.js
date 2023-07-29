@@ -21,7 +21,7 @@ export default new Router({
     userRoute,
     templateRoute,
     productRoute,
-    threeRoute,
+    ...threeRoute,
     {
       path: '/login',
       name: 'Login',

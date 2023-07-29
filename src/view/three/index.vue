@@ -1,22 +1,14 @@
 <template lang="pug">
-.three-container
-  canvas#canvas
+app-page
+  app-card
+    router-link(to="/three/game")
+      el-button(type="primary") 填字游戏
+    router-link(to="/three/map")
+      el-button(type="primary") 3d地图
 </template>
 
 <script>
-import Game from './game'
-
 export default {
-  name: 'ThreeIndex',
-  mounted() {
-    const el = document.getElementById('canvas')
-    const game = new Game(el, window.innerWidth, window.innerHeight)
-
-    game.init()
-
-    this.$on('hooks:beforeDestroy', function () {
-      game.destroy()
-    })
-  }
+  name: 'ThreeIndex'
 }
 </script>

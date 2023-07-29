@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import bg from '../images/IMG_7049.jpg'
+import bg from '../images/block.jpg'
+import bgActive from '../images/block_active.jpg'
 
 const map = [
   { y: 0, x: 0 },
@@ -68,6 +69,9 @@ const map = [
 ]
 
 const textureLoader = new THREE.TextureLoader()
+
+const texture = textureLoader.load(bg)
+const activeTexture = textureLoader.load(bgActive)
 
 class GameBase {
   /**
@@ -145,6 +149,14 @@ class GameBase {
     this.centerVector = new THREE.Vector3((row * this.size) / 2, 0, (col * this.size) / 2)
   }
 
+  get row() {
+    return this.grid[0]
+  }
+
+  get col() {
+    return this.grid[1]
+  }
+
   init() {
     const context = this
 
@@ -193,9 +205,7 @@ class GameBase {
 
       // console.log(intersects)
       if (intersects.length > 0) {
-        // 在这里填写点击代码
-        console.log('dianji')
-        console.log(intersects[0].object)
+        context.onPointDown(intersects[0].object)
       }
     }
 
@@ -290,6 +300,13 @@ class GameBase {
    */
   initCanvas() {}
 
+  /**
+   * 点击事件
+   * @abstract
+   * @protected
+   */
+  onPointDown() {}
+
   destroy() {
     window.removeEventListener('resize', this.resize)
     this.el.removeEventListener('pointerdown', this.pointerdown)
@@ -297,18 +314,207 @@ class GameBase {
   }
 }
 
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+function createObjectName(x, y) {
+  return `${x}-${y}`
+}
+
+/**
+ * @param {string} name
+ * @returns {[number, number]}
+ */
+function objectNameToLocation(name) {
+  return name.split('-').map(item => Number(item))
+}
+
 export default class Game extends GameBase {
+  tips = new Map([
+    ['21222324', '赫拉利将告诉你人类是如何从动物变成上帝'],
+    ['40414243', '对两次世界大战的哲学思考，直面存在的危机'],
+    ['81828384', '看萧红写的这书名还以为是一条河的历史'],
+    ['9091', '鲁迅先生的短篇小说集，里面有《狂人日记》'],
+    ['64656667', '天下合久必分，分久必合'],
+    ['46474849', '与达尔文《物种起源论》及哥白尼《天体运行论》并称为人类三大思想革命的经典之作'],
+    ['262728', '三位艺术天才的非凡人生，罗曼罗兰著'],
+    ['5678', '证明你上过中学的又一个有力佐证，冰心奶奶如是说'],
+    ['11121', '我们都是故事外的人——阿尔贝·加缪'],
+    ['13233343', '一种追求简单生活的价值观'],
+    ['415161718191', '余华手下一本关于记忆的长篇小说'],
+    ['647484', '走遍万水千山，泪尽撒哈拉'],
+    ['2737475767', '达康书记别低头，皇冠会掉'],
+    ['81828', '中国四大名著之一']
+  ])
+
+  /**
+   * @type {Array<THREE.Mesh>}
+   */
+  units = []
+
+  /**
+   * 空白材质
+   */
+  emptyMaterial = new THREE.MeshBasicMaterial({ color: 0xe3b35d, name: 'emptyUnitMaterial' })
+
+  /**
+   * 单元格材质
+   */
+  material = new THREE.MeshBasicMaterial({ map: texture, name: 'unitMaterial' })
+
+  /**
+   * 高亮单元格材质
+   */
+  activeMaterial = new THREE.MeshBasicMaterial({ map: activeTexture, name: 'activeUnitMaterial' })
+
+  /**
+   * @param {THREE.Object3D} unit
+   */
+  onPointDown(unit) {
+    if (unit.userData.empty) return
+
+    /**
+     * 重置
+     */
+    this.resetCollection(this.units, unit)
+
+    unit.userData.down = !unit.userData.down
+
+    /**
+     * @type {boolean}
+     */
+    const down = unit.userData.down
+    /**
+     * @type {boolean}
+     */
+    const selectRow = unit.userData.selectRow
+
+    console.log('selectRow', selectRow)
+    console.log('down', down)
+    /**
+     * @type {[number, number]}
+     */
+    const [x, y] = objectNameToLocation(unit.name)
+
+    const row = this.collectionUnit(x, y, true)
+    const col = this.collectionUnit(x, y, false)
+
+    if (down && selectRow) {
+      this.renderColCollection(x, y, [row, col])
+    } else {
+      this.renderRowCollection(x, y, [row, col])
+    }
+  }
+
+  /**
+   * 渲染 列
+   * 如果当前列内元素小于2个时 渲染行
+   * @param {number} x
+   * @param {number} y
+   * @param {[THREE.Mesh, THREE.Mesh]}
+   */
+  renderColCollection(x, y, [rowCollection, colCollection]) {
+    const aroundColUnit = this.aroundUnit(x, y, colCollection, false)
+
+    if (aroundColUnit.length < 2) {
+      this.renderRowCollection(x, y, [rowCollection, colCollection], true)
+      return
+    }
+
+    for (const item of aroundColUnit) {
+      item.userData.selectRow = false
+      item.material = this.activeMaterial
+    }
+  }
+
+  /**
+   * 渲染 行
+   * 如果当前行内元素小于2个时 渲染列
+   * @param {number} x
+   * @param {number} y
+   * @param {[THREE.Mesh, THREE.Mesh]}
+   */
+  renderRowCollection(x, y, [rowCollection, colCollection]) {
+    const aroundRowUnit = this.aroundUnit(x, y, rowCollection, true)
+
+    if (aroundRowUnit.length < 2) {
+      return this.renderColCollection(x, y, [rowCollection, colCollection], false)
+    }
+
+    for (const item of aroundRowUnit) {
+      item.userData.selectRow = true
+      item.material = this.activeMaterial
+    }
+  }
+
+  /**
+   * 重置为默认样式
+   * @param {Array<THREE.Mesh>} collection
+   * @param {THREE.Mesh} unit
+   */
+  resetCollection(collection, unit) {
+    const context = this
+
+    const data = collection.filter(function (item) {
+      return !item.userData.empty
+    })
+
+    for (const item of data) {
+      item.material = context.material
+      item.userData.down = false
+    }
+  }
+
+  /**
+   * 寻找 当前行或者列 单元格
+   * @param {number} x
+   * @param {number} y
+   * @param {boolean} row 行/列
+   */
+  collectionUnit(x, y, row) {
+    return this.units.filter(function (item) {
+      const [itemX, itemY] = objectNameToLocation(item.name)
+      return row ? itemY === y : itemX === x
+    })
+  }
+
+  /**
+   * 寻找 前后非空 单元格
+   * @param {number} x
+   * @param {number} y
+   * @param {Array<THREE.Object3D>} collection 当前行/列合集
+   * @param {boolean} row 是否选择行
+   */
+  aroundUnit(x, y, collection, row) {
+    /**
+     * @type {THREE.Mesh[]}
+     */
+    const result = []
+    const length = collection.length
+    const start = row ? x : y
+
+    for (let index = start; index < length; index++) {
+      const element = collection[index]
+      if (element && element.userData.empty) break
+      result.push(element)
+    }
+
+    for (let index = start - 1; index >= 0; index--) {
+      const element = collection[index]
+      if (element && element.userData.empty) break
+      result.push(element)
+    }
+
+    return result
+  }
+
   /**
    * @protected
    */
   initCanvas() {
-    const texture = textureLoader.load(bg)
     // 创建几何
     const geometry = new THREE.BoxGeometry(100, 100, 100)
-
-    // 创建材质
-    const emptyMaterial = new THREE.MeshBasicMaterial({ color: 0xe3b35d })
-    const material = new THREE.MeshBasicMaterial({ map: texture })
     const group = new THREE.Group()
 
     const [row, col] = this.grid
@@ -316,18 +522,26 @@ export default class Game extends GameBase {
     // 创建矩阵
     for (let x = 0; x < row; x++) {
       for (let y = 0; y < col; y++) {
-        let mesh = new THREE.Mesh(geometry, emptyMaterial)
+        let mesh = new THREE.Mesh(geometry, this.emptyMaterial)
 
         for (const item of this.map) {
           if (item.x === x && item.y === y) {
-            mesh = new THREE.Mesh(geometry, material)
+            mesh = new THREE.Mesh(geometry, this.material)
             break
           }
         }
 
         mesh.position.set(x * 120, 0, y * 120)
-        mesh.name = `${x}-${y}`
+        mesh.name = createObjectName(x, y)
+        mesh.userData.down = false
+        mesh.userData.selectRow = null
+
+        if (mesh.material.name === 'emptyUnitMaterial') {
+          mesh.userData.empty = true
+        }
+
         this.clickObjects.push(mesh)
+        this.units.push(mesh)
         group.add(mesh)
       }
     }
