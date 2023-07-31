@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 如果是双核浏览器优先使用webkit内核 -->
+    <meta name="renderer" content="webkit">
+    <!-- 让ie走最高级的edge渲染，如果有chrome就Chrome渲染 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta rel="dns-prefetch" href="https://geo.datav.aliyun.com">
     <title><%= VITE_APP_TITLE %></title>
   </head>
   <body>
