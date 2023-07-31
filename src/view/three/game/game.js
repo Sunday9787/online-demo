@@ -75,21 +75,21 @@ const activeTexture = textureLoader.load(bgActive)
 
 class GameBase {
   /**
-   * @param {HTMLCanvasElement} el
+   * @param {HTMLElement} container
    * @param {number} width
    * @param {number} height
    */
-  constructor(el, width, height) {
+  constructor(container, width, height) {
     /**
      * @protected
      */
     this.map = map
 
     /**
-     * @type {HTMLCanvasElement}
+     * @type {HTMLElement}
      * @protected
      */
-    this.el = el
+    this.container = container
 
     /**
      * @type {[number,number]}
@@ -209,7 +209,7 @@ class GameBase {
       }
     }
 
-    this.el.addEventListener('pointerdown', this.pointerdown)
+    this.container.addEventListener('pointerdown', this.pointerdown)
     window.addEventListener('resize', this.resize)
     window.dispatchEvent(new Event('resize'))
   }
@@ -275,11 +275,12 @@ class GameBase {
       context.renderer.render(context.scene, context.camera)
     }
 
-    this.renderer = new THREE.WebGL1Renderer({ antialias: true, canvas: this.el })
+    this.renderer = new THREE.WebGL1Renderer({ antialias: true })
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setClearColor(0xe8e8e8, 1)
 
     this.renderer.setAnimationLoop(bootstrap)
+    this.container.appendChild(this.renderer.domElement)
   }
 
   /**
@@ -309,7 +310,7 @@ class GameBase {
 
   destroy() {
     window.removeEventListener('resize', this.resize)
-    this.el.removeEventListener('pointerdown', this.pointerdown)
+    this.container.removeEventListener('pointerdown', this.pointerdown)
     this.control.removeEventListener('change', this.change)
   }
 }
