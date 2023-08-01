@@ -15,7 +15,7 @@ namespace Three {
     features: Feature[]
   }
 
-  interface Feature {
+  export interface Feature {
     type: string
     properties: Properties
     geometry: Geometry
@@ -26,11 +26,11 @@ namespace Three {
     coordinates: [number, number][][][]
   }
 
-  interface Properties {
+  export interface Properties {
     adcode: number
     name: string
-    center: number[]
-    centroid: number[]
+    center: [number, number]
+    centroid: [number, number]
     childrenNum: number
     level: string
     parent: Parent
