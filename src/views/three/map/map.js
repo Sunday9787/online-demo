@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer'
 
 import localIcon from '../images/local.png'
+import airplaneIcon from '../images/airplane.png'
 
 const textureLoader = new THREE.TextureLoader()
 
@@ -212,6 +213,7 @@ class MapBase {
     const bootstrap = function () {
       context.renderer.render(context.scene, context.camera)
       context.CSS2dRenderer.render(context.scene, context.camera)
+      context.animate()
       // context.SVGRenderer.render(context.scene, context.camera)
     }
 
@@ -300,6 +302,13 @@ class MapBase {
   initCanvas() {}
 
   /**
+   * 开始动画
+   * @abstract
+   * @protected
+   */
+  animate() {}
+
+  /**
    * 点击事件
    * @abstract
    * @protected
@@ -319,25 +328,59 @@ class MapBase {
 const offsetXY = d3.geoMercator()
 
 export default class ThreeMap extends MapBase {
+  /**
+   * @private
+   */
   iconMap = textureLoader.load(localIcon)
 
   /**
+   * @private
+   */
+  airplaneMap = textureLoader.load(airplaneIcon)
+
+  /**
+   * @private
+   * @type {Array<[THREE.Mesh, THREE.CubicBezierCurve3]>}
+   */
+  airplanes = []
+
+  /**
+   * @private
+   */
+
+  process = 0
+
+  /**
+   * @private
+   */
+  speed = 0.0005
+
+  /**
+   * @private
    * @type {Array<[string, string]>}
    */
   flyCity = [
     ['信阳市', '郑州市'],
     ['信阳市', '鹤壁市'],
-    ['信阳市', '三门峡市'],
-    ['信阳市', '洛阳市'],
+    ['三门峡市', '商丘市'],
+    ['三门峡市', '洛阳市'],
+    ['鹤壁市', '濮阳市'],
+    ['商丘市', '鹤壁市'],
+    ['鹤壁市', '南阳市'],
+    ['驻马店市', '焦作市'],
     ['信阳市', '濮阳市']
   ]
 
   /**
+   * @private
    * @type {Map<string, THREE.Vector3>}
    */
-  flayPoint = new Map()
+  cityPoint = new Map()
 
   initCanvas() {
+    const animateFolder = this.gui.addFolder('动画')
+    animateFolder.add(this, 'speed', 0.0005, 0.01).name('飞机飞行速度')
+
     const context = this
 
     this.map = context.createMap(context.data)
@@ -453,7 +496,7 @@ export default class ThreeMap extends MapBase {
       unit.name = name
 
       const [flayX, flayY] = offsetXY(point)
-      context.flayPoint.set(name, new THREE.Vector3(flayX, -flayY, depth))
+      context.cityPoint.set(name, new THREE.Vector3(flayX, -flayY, depth))
 
       coordinates.forEach(coordinate => {
         if (type === 'MultiPolygon') coordinate.forEach(item => handle.apply(context, [item, color, depth, unit]))
@@ -538,7 +581,7 @@ export default class ThreeMap extends MapBase {
      * 创建圆环
      */
     const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x1a46f0, side: THREE.DoubleSide, transparent: true })
-    const ringGeometry = new THREE.RingGeometry(0.1, 0.15, 200)
+    const ringGeometry = new THREE.RingGeometry(0.1, 0.15, 500)
     const ring = new THREE.Mesh(ringGeometry, ringMaterial)
     ring.position.add(point)
 
@@ -555,7 +598,11 @@ export default class ThreeMap extends MapBase {
 
     const curve = new THREE.QuadraticBezierCurve3(
       startPosition,
-      new THREE.Vector3((startPosition.x + endPosition.x) / 2, (startPosition.y + endPosition.y) / 2, 8),
+      new THREE.Vector3(
+        (startPosition.x + endPosition.x) / 2,
+        (startPosition.y + endPosition.y) / 2,
+        Math.abs(endPosition.x - startPosition.x) * 0.6
+      ),
       endPosition
     )
 
@@ -564,7 +611,19 @@ export default class ThreeMap extends MapBase {
     const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6e43c3, side: THREE.DoubleSide })
     const line = new THREE.Line(lineGeometry, lineMaterial)
 
-    return [start, end, line, startRing, endRing]
+    return [start, end, line, startRing, endRing, curve]
+  }
+
+  /**
+   * @param {THREE.Vector3} position
+   */
+  createPlane(position) {
+    const material = new THREE.MeshBasicMaterial({ map: this.airplaneMap, transparent: true })
+    const geometry = new THREE.PlaneGeometry(0.5, 0.5)
+    const plane = new THREE.Mesh(geometry, material)
+    plane.position.add(position)
+
+    return plane
   }
 
   /**
@@ -575,30 +634,56 @@ export default class ThreeMap extends MapBase {
      * @type {Array<THREE.Mesh>}
      */
     const rings = []
+    /**
+     * @type {Array<[THREE.Sprite, THREE.CubicBezierCurve3]>}
+     */
+    const airplanes = []
 
     for (const [startCity, endCity] of this.flyCity) {
-      const startPosition = this.flayPoint.get(startCity)
-      const endPosition = this.flayPoint.get(endCity)
-      const [start, end, line, startRing, endRing] = this.createLineConnect(startPosition, endPosition)
+      const startPosition = this.cityPoint.get(startCity)
+      const endPosition = this.cityPoint.get(endCity)
+      const plane = this.createPlane(startPosition)
+      const [start, end, line, startRing, endRing, curve] = this.createLineConnect(startPosition, endPosition)
+
+      // 旋转飞机角度
+      const rad = Math.atan2(endPosition.x - startPosition.x, endPosition.y - startPosition.y)
+
+      plane.rotateZ(-rad)
 
       rings.push(startRing, endRing)
-      group.add(start, end, line, startRing, endRing)
+      airplanes.push([plane, curve])
+      group.add(start, end, line, startRing, endRing, plane)
     }
 
-    this.animateFlay(rings)
+    this.animateFlay(rings, airplanes)
   }
 
   /**
-   * @param {THREE.Mesh[]} data
+   * @param {THREE.Mesh[]} rings
+   * @param {Array<[THREE.Mesh, THREE.CubicBezierCurve3]>} airplanes
    */
-  animateFlay(data) {
-    for (const mesh of data) {
+  animateFlay(rings, airplanes) {
+    this.airplanes = airplanes
+
+    for (const mesh of rings) {
       gsap.fromTo(
         mesh.scale,
         { x: 0.1, y: 0.1, z: 0.1 },
         { x: 1.2, y: 1.2, z: 1.2, duration: 3, repeat: -1, ease: Power1.easeInOut }
       )
       gsap.fromTo(mesh.material, { opacity: 1 }, { opacity: 0, duration: 3, repeat: -1, ease: Power1.easeInOut })
+    }
+  }
+
+  animate() {
+    if (this.process > 1) {
+      this.process = 0
+    }
+
+    this.process += this.speed
+    for (const [mesh, curve] of this.airplanes) {
+      const point = curve.getPoint(this.process)
+      mesh.position.set(point.x, point.y, point.z)
     }
   }
 }
