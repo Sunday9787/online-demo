@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import moment from 'moment'
+import Mock from 'mockjs'
+import { plainToInstance } from 'class-transformer'
 import { request } from '@/util/net'
 import pageMixin from '@/mixins/page'
 
@@ -121,16 +122,52 @@ import sample, { useSample } from './components/sample.vue'
 import report, { useReport } from './components/report.vue'
 import statistics, { useStatistics } from './components/statistics.vue'
 
-function getData(param) {
-  console.log(param)
-  return request(
-    Array.from({ length: param.length || 20 }, (v, k) => ({
-      date: moment().format('YYYY-MM-DD'),
-      name: '王小虎',
-      address: `上海市普陀区金沙江路 151${k} 弄`
-    }))
-  )
+function getData({ length = 10 }) {
+  const data = Mock.mock({
+    [`data|10-${length}`]: [
+      {
+        date: '@date',
+        name: '@cname',
+        address: '@province@city@county'
+      }
+    ]
+  })
+  return request(data.data)
 }
+
+;(async function () {
+  /**
+   * @param {0|1|null} status
+   */
+  function formatStatus(status) {
+    if (status === null) return '未初始化'
+    if (status > 0) return '启用'
+    return '禁用'
+  }
+
+  class TableItem {
+    date = ''
+
+    name = ''
+
+    address = ''
+
+    /**
+     * @type {0|1|null}
+     */
+    status = null
+
+    lastModified = ''
+
+    get statusName() {
+      return formatStatus(this.status)
+    }
+  }
+
+  const response = await getData({ length: 15 })
+  const data = plainToInstance(TableItem, response.data)
+  console.log(data)
+})()
 
 export default {
   name: 'DashboardIndex',
