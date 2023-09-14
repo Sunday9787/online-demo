@@ -7,7 +7,7 @@ import './style.scss'
  * @param {number} month
  */
 function daysOfMonth(year, month) {
-  return new Date(year, month - 1, 0).getDate()
+  return new Date(year, month + 1, 0).getDate()
 }
 
 /**
@@ -103,6 +103,7 @@ export default defineComponent({
           <tr>
             {rows.map(day => (
               <td
+                key={day.value}
                 onClick={function () {
                   let month = date.value.getMonth()
 
