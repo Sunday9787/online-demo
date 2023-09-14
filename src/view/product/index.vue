@@ -58,6 +58,11 @@
     </app-card>
 
     <app-card>
+      {{ activityDate.toLocaleDateString() }}
+      <app-calendar v-model="activityDate" />
+    </app-card>
+
+    <app-card>
       <el-select v-model="form.select" placeholder="">
         <el-option label="case1" value="case1" />
         <el-option label="case2" value="case2" />
@@ -80,7 +85,7 @@
 </template>
 
 <script>
-import Vue, { computed } from 'vue'
+import Vue, { computed, ref } from 'vue'
 import { mapGetters } from 'vuex'
 import { useStore } from '@/hooks/useStore'
 
@@ -91,9 +96,11 @@ export default {
   setup() {
     const store = useStore('appModule')
     const theme = computed(() => store.state.theme)
+    const activityDate = ref(new Date())
 
     return {
-      theme
+      theme,
+      activityDate
     }
   },
   data() {
