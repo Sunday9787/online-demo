@@ -63,6 +63,22 @@
     </app-card>
 
     <app-card>
+      <section style="height: 600px">
+        <app-virtual-list
+          ref="virtualRef"
+          :item-height="40"
+          :data="productList"
+          :prop="{ limit: 20 }"
+          @end="getProduct"
+        >
+          <template v-slot="item">
+            <div>{{ item.id }} {{ item.title }}</div>
+          </template>
+        </app-virtual-list>
+      </section>
+    </app-card>
+
+    <app-card>
       <el-select v-model="form.select" placeholder="">
         <el-option label="case1" value="case1" />
         <el-option label="case2" value="case2" />
@@ -85,9 +101,10 @@
 </template>
 
 <script>
-import Vue, { computed, ref } from 'vue'
+import Vue, { computed, ref, shallowRef } from 'vue'
 import { mapGetters } from 'vuex'
 import { useStore } from '@/hooks/useStore'
+import { getProductList } from '@/mock/product'
 
 const caseMap = new Map()
 
@@ -97,10 +114,25 @@ export default {
     const store = useStore('appModule')
     const theme = computed(() => store.state.theme)
     const activityDate = ref(new Date())
+    /**
+     * @type {import('vue').Ref<Product.Detail[]>}
+     */
+    const productList = ref([])
+
+    const virtualRef = shallowRef()
+
+    async function getProduct(options) {
+      const response = await getProductList({ limit: options.limit, current: options.current })
+      productList.value = productList.value.concat(response.list)
+      virtualRef.value.loaded()
+    }
 
     return {
       theme,
-      activityDate
+      activityDate,
+      productList,
+      virtualRef,
+      getProduct
     }
   },
   data() {

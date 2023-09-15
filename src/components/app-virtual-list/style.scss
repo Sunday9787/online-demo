@@ -1,0 +1,34 @@
+
+.app-virtual-list {
+  position: relative;
+  height: 100%;
+  padding: 10px 0;
+  overflow-y: auto;
+}
+
+.app-virtual-container {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.app-virtual-scroll-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  width: 1px;
+  visibility: hidden;
+}
+
+.app-virtual-item {
+  padding: 10px;
+
+  &:not(:last-of-type) {
+    border-bottom: solid 1px var(--color-border-light);
+  }
+}

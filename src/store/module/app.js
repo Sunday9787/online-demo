@@ -220,7 +220,7 @@ const module = {
       })
 
       commit('updateDispatchedTransInOrgList', true)
-      this.commit('userModule/updateTransInOrgList', response.data)
+      this.commit('userModule/updateTransInOrgList', response)
     }
   }
 }
