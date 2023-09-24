@@ -1,38 +1,31 @@
-<template>
-  <el-header class="layout-header">
-    <el-container>
-      <el-container>
-        <el-dropdown trigger="click" @command="updateCurrentMechanism">
-          <el-button type="primary">
-            {{ currentMechanism.mechanismName }}
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
+<template lang="pug">
+  el-header.layout-header
+    el-container
+      el-container
+        el-dropdown(trigger="click" @command="updateCurrentMechanism")
+          el-button(type="primary")
+            | {{ currentMechanism.mechanismName }}
+            i.el-icon-arrow-down.el-icon--right
 
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, k) in organization.mechanismList" :key="k" :command="item">{{
-              item.mechanismName
-            }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-container>
+          el-dropdown-menu slot="dropdown">
+            el-dropdown-item(v-for="(item, k) in organization.mechanismList" :key="k" :command="item") {{ item.mechanismName }}
 
-      <el-container>
-        <app-permission :power="item.power" v-for="(item, k) in page" :key="k">
-          <el-button type="primary">{{ item.label }}</el-button>
-        </app-permission>
-      </el-container>
+      el-container
+        app-permission(:power="item.power" v-for="(item, k) in page" :key="k")
+          el-button(type="primary") {{ item.label }}
 
-      <el-container>
-        <el-switch
+      el-row(align="middle" type="flex" style='column-gap: 10px')
+        el-switch(
           v-model="themeMode"
           active-color="#13ce66"
           inactive-color="#ff4949"
           active-value="dark"
-          inactive-value="light"
-        />
-      </el-container>
-    </el-container>
-  </el-header>
+          inactive-value="light")
+
+        a(href="javascript:;" @click="openCalculator")
+          app-svg-icon(name="Icon_calculator" size="30" color="var(--color-primary)")
+
+    app-calculator(:visible.sync="calculatorVisible")
 </template>
 
 <script>
@@ -42,6 +35,11 @@ const { mapState, mapGetters, mapMutations } = createNamespacedHelpers('appModul
 
 export default {
   name: 'layout-header',
+  data() {
+    return {
+      calculatorVisible: false
+    }
+  },
   setup() {
     const page = [
       { label: '核型分析', power: 'analysis' },
@@ -65,7 +63,10 @@ export default {
     ...mapGetters(['mechanismMap', 'currentMechanism'])
   },
   methods: {
-    ...mapMutations(['updateCurrentMechanism', 'updateTheme'])
+    ...mapMutations(['updateCurrentMechanism', 'updateTheme']),
+    openCalculator() {
+      this.calculatorVisible = true
+    }
   }
 }
 </script>
