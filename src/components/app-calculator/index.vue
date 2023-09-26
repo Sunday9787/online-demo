@@ -79,7 +79,7 @@ export default defineComponent({
      */
     formatProcessText(val) {
       if (val) {
-        return val.replace(/[+\-×÷/]/g, function ($) {
+        return val.replace(/[+\-×÷]/g, function ($) {
           return ' ' + $ + ' '
         })
       }
@@ -301,6 +301,16 @@ export default defineComponent({
          * 则将上一个计算项值 重新 计算
          */
         if (item.key === '%') {
+          if (isBracket) {
+            calcQueue.push(item)
+            continue
+          }
+
+          if (lastBracket) {
+            lastBracket.push(item)
+            continue
+          }
+
           if (lastCalcItem) {
             lastCalcItem.value = this.calc([lastCalcItem, { map: 'divide' }, { value: 100 }])
             continue
@@ -399,6 +409,18 @@ export default defineComponent({
         }
 
         calcQueue.push(item)
+      }
+
+      /**
+       * 优先级运算符没有结束标识时 手动求值
+       * 优先级结束符标识 ) +-
+       * 当遇到 优先级运算符在最后一项时 需要手动计算该运算队列
+       * @type {CalcItem[]|null}
+       */
+      const lastBracket = last(brackets)
+      if (lastBracket) {
+        const value = this.processCalcQueue(lastBracket)
+        calcQueue.push({ value, type: 'number' })
       }
 
       return this.calc(calcQueue)

@@ -7,7 +7,7 @@
             | {{ currentMechanism.mechanismName }}
             i.el-icon-arrow-down.el-icon--right
 
-          el-dropdown-menu slot="dropdown">
+          el-dropdown-menu(slot="dropdown")
             el-dropdown-item(v-for="(item, k) in organization.mechanismList" :key="k" :command="item") {{ item.mechanismName }}
 
       el-container
