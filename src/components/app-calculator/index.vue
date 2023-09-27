@@ -21,8 +21,41 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import { calculator, last } from '@/util'
+import { defineComponent, readonly } from 'vue'
+import { calculator } from '@/util'
+
+const KEY = readonly({
+  /** `(` */
+  leftBracket: '(',
+  /** `)` */
+  rightBracket: ')',
+  /** `%` */
+  percent: '%',
+  /** `ac` */
+  ac: 'ac',
+  number0: '0',
+  number1: '1',
+  number2: '2',
+  number3: '3',
+  number4: '4',
+  number5: '5',
+  number6: '6',
+  number7: '7',
+  number8: '8',
+  number9: '9',
+  /** `+` */
+  plus: '+',
+  /** `-` */
+  minus: '-',
+  /** `*` */
+  times: '*',
+  /** `/` */
+  divide: '/',
+  /** `.` */
+  point: '.',
+  /** `=` */
+  equal: '='
+})
 
 /**
  * @typedef CalcItem
@@ -38,30 +71,30 @@ import { calculator, last } from '@/util'
  * @type {ReadonlyArray<CalcItem>}
  */
 const grid = Object.freeze([
-  { label: '(', key: '(', code: 'Digit9', type: 'symbol' },
-  { label: ')', key: ')', code: 'Digit0', type: 'symbol' },
-  { label: '%', key: '%', code: 'Digit5', type: 'symbol' },
-  { label: 'AC', key: 'ac', code: 'Backspace', type: 'ac' },
+  { label: '(', key: KEY.leftBracket, code: 'Digit9', type: 'symbol' },
+  { label: ')', key: KEY.rightBracket, code: 'Digit0', type: 'symbol' },
+  { label: '%', key: KEY.percent, code: 'Digit5', type: 'symbol' },
+  { label: 'AC', key: KEY.ac, code: 'Backspace', type: 'ac' },
 
-  { label: '7', key: '7', value: '7', code: 'Numpad7|Digit7', type: 'number' },
-  { label: '8', key: '8', value: '8', code: 'Numpad8|Digit8', type: 'number' },
-  { label: '9', key: '9', value: '9', code: 'Numpad9|Digit9', type: 'number' },
-  { label: '÷', key: '/', map: 'divide', code: 'NumpadDivide', type: 'operator' },
+  { label: '7', key: KEY.number7, value: '7', code: 'Numpad7|Digit7', type: 'number' },
+  { label: '8', key: KEY.number8, value: '8', code: 'Numpad8|Digit8', type: 'number' },
+  { label: '9', key: KEY.number9, value: '9', code: 'Numpad9|Digit9', type: 'number' },
+  { label: '÷', key: KEY.divide, map: 'divide', code: 'NumpadDivide', type: 'operator' },
 
-  { label: '4', key: '4', value: '4', code: 'Numpad4|Digit4', type: 'number' },
-  { label: '5', key: '5', value: '5', code: 'Numpad5|Digit5', type: 'number' },
-  { label: '6', key: '6', value: '6', code: 'Numpad6|Digit6', type: 'number' },
-  { label: '×', key: '*', map: 'times', code: 'NumpadMultiply', type: 'operator' },
+  { label: '4', key: KEY.number4, value: '4', code: 'Numpad4|Digit4', type: 'number' },
+  { label: '5', key: KEY.number5, value: '5', code: 'Numpad5|Digit5', type: 'number' },
+  { label: '6', key: KEY.number6, value: '6', code: 'Numpad6|Digit6', type: 'number' },
+  { label: '×', key: KEY.times, map: 'times', code: 'NumpadMultiply', type: 'operator' },
 
-  { label: '1', key: '1', value: '1', code: 'Numpad1|Digit1', type: 'number' },
-  { label: '2', key: '2', value: '2', code: 'Numpad2|Digit2', type: 'number' },
-  { label: '3', key: '3', value: '3', code: 'Numpad3|Digit3', type: 'number' },
-  { label: '-', key: '-', map: 'minus', code: 'NumpadSubtract', type: 'operator' },
+  { label: '1', key: KEY.number1, value: '1', code: 'Numpad1|Digit1', type: 'number' },
+  { label: '2', key: KEY.number2, value: '2', code: 'Numpad2|Digit2', type: 'number' },
+  { label: '3', key: KEY.number3, value: '3', code: 'Numpad3|Digit3', type: 'number' },
+  { label: '-', key: KEY.minus, map: 'minus', code: 'NumpadSubtract', type: 'operator' },
 
-  { label: '0', key: '0', value: '0', code: 'Numpad0|Digit0', type: 'number' },
-  { label: '.', key: '.', code: 'NumpadDecimal|Period', type: 'symbol' },
-  { label: '=', key: '=', code: 'Equal', type: 'equal' },
-  { label: '+', key: '+', map: 'plus', code: 'NumpadAdd|Equal', type: 'operator' }
+  { label: '0', key: KEY.number0, value: '0', code: 'Numpad0|Digit0', type: 'number' },
+  { label: '.', key: KEY.point, code: 'NumpadDecimal|Period', type: 'symbol' },
+  { label: '=', key: KEY.equal, code: 'Equal', type: 'equal' },
+  { label: '+', key: KEY.plus, map: 'plus', code: 'NumpadAdd|Equal', type: 'operator' }
 ])
 
 const gridMap = new Map(grid.map(item => [item.key, item]))
@@ -193,7 +226,7 @@ export default defineComponent({
           this.result = data
 
           this.processText = this.queue.reduce(function (previousValue, currentValue) {
-            return previousValue + currentValue.label
+            return previousValue.concat(currentValue.label)
           }, '')
         } catch {
           this.result = 'Error'
@@ -205,13 +238,14 @@ export default defineComponent({
       this.queue.push(item)
     },
     /**
-     * @param {Array<CalcItem>} data
-     * @param {boolean} isBracket 是否是 优先级运算符队列
+     * @param {Array<CalcItem>} data 计算队列
+     * @param {boolean} isBracket 是否是 优先级运算符队列 如 true 则遇到优先级运算符 `* /` 不再 创建优先级运算符队列
      * @returns {number}
      */
     processCalcQueue(data, isBracket = false) {
       /**
        * 计算队列
+       * @type {Array<CalcItem>}
        */
       const calcQueue = []
       /**
@@ -220,7 +254,9 @@ export default defineComponent({
        */
       const brackets = []
       /**
-       * 在运算队列中 是否 有 优先级运算符
+       * 是否 有 隐式优先级运算符
+       * @description
+       * 当 item type 为 `(` 则表示 显式优先级运算符，为 `* /` 则表示 隐式优先级运算符
        */
       let latentPriority = false
 
@@ -229,16 +265,18 @@ export default defineComponent({
         /**
          * @type {CalcItem|null}
          */
-        const lastCalcItem = last(calcQueue)
+        const lastCalcItem = calcQueue.at(-1)
         /**
          * @type {CalcItem[]|null}
          */
-        const lastBracket = last(brackets)
+        const lastBracket = brackets.at(-1)
 
         /**
          * 创建一个新的 运算队列
+         * 隐式 优先级运算符 为 false
          */
-        if (item.key === '(') {
+        if (item.key === KEY.leftBracket) {
+          latentPriority = false
           brackets.push([])
           continue
         }
@@ -246,7 +284,7 @@ export default defineComponent({
         /**
          * 开始 求值 运算队列
          */
-        if (item.key === ')') {
+        if (item.key === KEY.rightBracket) {
           /**
            * 在 优先级运算符队列 弹出 最后 一个运算队列
            */
@@ -261,7 +299,7 @@ export default defineComponent({
           /**
            * 在 优先级运算符队列 再获取一次 最后一个 运算队列
            */
-          const nextBracket = last(brackets)
+          const nextBracket = brackets.at(-1)
 
           /**
            * 如果有 运算队列 则
@@ -300,91 +338,95 @@ export default defineComponent({
          * 如果 是 % 运算符
          * 则将上一个计算项值 重新 计算
          */
-        if (item.key === '%') {
-          if (isBracket) {
-            calcQueue.push(item)
-            continue
-          }
-
+        if (item.key === KEY.percent) {
           if (lastBracket) {
             lastBracket.push(item)
             continue
           }
 
           if (lastCalcItem) {
-            lastCalcItem.value = this.calc([lastCalcItem, { map: 'divide' }, { value: 100 }])
+            lastCalcItem.value = this.calc([lastCalcItem, { map: 'divide', key: '/' }, { value: 100 }])
             continue
           }
         }
 
         /**
-         * 如 key 为 * 则 标记 有 优先级运算符
+         * 如 当前计算队列已是 优先级运算符队列 则 插入到 计算队列中
+         * 如 当前已有优先级队列 则插入到队列中
+         * 如 key 为 * / 则 标记 有 优先级运算符
          * 创建一个 运算队列
          */
-        if (item.key === '*') {
+        if (item.key === KEY.times || item.key === KEY.divide) {
           if (isBracket) {
             calcQueue.push(item)
             continue
           }
 
+          /**
+           * 如 已有优先级运算符队列，则 弹出该队列中原素 插入到新的队列
+           */
           if (lastBracket) {
             lastBracket.push(item)
             continue
           }
 
           latentPriority = true
+          const popItem = calcQueue.pop()
 
-          if (lastCalcItem) {
-            calcQueue.pop()
-            brackets.push([lastCalcItem, { map: 'times' }])
-            continue
-          }
+          brackets.push([popItem, { map: item.key === KEY.times ? 'times' : 'divide', key: item.key }])
+          continue
         }
 
         /**
          * 如 有 优先级运算符标识 则 判断 当前 item.key === '+' or '-' 则
          * 优先级运算符队列 弹出最后一个 运算符计算队列 并 计算该队列
          */
-        if (item.key === '+' || item.key === '-') {
+        if (item.key === KEY.plus || item.key === KEY.minus) {
           if (latentPriority) {
-            if (lastBracket) {
-              brackets.pop()
+            brackets.pop()
 
-              latentPriority = false
+            /**
+             * 求值 运算符队列
+             */
+            const value = this.processCalcQueue(lastBracket, true)
+            /**
+             * 在 优先级运算符队列 再获取一次 最后一个 运算队列
+             */
+            const nextBracket = brackets.at(-1)
 
-              /**
-               * 求值 运算符队列
-               */
-              const value = this.processCalcQueue(lastBracket)
-              /**
-               * 在 优先级运算符队列 再获取一次 最后一个 运算队列
-               */
-              const nextBracket = last(brackets)
-
-              /**
-               * 如果有 运算队列 则
-               * 将 该值插入 到 该队列
-               */
-              if (nextBracket) {
-                nextBracket.push({ value, type: 'number' })
-                continue
-              }
-
-              /**
-               * 手动 插入 计算队列
-               */
-              calcQueue.push({ value, type: 'number' })
-              calcQueue.push(item)
+            /**
+             * 如果有 运算队列 则
+             * 将 该值插入 到 该队列
+             */
+            if (nextBracket) {
+              nextBracket.push({ value, type: 'number' })
               continue
             }
+
+            /**
+             * 手动 插入 计算队列
+             */
+            calcQueue.push({ value, type: 'number' })
+            calcQueue.push(item)
+            continue
           }
+
+          latentPriority = false
+
+          if (lastBracket) {
+            lastBracket.push(item)
+            continue
+          }
+
+          calcQueue.push(item)
+          continue
         }
 
         /**
          * 如果当前 key 是 小数点 那么 就合并到上一个运算符
          * @example item = . lastCalcItem = 1 => 1.
          */
-        if (item.key === '.') {
+        if (item.key === KEY.point) {
           /**
            * 如果存在 优先级运算队列 那么就不做处理 添加到 队列
            */
@@ -417,9 +459,9 @@ export default defineComponent({
        * 当遇到 优先级运算符在最后一项时 需要手动计算该运算队列
        * @type {CalcItem[]|null}
        */
-      const lastBracket = last(brackets)
+      const lastBracket = brackets.at(-1)
       if (lastBracket) {
-        const value = this.processCalcQueue(lastBracket)
+        const value = this.processCalcQueue(lastBracket, true)
         calcQueue.push({ value, type: 'number' })
       }
 
