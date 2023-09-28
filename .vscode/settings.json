@@ -1,0 +1,13 @@
+{
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace, 'MesloLGS NF'",
+  "stylelint.validate": ["css", "less", "postcss", "scss", "sass", "vue"],
+  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "eslint.autoFixOnSave": true,
+    "source.fixAll.stylelint": true
+  }
+}

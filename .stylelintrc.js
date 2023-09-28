@@ -9,6 +9,18 @@ module.exports = {
   ],
   plugins: ['stylelint-prettier'],
   rules: {
-    'scss/no-global-function-names': null
+    'scss/no-global-function-names': null,
+    'scss/at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+        ],
+      }
+    ]
   }
 }

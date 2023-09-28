@@ -91,11 +91,17 @@ export function useMarkLine() {
    * @type {import('vue').Ref<Array<{type: 'yl'|'yc'|'yr'|'xt'|'xc'|'xb',direction: string, visible: boolean, position: {left: number, top: number}}>>}
    */
   const markLine = ref([
+    /** Y轴 左左对比 */
     { type: 'yl', direction: 'vertical', visible: false, position: { left: 0, top: 0 } },
+    /** Y轴 中中对比 */
     { type: 'yc', direction: 'vertical', visible: false, position: { left: 0, top: 0 } },
+    /** Y轴 右右对比 */
     { type: 'yr', direction: 'vertical', visible: false, position: { left: 0, top: 0 } },
+    /** X轴 上上对比 */
     { type: 'xt', direction: 'horizontal', visible: false, position: { left: 0, top: 0 } },
+    /** X轴 中中对比 */
     { type: 'xc', direction: 'horizontal', visible: false, position: { left: 0, top: 0 } },
+    /** X轴 下下对比 */
     { type: 'xb', direction: 'horizontal', visible: false, position: { left: 0, top: 0 } }
   ])
 

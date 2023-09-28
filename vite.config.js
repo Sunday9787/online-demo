@@ -9,7 +9,6 @@ import { manualChunksPlugin } from 'vite-plugin-webpackchunkname'
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import vuePugPlugin from 'vue-pug-plugin'
-import cssnano from 'cssnano'
 import themePlugin from './plugin/theme'
 
 console.log(path.resolve('./src/style/theme/__variables.scss'))
@@ -103,9 +102,6 @@ export default defineConfig(function (env) {
     },
     css: {
       devSourcemap: true,
-      postcss: {
-        plugins: [cssnano()]
-      },
       preprocessorOptions: {
         scss: {
           javascriptEnable: true,

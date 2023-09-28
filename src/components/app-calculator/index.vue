@@ -260,8 +260,7 @@ export default defineComponent({
        */
       let latentPriority = false
 
-      for (let i = 0; i < data.length; i++) {
-        const item = data[i]
+      for (const item of data) {
         /**
          * @type {CalcItem|null}
          */
