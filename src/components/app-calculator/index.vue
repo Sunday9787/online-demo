@@ -294,8 +294,10 @@ export default defineComponent({
 
           /**
            * 求值该运算队列
+           *
+           * 因为 是 显式优先级运算符 故 isBracket = true
            */
-          const value = this.processCalcQueue(lastBracket, true)
+          const value = this.processCalcQueue(lastBracket, false)
           /**
            * 在 优先级运算符队列 再获取一次 最后一个 运算队列
            */
