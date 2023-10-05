@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex'
-import _ from 'lodash-es'
+import { debounce } from 'lodash-es'
 
 /**
  * @this Page
@@ -149,7 +149,7 @@ function page(opt) {
       /**
        * @this {Page}
        */
-      search: _.debounce(
+      search: debounce(
         /**
          * @this {Page}
          * @param {number} [current]
