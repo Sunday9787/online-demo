@@ -14,7 +14,7 @@ const route = {
       path: 'index',
       name: 'UserIndex',
       meta: { activeMenu: '/user/index' },
-      component: () => import(/* webpackChunkName: "user" */ '@/view/user/index.vue')
+      component: () => import(/* webpackChunkName: "user" */ '@/views/user/index.vue')
     }
   ]
 }

@@ -23,12 +23,12 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: () => import('@/view/login/index.vue')
+      component: () => import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
     },
     {
       path: '/',
       name: 'AppIndex',
-      component: () => import('@/view/index.vue')
+      component: () => import(/* webpackChunkName: "index" */ '@/views/index.vue')
     }
   ]
 })

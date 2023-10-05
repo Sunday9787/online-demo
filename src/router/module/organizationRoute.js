@@ -14,7 +14,7 @@ const route = {
       path: 'index',
       name: 'OrganizationIndex',
       meta: { activeMenu: '/organization/index' },
-      component: () => import(/* webpackChunkName: "organization" */ '@/view/organization/index.vue')
+      component: () => import(/* webpackChunkName: "organization" */ '@/views/organization/index.vue')
     }
   ]
 }

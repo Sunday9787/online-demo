@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-import { request } from '@/util/net'
+import { request } from '@/utils/net'
 
 /**
  * @param {Request.List} param

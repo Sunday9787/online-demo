@@ -22,7 +22,7 @@
 
 <script>
 import { defineComponent, readonly } from 'vue'
-import { calculator } from '@/util'
+import { calculator } from '@/utils'
 
 const KEY = readonly({
   /** `(` */

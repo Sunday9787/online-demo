@@ -51,16 +51,16 @@ export default {
   border-radius: 4px;
 
   &.is-light {
-    background-image: url('@/image/components/app-patient/thumbnail-list-light.svg');
+    background-image: url('@/images/components/app-patient/thumbnail-list-light.svg');
     &.is-thumbnail {
-      background-image: url('@/image/components/app-patient/thumbnail-grid-light.svg');
+      background-image: url('@/images/components/app-patient/thumbnail-grid-light.svg');
     }
   }
 
   &.is-dark {
-    background-image: url('@/image/components/app-patient/thumbnail-list-dark.svg');
+    background-image: url('@/images/components/app-patient/thumbnail-list-dark.svg');
     &.is-thumbnail {
-      background-image: url('@/image/components/app-patient/thumbnail-grid-dark.svg');
+      background-image: url('@/images/components/app-patient/thumbnail-grid-dark.svg');
     }
   }
 }

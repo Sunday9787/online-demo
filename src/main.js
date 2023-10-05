@@ -3,7 +3,7 @@ import ElementUI from 'element-ui'
 import 'virtual:svg-icons-register'
 
 import './router/permission'
-import './style/index.scss'
+import './styles/index.scss'
 
 import store from './store'
 import router from './router'
@@ -11,7 +11,7 @@ import App from './App.vue'
 
 import Mixin from './mixins'
 import Components from './components'
-import Directive from './directive'
+import Directive from './directives'
 
 Vue.use(ElementUI)
 Vue.use(Mixin)

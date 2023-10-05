@@ -1,4 +1,4 @@
-import { request } from '@/util/net'
+import { request } from '@/utils/net'
 
 /**
  * @type {Readonly<[string, string]>}

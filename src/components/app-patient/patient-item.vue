@@ -93,7 +93,7 @@
 
 <script>
 import Vue from 'vue'
-import { request } from '@/util/net'
+import { request } from '@/utils/net'
 import PatientData from './components/patient-data.vue'
 import * as mockData from '@/mock/patient'
 

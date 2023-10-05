@@ -13,7 +13,7 @@ const route = {
     {
       path: 'action',
       props: route => ({ type: route.query.type }),
-      component: () => import('@/view/template/action/index.vue')
+      component: () => import(/* webpackChunkName: "template" */ '@/views/template/action/index.vue')
     }
   ]
 }

@@ -14,7 +14,7 @@ const route = {
       path: 'index',
       name: 'DashboardIndex',
       meta: { activeMenu: '/dashboard/index' },
-      component: () => import(/* webpackChunkName: "dashboard" */ '@/view/dashboard/index.vue')
+      component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue')
     }
   ]
 }

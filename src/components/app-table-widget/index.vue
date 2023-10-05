@@ -9,7 +9,7 @@
       <li v-for="item in showHead" :key="item.prop" :title="item.label" class="table-widget__item">
         <div class="table-widget__label">
           <div class="table-widget__icon">
-            <img src="@/image/components/app-table-widget/table-widget.svg" />
+            <img src="@/images/components/app-table-widget/table-widget.svg" />
           </div>
           <div class="table-widget__text">{{ item.label }}</div>
         </div>

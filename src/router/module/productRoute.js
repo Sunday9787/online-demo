@@ -14,13 +14,13 @@ const route = {
       path: 'index',
       name: 'ProductIndex',
       meta: { activeMenu: '/product/index' },
-      component: () => import(/* webpackChunkName: "product" */ '@/view/product/index.vue')
+      component: () => import(/* webpackChunkName: "productIndex" */ '@/views/product/index.vue')
     },
     {
       path: 'buy/:id(\\d+)',
       name: 'ProductBuy',
       props: route => ({ id: Number(route.params.id) }),
-      component: () => import(/* webpackChunkName: "productBuy" */ '@/view/product/buy/index.vue')
+      component: () => import(/* webpackChunkName: "productBuy" */ '@/views/product/buy/index.vue')
     }
   ]
 }
