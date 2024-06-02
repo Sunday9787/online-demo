@@ -1,33 +1,33 @@
 <template lang="pug">
-  el-dialog(
-    title="编辑模板"
-    :visible.sync="dialogVisible"
-    :close-on-click-modal="false"
-    :close-on-press-escape="false"
-    :show-close="false"
-    :width="store.size.width + 50 + 'px'")
-    section(:style="{ height: '55vh', overflowY: 'auto' }" style="background-color: #fff;")
-      div.template-document(:style="documentStyle")
-        template(v-for="component of store.componentsData")
-          component(
-            group
-            mode="element"
-            :key="component.id"
-            :is="component.name"
-            :children="component.children"
-            v-bind="component.props"
-            v-if="component.name === 'builtin-group'")
-          component(
-            mode="element"
-            :key="component.id"
-            :is="component.name"
-            v-model="component.value"
-            v-bind="component.props"
-            v-else)
+el-dialog(
+  title="编辑模板"
+  :visible.sync="dialogVisible"
+  :close-on-click-modal="false"
+  :close-on-press-escape="false"
+  :show-close="false"
+  :width="store.size.width + 50 + 'px'")
+  section(:style="{ height: '55vh', overflowY: 'auto' }" style="background-color: #fff;")
+    div.template-document(:style="documentStyle")
+      template(v-for="component of store.componentsData")
+        component(
+          group
+          mode="element"
+          :key="component.id"
+          :is="component.name"
+          :children="component.children"
+          v-bind="component.props"
+          v-if="component.name === 'builtin-group'")
+        component(
+          mode="element"
+          :key="component.id"
+          :is="component.name"
+          v-model="component.value"
+          v-bind="component.props"
+          v-else)
 
-    div(slot="footer")
-      el-button(size="small" @click="action('cancel')") 取 消
-      el-button(type="primary" size="small" @click="action('ok')") 确 定
+  div(slot="footer")
+    el-button(size="small" @click="action('cancel')") 取 消
+    el-button(type="primary" size="small" @click="action('ok')") 确 定
 </template>
 
 <script>

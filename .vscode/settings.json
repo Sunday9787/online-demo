@@ -6,8 +6,8 @@
   "stylelint.validate": ["css", "less", "postcss", "scss", "sass", "vue"],
   "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact", "vue"],
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "eslint.autoFixOnSave": true,
-    "source.fixAll.stylelint": true
+    "source.fixAll.eslint": "explicit",
+    "eslint.autoFixOnSave": "explicit",
+    "source.fixAll.stylelint": "explicit"
   }
 }

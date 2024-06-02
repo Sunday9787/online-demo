@@ -1,18 +1,18 @@
 <template lang="pug">
-  div.template-control(
-    :class="{ visible, lock }"
-    :style="wrapperStyle"
-    @pointerdown.stop="onPointerdown")
-    div.template-control-mask
-    i.template-control-point.top-left(@pointerdown.stop="onControlPointerdown('topLeft', $event)")
-    i.template-control-point.top-center(@pointerdown.stop="onControlPointerdown('topCenter', $event)")
-    i.template-control-point.top-right(@pointerdown.stop="onControlPointerdown('topRight', $event)")
-    i.template-control-point.center-left(@pointerdown.stop="onControlPointerdown('centerLeft', $event)")
-    i.template-control-point.center-right(@pointerdown.stop="onControlPointerdown('centerRight', $event)")
-    i.template-control-point.bottom-left(@pointerdown.stop="onControlPointerdown('bottomLeft', $event)")
-    i.template-control-point.bottom-center(@pointerdown.stop="onControlPointerdown('bottomCenter', $event)")
-    i.template-control-point.bottom-right(@pointerdown.stop="onControlPointerdown('bottomRight', $event)")
-    slot
+.template-control(
+  :class="{ visible, lock }"
+  :style="wrapperStyle"
+  @pointerdown.stop="onPointerdown")
+  div.template-control-mask
+  i.template-control-point.top-left(@pointerdown.stop="onControlPointerdown('topLeft', $event)")
+  i.template-control-point.top-center(@pointerdown.stop="onControlPointerdown('topCenter', $event)")
+  i.template-control-point.top-right(@pointerdown.stop="onControlPointerdown('topRight', $event)")
+  i.template-control-point.center-left(@pointerdown.stop="onControlPointerdown('centerLeft', $event)")
+  i.template-control-point.center-right(@pointerdown.stop="onControlPointerdown('centerRight', $event)")
+  i.template-control-point.bottom-left(@pointerdown.stop="onControlPointerdown('bottomLeft', $event)")
+  i.template-control-point.bottom-center(@pointerdown.stop="onControlPointerdown('bottomCenter', $event)")
+  i.template-control-point.bottom-right(@pointerdown.stop="onControlPointerdown('bottomRight', $event)")
+  slot
 </template>
 
 <script>

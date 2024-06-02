@@ -160,7 +160,7 @@ export function initBuiltinComponentProps(props, name, type) {
       add() {
         if (this.value.length) {
           // 当最后一项不为空时 才可以 新增项
-          if (this.value[this.value.length - 1].value) {
+          if (this.value.at(-1).value) {
             this.value.push({ value: '', key: Date.now() })
           }
           return
@@ -270,13 +270,16 @@ export function createBuiltinComponentGroup(...args) {
    */
   const [left, top, right, bottom] = children.map(getRect).reduce(
     function (previousValue, currentValue) {
+      /**
+       * @type {Array<number[],number[],number[],number[]>}
+       */
       const [left, top, right, bottom] = previousValue
 
       left.push(currentValue.left)
       top.push(currentValue.top)
       right.push(currentValue.right)
       bottom.push(currentValue.bottom)
-      return [].concat([left], [top], [right], [bottom])
+      return [left, top, right, bottom]
     },
     [[], [], [], []]
   )

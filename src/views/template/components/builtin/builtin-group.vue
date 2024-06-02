@@ -1,15 +1,15 @@
 <template lang="pug">
-  div.builtin-group(:style="groupStyle")
-    component(
-      ref="builtinComponentRef"
-      v-for="(component) in children"
-      v-bind="component.props"
-      v-model="component.value"
-      :mode="mode"
-      :children="component.children"
-      :key="component.id"
-      :is="component.name"
-      group)
+.builtin-group(:style="groupStyle")
+  component(
+    ref="builtinComponentRef"
+    v-for="(component) in children"
+    v-bind="component.props"
+    v-model="component.value"
+    :mode="mode"
+    :children="component.children"
+    :key="component.id"
+    :is="component.name"
+    group)
 </template>
 
 <script>

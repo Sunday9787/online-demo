@@ -1,15 +1,15 @@
 <template lang="pug">
-  app-page
-    app-data-view(pagination)
-      app-table-container
-        template(slot="action")
-          router-link(to="/template/action?type=create")
-            el-button(size="small", type="primary") 自定义模板
+app-page
+  app-data-view(pagination)
+    app-table-container
+      template(slot="action")
+        router-link(to="/template/action?type=create")
+          el-button(size="small", type="primary") 自定义模板
 
-        el-table(ref="table", :data="table.data", v-loading="table.loading", height="100%", stripe)
-          el-table-column(prop="date", label="日期", width="180")
-          el-table-column(prop="name", label="姓名", width="180")
-          el-table-column(prop="address", label="地址")
+      el-table(ref="table", :data="table.data", v-loading="table.loading", height="100%", stripe)
+        el-table-column(prop="date", label="日期", width="180")
+        el-table-column(prop="name", label="姓名", width="180")
+        el-table-column(prop="address", label="地址")
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template lang="pug">
-  svg.template-mark-line(
-    xmlns="http://www.w3.org/2000/svg"
-    :width="size.width"
-    :height="size.height"
-    :style="wrapperStyle"
-    :class="{visible}")
-    line(stroke="var(--color-primary)" x1="0" y1="0" :x2="size.width" :y2="size.height")
+svg.template-mark-line(
+  xmlns="http://www.w3.org/2000/svg"
+  :width="size.width"
+  :height="size.height"
+  :style="wrapperStyle"
+  :class="{visible}")
+  line(stroke="var(--color-primary)" x1="0" y1="0" :x2="size.width" :y2="size.height")
 </template>
 
 <script>

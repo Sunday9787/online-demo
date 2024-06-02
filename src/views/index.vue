@@ -1,21 +1,21 @@
 <template lang="pug">
-  div.data-container
-    app-big-screen(:width="1920" :height="1080" :wrapperStyle="{ display: 'flex' }")
-      aside.data-left
-        div#chart-pie1(style="height: 240px; width: 550px;")
-        div#chart-line1(style="height: 280px; width: 550px;")
-        div#chart-line2(style="height: 280px; width: 550px;")
-        div#chart-line6(style="height: 280px; width: 550px;")
-      section.data-main.flex1
-        div#chart-three(style="height: 800px; width: 880px;")
-        el-row(type="flex")
-          div#chart-gauge(style="height: 280px; width: 440px;")
-          div#chart-line7(style="height: 280px; width: 440px;")
-      aside.data-right
-        div#chart-line3(style="height: 180px; width: 550px;")
-        div#chart-line4(style="height: 280px; width: 550px;")
-        div#chart-line5(style="height: 280px; width: 550px;")
-        div#chart-radar1(style="height: 300px; width: 550px;")
+.data-container
+  app-big-screen(:width="1920" :height="1080" :wrapperStyle="{ display: 'flex' }")
+    aside.data-left
+      div#chart-pie1(style="height: 240px; width: 550px;")
+      div#chart-line1(style="height: 280px; width: 550px;")
+      div#chart-line2(style="height: 280px; width: 550px;")
+      div#chart-line6(style="height: 280px; width: 550px;")
+    section.data-main.flex1
+      div#chart-three(style="height: 800px; width: 880px;")
+      el-row(type="flex")
+        div#chart-gauge(style="height: 280px; width: 440px;")
+        div#chart-line7(style="height: 280px; width: 440px;")
+    aside.data-right
+      div#chart-line3(style="height: 180px; width: 550px;")
+      div#chart-line4(style="height: 280px; width: 550px;")
+      div#chart-line5(style="height: 280px; width: 550px;")
+      div#chart-radar1(style="height: 300px; width: 550px;")
 </template>
 
 <script>

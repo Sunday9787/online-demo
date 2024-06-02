@@ -1,18 +1,10 @@
 const components = (function () {
   /**
-   * @type {Vue.Component[]}
-   */
-  const result = []
-  /**
    * @type {Record<string, {default: Vue.Component}>}
    */
   const data = import.meta.glob(['./**/index.vue', './**/index.jsx'], { eager: true })
 
-  for (const item of Object.values(data)) {
-    result.push(item.default)
-  }
-
-  return result
+  return Object.values(data).map(item => item.default)
 })()
 
 /**

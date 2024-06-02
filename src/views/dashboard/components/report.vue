@@ -1,25 +1,18 @@
-<template>
-  <app-table-container>
-    <template slot="action">
-      <el-button size="small" type="primary">导出LIS</el-button>
-      <el-button size="small" type="primary">导出EXCEL</el-button>
-      <el-button size="small" type="primary" @click="exposePDF()">导出PDF</el-button>
-    </template>
-
-    <el-table ref="table" :data="page.table.data" v-loading="page.table.loading" height="100%" stripe>
-      <template v-for="head in tableHead">
-        <el-table-column :key="head.prop" v-bind="head" v-if="head.on || !head.prop">
-          <app-table-widget
-            slot="header"
-            storage-key="dashboard-report"
-            :data="tableHead"
-            :text="head.label"
-            v-if="!head.prop"
-          />
-        </el-table-column>
-      </template>
-    </el-table>
-  </app-table-container>
+<template lang="pug">
+app-table-container
+  template(slot="action")
+    el-button(type="primary" size="small") 导出LIS
+    el-button(type="primary" size="small") 导出EXCEL
+    el-button(@click="exposePDF()" type="primary" size="small") 导出PDF
+  el-table(stripe height="100%" v-loading="page.table.loading" :data="page.table.data" ref="table")
+    template(v-for="head in tableHead")
+      el-table-column(v-if="head.on || !head.prop" v-bind="head" :key="head.prop")
+        app-table-widget(
+          v-if="!head.prop"
+          :text="head.label"
+          :data="tableHead"
+          storage-key="dashboard-report"
+          slot="header")
 </template>
 
 <script>
@@ -94,6 +87,11 @@ export default {
         }
       ]
     }
+  },
+  created() {
+    this.$nextTick(function () {
+      console.log(this.page)
+    })
   },
   methods: {
     exposePDF() {

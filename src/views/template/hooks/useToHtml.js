@@ -12,7 +12,7 @@ export function useToHtml() {
     const node = refComponent.value.toHtml()
     node.style.margin = '0 auto'
 
-    const html = `
+    const html = /* html */ `
       <html lang="zh-CN">
         <head>
           <meta charset="utf-8" />

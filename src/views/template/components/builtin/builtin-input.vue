@@ -1,11 +1,11 @@
 <template lang="pug">
-  div(v-if="isShape" :style="containerStyle")
-    label(:for="id") {{ label }}
-    div(:id="id" :style="valueStyle" style="flex: 1")
+div(v-if="isShape" :style="containerStyle")
+  label(:for="id") {{ label }}
+  div(:id="id" :style="valueStyle" style="flex: 1")
 
-  div(v-else :style="containerStyle")
-    label(:for="id") {{ label }}
-    div.flex1(:style="valueStyle" style="flex: 1") {{ formValue }}
+div(v-else :style="containerStyle")
+  label(:for="id") {{ label }}
+  div.flex1(:style="valueStyle" style="flex: 1") {{ formValue }}
 </template>
 
 <script>

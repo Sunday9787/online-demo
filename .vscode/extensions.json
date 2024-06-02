@@ -1,9 +1,12 @@
 {
   "recommendations": [
-    "octref.vetur"
+    "vue.volar",
+    "shenjiaolong.vue-helper",
+    "amandeepmittal.pug",
+    "tobermory.es6-string-html",
+    "streetsidesoftware.code-spell-checker",
+    "sysoev.language-stylus",
+    "dbaeumer.vscode-eslint"
   ],
-  "unwantedRecommendations": [
-    "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin"
-  ]
+  "unwantedRecommendations": []
 }

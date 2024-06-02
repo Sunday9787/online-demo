@@ -1,12 +1,12 @@
 <template lang="pug">
-  nav.template-contextmenu(:class="{ visible }" :style="wrapperStyle" @pointerdown.stop="noop")
-    template(v-if="currentComponent")
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('del')") 删除
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('unlock')" v-if="current.lock") 取消锁定
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('lock')" v-else) 锁定
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toTop')") 置于上层
-      a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toBottom')") 置于下层
-    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toPaste')" v-else) 粘贴
+nav.template-contextmenu(:class="{ visible }" :style="wrapperStyle" @pointerdown.stop="noop")
+  template(v-if="currentComponent")
+    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('del')") 删除
+    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('unlock')" v-if="current.lock") 取消锁定
+    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('lock')" v-else) 锁定
+    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toTop')") 置于上层
+    a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toBottom')") 置于下层
+  a.template-contextmenu-item(href="javascript:;" @pointerdown="command('toPaste')" v-else) 粘贴
 </template>
 
 <script>

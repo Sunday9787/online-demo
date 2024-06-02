@@ -1,115 +1,74 @@
-<template>
-  <app-page>
-    <app-card>
-      <app-form-tab v-model="activeName" @change="tabChange">
-        <app-form-tab-pane v-slot="{ visible }" name="sample" title="样本管理">
-          <app-form-collapse :visible="visible">
-            <el-form ref="sample" inline :model="sampleForm" size="small" label-width="80px">
-              <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="sampleForm.patientNo" @input="search()" />
-              </el-form-item>
-              <el-form-item label="上传时间" prop="startTime">
-                <el-date-picker
-                  type="daterange"
-                  v-model="uploadTime"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="search()"
-                />
-              </el-form-item>
-              <el-form-item label="会诊状态" prop="hasExpertPatient">
-                <el-select v-model="sampleForm.hasExpertPatient" default-first-option @change="search()">
-                  <el-option
-                    v-for="item in expertPatientOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="转交状态" prop="transferStatus">
-                <el-select v-model="sampleForm.transferStatus" default-first-option>
-                  <el-option
-                    v-for="item in transferPatientOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <el-button slot="action" size="small" @click="resetForm('sample')">重置</el-button>
-          </app-form-collapse>
-        </app-form-tab-pane>
-
-        <app-form-tab-pane v-slot="{ visible }" name="statistics" title="样本统计">
-          <app-form-collapse :visible="visible">
-            <el-form ref="statistics" inline :model="statisticsForm" size="small" label-width="80px">
-              <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="statisticsForm.patientNo" @input="search()" />
-              </el-form-item>
-              <el-form-item label="删除状态" prop="delFlag">
-                <el-select v-model="statisticsForm.delFlag" default-first-option @change="search()">
-                  <el-option v-for="item in delFlagOptions" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="提交时间" prop="submitDateStart">
-                <el-date-picker
-                  type="daterange"
-                  v-model="submitTime"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="search()"
-                />
-              </el-form-item>
-            </el-form>
-            <el-button slot="action" size="small" @click="resetForm('statistics')">重置</el-button>
-          </app-form-collapse>
-        </app-form-tab-pane>
-
-        <app-form-tab-pane v-slot="{ visible }" name="report" title="报告报告统计">
-          <app-form-collapse :visible="visible">
-            <el-form ref="report" inline :model="reportForm" size="small" label-width="80px">
-              <el-form-item label="样本编号" prop="patientNo">
-                <el-input v-model="reportForm.patientNo" @input="search()" />
-              </el-form-item>
-              <el-form-item label="导出Lsi" prop="hasExportLis">
-                <el-select v-model="reportForm.hasExportLis" default-first-option @change="search()">
-                  <el-option
-                    v-for="item in exportLisOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="审核进度" prop="tabType">
-                <el-select v-model="reportForm.tabType" default-first-option @change="search()">
-                  <el-option v-for="item in tabTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="完成时间" prop="finishDateEndTime">
-                <el-date-picker
-                  type="daterange"
-                  v-model="finishTime"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  @change="search()"
-                />
-              </el-form-item>
-            </el-form>
-            <el-button slot="action" size="small" @click="resetForm('report')">重置</el-button>
-          </app-form-collapse>
-        </app-form-tab-pane>
-      </app-form-tab>
-    </app-card>
-
-    <app-data-view pagination>
-      <keep-alive>
-        <component :is="activeName" />
-      </keep-alive>
-    </app-data-view>
-  </app-page>
+<template lang="pug">
+app-page
+  app-card
+    app-form-tab(@change="tabChange" v-model="activeName")
+      app-form-tab-pane(title="样本管理" name="sample" v-slot="{ visible }")
+        app-form-collapse(:visible="visible")
+          el-form(label-width="80px" size="small" :model="sampleForm" inline ref="sample")
+            el-form-item(prop="patientNo" label="样本编号")
+              el-input(@input="search()" v-model="sampleForm.patientNo")
+            el-form-item(prop="startTime" label="上传时间")
+              el-date-picker(@change="search()" end-placeholder="结束日期" start-placeholder="开始日期" v-model="uploadTime" type="daterange")
+            el-form-item(prop="hasExpertPatient" label="会诊状态")
+              el-select(@change="search()" default-first-option v-model="sampleForm.hasExpertPatient")
+                el-option(
+                  v-for="item in expertPatientOptions"
+                  :value="item.value"
+                  :label="item.label"
+                  :key="item.value")
+            el-form-item(prop="transferStatus" label="转交状态")
+              el-select(default-first-option v-model="sampleForm.transferStatus")
+                el-option(
+                  v-for="item in transferPatientOptions"
+                  :value="item.value"
+                  :label="item.label"
+                  :key="item.value")
+          el-button(@click="resetForm('sample')" size="small" slot="action") 重置
+      app-form-tab-pane(title="样本统计" name="statistics" v-slot="{ visible }")
+        app-form-collapse(:visible="visible")
+          el-form(label-width="80px" size="small" :model="statisticsForm" inline ref="statistics")
+            el-form-item(prop="patientNo" label="样本编号")
+              el-input(@input="search()" v-model="statisticsForm.patientNo")
+            el-form-item(prop="delFlag" label="删除状态")
+              el-select(@change="search()" default-first-option v-model="statisticsForm.delFlag")
+                el-option(
+                  v-for="item in delFlagOptions"
+                  :value="item.value"
+                  :label="item.label"
+                  :key="item.value")
+            el-form-item(prop="submitDateStart" label="提交时间")
+              el-date-picker(
+                @change="search()"
+                end-placeholder="结束日期"
+                start-placeholder="开始日期"
+                v-model="submitTime"
+                type="daterange")
+          el-button(@click="resetForm('statistics')" size="small" slot="action") 重置
+      app-form-tab-pane(title="报告报告统计" name="report" v-slot="{ visible }")
+        app-form-collapse(:visible="visible")
+          el-form(label-width="80px" size="small" :model="reportForm" inline ref="report")
+            el-form-item(prop="patientNo" label="样本编号")
+              el-input(@input="search()" v-model="reportForm.patientNo")
+            el-form-item(prop="hasExportLis" label="导出Lsi")
+              el-select(@change="search()" default-first-option v-model="reportForm.hasExportLis")
+                el-option(
+                  v-for="item in exportLisOptions"
+                  :value="item.value"
+                  :label="item.label"
+                  :key="item.value")
+            el-form-item(prop="tabType" label="审核进度")
+              el-select(@change="search()" default-first-option v-model="reportForm.tabType")
+                el-option(
+                  v-for="item in tabTypeOptions"
+                  :value="item.value"
+                  :label="item.label"
+                  :key="item.value")
+            el-form-item(prop="finishDateEndTime" label="完成时间")
+              el-date-picker(change="search()" end-placeholder="结束日期" start-placeholder="开始日期" v-model="finishTime" type="daterange")
+          el-button(@click="resetForm('report')" size="small" slot="action") 重置
+  app-data-view(pagination)
+    keep-alive
+      component(:is="activeName")
 </template>
 
 <script>
@@ -165,7 +124,7 @@ function getData({ length = 10 }) {
   }
 
   const response = await getData({ length: 15 })
-  const data = plainToInstance(TableItem, response.data)
+  const data = plainToInstance(TableItem, response)
   console.log(data)
 })()
 
@@ -222,6 +181,10 @@ export default {
   created() {
     this.form.mechanismId = this.currentMechanism.mechanismId
     this.search()
+
+    this.$nextTick(function () {
+      console.log(this.table)
+    })
   },
   methods: {
     tabChange(tab) {

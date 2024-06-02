@@ -1,11 +1,9 @@
-<template>
-  <app-table-container>
-    <el-table ref="table" :data="page.table.data" v-loading="page.table.loading" height="100%" stripe>
-      <el-table-column prop="date" label="日期" width="180" />
-      <el-table-column prop="name" label="姓名" width="180" />
-      <el-table-column prop="address" label="地址" />
-    </el-table>
-  </app-table-container>
+<template lang="pug">
+app-table-container
+  el-table(stripe height="100%" v-loading="page.table.loading" :data="page.table.data" ref="table")
+    el-table-column(width="180" label="日期" prop="date")
+    el-table-column(width="180" label="姓名" prop="name")
+    el-table-column(label="地址" prop="address")
 </template>
 
 <script>

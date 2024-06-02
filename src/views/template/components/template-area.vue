@@ -1,10 +1,10 @@
 <template lang="pug">
-  svg.template-area(
-    xmlns="http://www.w3.org/2000/svg"
-    :width="rectStyle.width"
-    :height="rectStyle.height"
-    :style="{ left: rectStyle.left, top: rectStyle.top }")
-    rect(stroke="var(--color-primary)" fill="rgba(0, 0, 0, 0.1)" stroke-width="1" height="100%" width="100%")
+svg.template-area(
+  xmlns="http://www.w3.org/2000/svg"
+  :width="rectStyle.width"
+  :height="rectStyle.height"
+  :style="{ left: rectStyle.left, top: rectStyle.top }")
+  rect(stroke="var(--color-primary)" fill="rgba(0, 0, 0, 0.1)" stroke-width="1" height="100%" width="100%")
 </template>
 
 <script>
