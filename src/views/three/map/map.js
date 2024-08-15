@@ -1,5 +1,7 @@
+import { gsap, Power1 } from 'gsap'
 import * as THREE from 'three'
 import * as d3 from 'd3'
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { CSS2DObject, CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer'
 
@@ -11,7 +13,7 @@ class MapBase {
   /**
    * @type {Three.Map}
    */
-  mapData = null
+  data = null
 
   /**
    * @param {HTMLElement} container
@@ -72,25 +74,31 @@ class MapBase {
      * @protected
      */
     this.control = null
+
+    /**
+     * @protected
+     * @type {GUI}
+     */
+    this.gui = null
   }
 
   /**
    * @param {Three.Map} map
    */
   init(map) {
-    this.mapData = map
+    this.data = map
     const context = this
 
     const raycaster = new THREE.Raycaster()
     const mouse = new THREE.Vector2()
 
     this.initScene()
+    this.initHelper()
     this.initCamera()
     this.initLight()
     this.initRenderer()
     this.initCSS2dRenderer()
     // this.initSVGRenderer()
-    this.initHelper()
     this.initControl()
     this.initCanvas()
 
@@ -163,7 +171,10 @@ class MapBase {
    */
   initHelper() {
     const axesHelper = new THREE.AxesHelper(50)
+    this.gui = new GUI({ title: '地图控制器' })
     this.scene.add(axesHelper)
+
+    document.body.appendChild(this.gui.domElement)
   }
 
   /**
@@ -204,7 +215,7 @@ class MapBase {
       // context.SVGRenderer.render(context.scene, context.camera)
     }
 
-    this.renderer = new THREE.WebGL1Renderer({ antialias: true })
+    this.renderer = new THREE.WebGLRenderer({ antialias: true })
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setClearColor(0xd3e6fb, 1)
 
@@ -263,6 +274,22 @@ class MapBase {
     this.scene.add(directionalLight2)
     this.scene.add(directionalLight3)
     this.scene.add(directionalLight4)
+
+    const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 2, 0xff0000)
+    this.scene.add(directionalLightHelper)
+
+    const lightFolder = this.gui.addFolder('平行光')
+    lightFolder.add(directionalLight.position, 'x', 0, 20).name('x轴')
+    lightFolder.add(directionalLight.position, 'y', 0, 20).name('y轴')
+    lightFolder.add(directionalLight.position, 'z', 0, 20).name('z轴')
+    lightFolder.add(directionalLight, 'intensity', 0, 5).name('强度')
+
+    lightFolder
+      .addColor(ambientLight, 'color')
+      .onChange(function (value) {
+        ambientLight.color.set(value)
+      })
+      .name('环境光颜色')
   }
 
   /**
@@ -291,13 +318,29 @@ class MapBase {
  */
 const offsetXY = d3.geoMercator()
 
-export default class Map extends MapBase {
+export default class ThreeMap extends MapBase {
   iconMap = textureLoader.load(localIcon)
+
+  /**
+   * @type {Array<[string, string]>}
+   */
+  flyCity = [
+    ['信阳市', '郑州市'],
+    ['信阳市', '鹤壁市'],
+    ['信阳市', '三门峡市'],
+    ['信阳市', '洛阳市'],
+    ['信阳市', '濮阳市']
+  ]
+
+  /**
+   * @type {Map<string, THREE.Vector3>}
+   */
+  flayPoint = new Map()
 
   initCanvas() {
     const context = this
 
-    this.map = context.createMap(context.mapData)
+    this.map = context.createMap(context.data)
 
     const box = new THREE.Box3().setFromObject(this.map)
     const boxHelper = new THREE.Box3Helper(box, 0xffff00)
@@ -356,11 +399,11 @@ export default class Map extends MapBase {
       points.push(new THREE.Vector3(x, -y, 0))
     })
     const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
-    const uplineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff })
-    const downlineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff })
+    const upLineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff })
+    const downLineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff })
 
-    const upLine = new THREE.Line(lineGeometry, uplineMaterial)
-    const downLine = new THREE.Line(lineGeometry, downlineMaterial)
+    const upLine = new THREE.Line(lineGeometry, upLineMaterial)
+    const downLine = new THREE.Line(lineGeometry, downLineMaterial)
     downLine.position.z = -0.0001
     upLine.position.z = depth + 0.0001
     return [upLine, downLine]
@@ -381,7 +424,7 @@ export default class Map extends MapBase {
     offsetXY.center(center).translate([0, 0])
 
     /**
-     * @this {Map}
+     * @this {ThreeMap}
      * @param {[number, number][]} coordinate
      * @param {number} color
      * @param {number} depth
@@ -407,6 +450,10 @@ export default class Map extends MapBase {
       const point = centroid || center || [0, 0]
       const label = context.createLabel(name, point, depth)
       const icon = context.createPoint(point, depth)
+      unit.name = name
+
+      const [flayX, flayY] = offsetXY(point)
+      context.flayPoint.set(name, new THREE.Vector3(flayX, -flayY, depth))
 
       coordinates.forEach(coordinate => {
         if (type === 'MultiPolygon') coordinate.forEach(item => handle.apply(context, [item, color, depth, unit]))
@@ -415,6 +462,9 @@ export default class Map extends MapBase {
 
       map.add(unit, label, icon)
     })
+
+    this.createFlayLine(map)
+
     return map
   }
 
@@ -469,6 +519,86 @@ export default class Map extends MapBase {
 
     for (const item of parent.children) {
       item.material.opacity = 0.4
+    }
+  }
+
+  /**
+   * @param {THREE.Vector3} point
+   */
+  createFlyPoint(point) {
+    /**
+     * 创建 飞行起点圆
+     */
+    const material = new THREE.MeshBasicMaterial({ color: 0x1a46d0, side: THREE.DoubleSide })
+    const circleGeometry = new THREE.CircleGeometry(0.1, 200)
+    const circle = new THREE.Mesh(circleGeometry, material)
+    circle.position.add(point)
+
+    /**
+     * 创建圆环
+     */
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x1a46f0, side: THREE.DoubleSide, transparent: true })
+    const ringGeometry = new THREE.RingGeometry(0.1, 0.15, 200)
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+    ring.position.add(point)
+
+    return [circle, ring]
+  }
+
+  /**
+   * @param {THREE.Vector3} startPosition
+   * @param {THREE.Vector3} endPosition
+   */
+  createLineConnect(startPosition, endPosition) {
+    const [start, startRing] = this.createFlyPoint(startPosition)
+    const [end, endRing] = this.createFlyPoint(endPosition)
+
+    const curve = new THREE.QuadraticBezierCurve3(
+      startPosition,
+      new THREE.Vector3((startPosition.x + endPosition.x) / 2, (startPosition.y + endPosition.y) / 2, 8),
+      endPosition
+    )
+
+    const points = curve.getPoints(50)
+    const lineGeometry = new THREE.BufferGeometry().setFromPoints(points)
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6e43c3, side: THREE.DoubleSide })
+    const line = new THREE.Line(lineGeometry, lineMaterial)
+
+    return [start, end, line, startRing, endRing]
+  }
+
+  /**
+   * @param {THREE.Group} group
+   */
+  createFlayLine(group) {
+    /**
+     * @type {Array<THREE.Mesh>}
+     */
+    const rings = []
+
+    for (const [startCity, endCity] of this.flyCity) {
+      const startPosition = this.flayPoint.get(startCity)
+      const endPosition = this.flayPoint.get(endCity)
+      const [start, end, line, startRing, endRing] = this.createLineConnect(startPosition, endPosition)
+
+      rings.push(startRing, endRing)
+      group.add(start, end, line, startRing, endRing)
+    }
+
+    this.animateFlay(rings)
+  }
+
+  /**
+   * @param {THREE.Mesh[]} data
+   */
+  animateFlay(data) {
+    for (const mesh of data) {
+      gsap.fromTo(
+        mesh.scale,
+        { x: 0.1, y: 0.1, z: 0.1 },
+        { x: 1.2, y: 1.2, z: 1.2, duration: 3, repeat: -1, ease: Power1.easeInOut }
+      )
+      gsap.fromTo(mesh.material, { opacity: 1 }, { opacity: 0, duration: 3, repeat: -1, ease: Power1.easeInOut })
     }
   }
 }
