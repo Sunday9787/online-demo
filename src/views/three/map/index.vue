@@ -20,7 +20,7 @@ export default {
 
     map.init(data)
 
-    this.$on('hooks:beforeDestroy', function () {
+    this.$on('hook:beforeDestroy', function () {
       map.destroy()
     })
   }

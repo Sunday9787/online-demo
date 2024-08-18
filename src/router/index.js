@@ -8,6 +8,7 @@ import userRoute from './module/userRoute'
 import templateRoute from './module/templateRoute'
 import productRoute from './module/productRoute'
 import threeRoute from './module/threeRoute'
+import canvasRoute from './module/canvasRoute'
 
 Vue.use(Router)
 
@@ -22,6 +23,7 @@ export default new Router({
     templateRoute,
     productRoute,
     ...threeRoute,
+    ...canvasRoute,
     {
       path: '/login',
       name: 'Login',

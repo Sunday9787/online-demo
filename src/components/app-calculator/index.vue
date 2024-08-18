@@ -1,23 +1,23 @@
 <template lang="pug">
-  el-dialog(
-    title="计算器"
-    width="450px"
-    append-to-body
-    custom-class="calc-dialog"
-    :visible.sync="dialogVisible"
-    :close-on-click-modal="false"
-    @closed="calcHandle({ type: 'ac' })")
-    section.calc-container
-      .calc-display
-        .calc-display-inner
-          p.calc-display-process {{ processText | formatProcessText }}
-          p.calc-display-result {{ resultText }}
+el-dialog(
+  title="计算器"
+  width="450px"
+  append-to-body
+  custom-class="calc-dialog"
+  :visible.sync="dialogVisible"
+  :close-on-click-modal="false"
+  @closed="calcHandle({ type: 'ac' })")
+  section.calc-container
+    .calc-display
+      .calc-display-inner
+        p.calc-display-process {{ processText | formatProcessText }}
+        p.calc-display-result {{ resultText }}
 
-      ol.calc-keys
-        li.calc-key(v-for="item of grid"
-          :key="item.label"
-          :class="item.type"
-          @click="calcHandle(item)") {{ item.label }}
+    ol.calc-keys
+      li.calc-key(v-for="item of grid"
+        :key="item.label"
+        :class="item.type"
+        @click="calcHandle(item)") {{ item.label }}
 </template>
 
 <script>
@@ -180,7 +180,7 @@ export default defineComponent({
 
     document.addEventListener('keyup', keyup)
 
-    this.$once('hooks:beforeDestroy', function () {
+    this.$once('hook:beforeDestroy', function () {
       document.removeEventListener('keyup', keyup)
     })
   },

@@ -319,6 +319,11 @@ class MapBase {
     window.removeEventListener('resize', this.resize)
     this.container.removeEventListener('pointerdown', this.pointerdown)
     this.control.removeEventListener('change', this.change)
+    this.control.dispose()
+    this.gui.destroy()
+    this.renderer.dispose()
+    this.scene.clear()
+    this.data = null
   }
 }
 

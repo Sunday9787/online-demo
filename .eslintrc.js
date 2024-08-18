@@ -10,7 +10,6 @@ module.exports = {
     node: true
   },
   extends: ['plugin:vue/essential', '@vue/eslint-config-standard', '@vue/eslint-config-prettier'],
-  plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 'latest'
   },

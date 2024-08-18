@@ -1,18 +1,21 @@
-<template>
-  <transition
-    :css="false"
-    @beforeEnter="beforeEnter"
-    @enter="enter"
-    @afterEnter="afterEnter"
-    @beforeLeave="beforeLeave"
-    @leave="leave"
-    @afterLeave="afterLeave"
-  >
-    <div v-if="tag" v-show="visible" :style="{ overflow: 'hidden', width: transitionSize }">
-      <slot />
-    </div>
-    <slot v-else />
-  </transition>
+<template lang="pug">
+transition(
+  :css="false"
+  @afterleave="afterLeave"
+  @leave="leave"
+  @beforeleave="beforeLeave"
+  @afterenter="afterEnter"
+  @enter="enter"
+  @beforeenter="beforeEnter")
+  div(
+    v-show="visible"
+    v-if="tag"
+    :style=`{
+      overflow: 'hidden',
+      width: transitionSize
+    }`)
+    slot
+  slot(v-else)
 </template>
 
 <script>

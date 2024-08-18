@@ -1,18 +1,14 @@
-<template functional>
-  <div
-    class="app-card"
-    :class="[
-      data.staticClass,
-      {
-        flex1: props.flex1,
-        'app-card--flex': props.type === 'flex',
-        'app-card--vertical': props.direction === 'vertical',
-        'app-card--horizontal': props.direction === 'horizontal'
-      }
-    ]"
-  >
-    <slot />
-  </div>
+<template functional lang="pug">
+.app-card(:class=`[
+  data.staticClass,
+  {
+    flex1: props.flex1,
+    'app-card--flex': props.type === 'flex',
+    'app-card--vertical': props.direction === 'vertical',
+    'app-card--horizontal': props.direction === 'horizontal'
+  }
+]`)
+  slot
 </template>
 
 <script>

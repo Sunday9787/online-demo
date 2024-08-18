@@ -277,7 +277,7 @@ class GameBase {
 
     this.renderer = new THREE.WebGL1Renderer({ antialias: true })
     this.renderer.setPixelRatio(window.devicePixelRatio)
-    this.renderer.setClearColor(0xe8e8e8, 1)
+    this.renderer.setClearColor(0xd3e6fb, 1)
 
     this.renderer.setAnimationLoop(bootstrap)
     this.container.appendChild(this.renderer.domElement)
@@ -312,6 +312,10 @@ class GameBase {
     window.removeEventListener('resize', this.resize)
     this.container.removeEventListener('pointerdown', this.pointerdown)
     this.control.removeEventListener('change', this.change)
+    this.control.dispose()
+    this.gui.destroy()
+    this.renderer.dispose()
+    this.scene.clear()
   }
 }
 

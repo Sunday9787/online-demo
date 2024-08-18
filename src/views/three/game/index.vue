@@ -12,7 +12,7 @@ export default {
 
     game.init()
 
-    this.$on('hooks:beforeDestroy', function () {
+    this.$on('hook:beforeDestroy', function () {
       game.destroy()
     })
   }
