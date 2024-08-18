@@ -2,13 +2,29 @@
 
 一个 vue hooks 学习项目，也是对过去的一个总结
 
-![image-20230307183338710](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-33-38-image-20230307183338710.png)
+![ECharts 大屏](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-33-38-image-20230307183338710.png)
 
-![image-20230307183216402](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-32-16-image-20230307183216402.png)
+ECharts 大屏
 
-![image-20230307183231746](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-32-31-image-20230307183231746.png)
+![拖拉编辑器](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-32-16-image-20230307183216402.png)
 
-![image-20230307183301078](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-33-01-image-20230307183301078.png)
+拖拉编辑器
+
+![拖拉编辑器](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-32-31-image-20230307183231746.png)
+
+拖拉编辑器 - 预览
+
+![拖拉编辑器](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/2023-03-07-18-33-01-image-20230307183301078.png)
+
+拖拉编辑器 - 填充数据
+
+![计算器](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/WX20240816-100144-2x-1723778191.png)
+
+计算器
+
+![3d地图](https://static-1256180570.cos.ap-nanjing.myqcloud.com/image/WX20240816-100954-2x-1723778547.png)
+
+3d 地图
 
 ## 动机
 
@@ -90,21 +106,24 @@ pnpm i
 pnpm dev
 ```
 
-这样会自动打开 http://localhost:7007
+这样会自动打开 `http://localhost:7007`
 
 ## 主要功能
 
 - 主题切换
 - 模板编辑器
 - 通用curd封装
+- 3d 地图（飞行动画）
+- 3d 填字游戏
 
 ### 全局组件
 
-- app-form-collapse
-- app-form-tab
+- app-form-collapse **form折叠面板**
+- app-form-tab **form切换面板**
 - app-form-tab-pane
 - app-patient
-- app-big-screen
+- app-big-screen **等比例大屏**
+- app-calculator **计算器**
 
 ### 主要页面
 
@@ -114,3 +133,5 @@ pnpm dev
 | /dashboard/index    | CURD 模板                 |
 | /user/index         | 报告模板 - 创建&编辑 模板 |
 | /consultation/index | grid 布局                 |
+| /three/map          | 3d 地图                   |
+| /three/game         | 3d 填字游戏               |
