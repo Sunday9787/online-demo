@@ -8,6 +8,8 @@ app-page
         el-button(type="primary") 3d地图
       router-link(to="/three/dragon")
         el-button(type="primary") 3d字体
+      router-link(to="/three/earth")
+        el-button(type="primary") 3d地图
 </template>
 
 <script>

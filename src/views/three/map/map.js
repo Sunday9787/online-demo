@@ -602,7 +602,7 @@ export default class ThreeMap extends MapBase {
       new THREE.Vector3(
         (startPosition.x + endPosition.x) / 2,
         (startPosition.y + endPosition.y) / 2,
-        Math.abs(endPosition.x - startPosition.x) * 0.6
+        Math.random() * 10 * 0.6
       ),
       endPosition
     )

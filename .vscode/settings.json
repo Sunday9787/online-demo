@@ -10,5 +10,9 @@
     "eslint.autoFixOnSave": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-  "cSpell.words": ["MeshMatcapMaterial"]
+  "cSpell.words": [
+    "CatmullRomCurve3",
+    "MeshMatcapMaterial",
+    "MeshPhongMaterial"
+  ]
 }

@@ -20,6 +20,11 @@ const route = [
     component: () => import('@/views/three/dragon/index.vue')
   },
   {
+    path: '/three/earth',
+    name: 'ThreeEarth',
+    component: () => import('@/views/three/earth/index.vue')
+  },
+  {
     path: '/three',
     name: 'Three',
     redirect: '/three/index',
