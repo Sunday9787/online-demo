@@ -9,5 +9,6 @@
     "source.fixAll.eslint": "explicit",
     "eslint.autoFixOnSave": "explicit",
     "source.fixAll.stylelint": "explicit"
-  }
+  },
+  "cSpell.words": ["MeshMatcapMaterial"]
 }

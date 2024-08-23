@@ -6,6 +6,8 @@ app-page
         el-button(type="primary") 填字游戏
       router-link(to="/three/map")
         el-button(type="primary") 3d地图
+      router-link(to="/three/dragon")
+        el-button(type="primary") 3d字体
 </template>
 
 <script>

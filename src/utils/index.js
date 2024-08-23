@@ -14,3 +14,11 @@ export function calculator(value) {
 export function last(data) {
   return data.length ? data[data.length - 1] : null
 }
+
+/**
+ * 角度转弧度
+ * @param {number} angle 角度
+ */
+export function radian(angle) {
+  return (Math.PI / 180) * angle
+}

@@ -213,7 +213,6 @@ class MapBase {
     const bootstrap = function () {
       context.renderer.render(context.scene, context.camera)
       context.CSS2dRenderer.render(context.scene, context.camera)
-      context.animate()
       // context.SVGRenderer.render(context.scene, context.camera)
     }
 
@@ -383,9 +382,6 @@ export default class ThreeMap extends MapBase {
   cityPoint = new Map()
 
   initCanvas() {
-    const animateFolder = this.gui.addFolder('动画')
-    animateFolder.add(this, 'speed', 0.0005, 0.01).name('飞机飞行速度')
-
     const context = this
 
     this.map = context.createMap(context.data)
@@ -660,14 +656,14 @@ export default class ThreeMap extends MapBase {
       group.add(start, end, line, startRing, endRing, plane)
     }
 
-    this.animateFlay(rings, airplanes)
+    this.animate(rings, airplanes)
   }
 
   /**
    * @param {THREE.Mesh[]} rings
    * @param {Array<[THREE.Mesh, THREE.CubicBezierCurve3]>} airplanes
    */
-  animateFlay(rings, airplanes) {
+  animate(rings, airplanes) {
     this.airplanes = airplanes
 
     for (const mesh of rings) {
@@ -678,17 +674,31 @@ export default class ThreeMap extends MapBase {
       )
       gsap.fromTo(mesh.material, { opacity: 1 }, { opacity: 0, duration: 3, repeat: -1, ease: Power1.easeInOut })
     }
-  }
 
-  animate() {
-    if (this.process > 1) {
-      this.process = 0
-    }
+    for (const [shape, curve] of this.airplanes) {
+      gsap.to(shape.position, {
+        onUpdate() {
+          const t = gsap.getProperty(shape.position, 'progress') % 1
+          const position = curve.getPoint(t)
+          const tangent = curve.getTangent(t).normalize()
+          shape.position.copy(position)
 
-    this.process += this.speed
-    for (const [mesh, curve] of this.airplanes) {
-      const point = curve.getPoint(this.process)
-      mesh.position.set(point.x, point.y, point.z)
+          // 计算物体的旋转
+          const axis = new THREE.Vector3(0, 1, 0).cross(tangent).normalize()
+          const angle = Math.acos(new THREE.Vector3(0, 1, 0).dot(tangent))
+          shape.quaternion.setFromAxisAngle(axis, angle)
+        },
+        onStart() {
+          gsap.set(shape.position, { progress: 0 }) // 初始进度
+        },
+        onComplete() {
+          gsap.set(shape.position, { progress: 0 }) // 动画完成后重置进度
+        },
+        progress: 1,
+        repeat: -1,
+        duration: 8,
+        ease: 'linear'
+      })
     }
   }
 }

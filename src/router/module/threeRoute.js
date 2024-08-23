@@ -15,6 +15,11 @@ const route = [
     component: () => import('@/views/three/map/index.vue')
   },
   {
+    path: '/three/dragon',
+    name: 'ThreeDragon',
+    component: () => import('@/views/three/dragon/index.vue')
+  },
+  {
     path: '/three',
     name: 'Three',
     redirect: '/three/index',
