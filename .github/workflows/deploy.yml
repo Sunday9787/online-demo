@@ -1,0 +1,40 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.10.0
+          run_install: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.18.2
+          cache: pnpm
+
+      - name: Setup Build Project
+        run: pnpm run build
+
+      - name: Setup Copy index.html to 404.html
+        run: cp dist/index.html dist/404.html
+
+      - name: Setup Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          repository-name: Sunday9787/online.sunday90.com
+          branch: master
+          folder: dist
+          token: ${{ secrets.ACCESS_TOKEN }}
+          single-commit: true
