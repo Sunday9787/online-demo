@@ -1,53 +1,51 @@
 <template lang="pug">
-  div.template-stage(
-    tabindex="-1"
-    :style="stageStyle"
-    @pointerdown="unSelectComponent"
-    @keydown.delete="deleteComponent"
-    @keydown.space.exact="spaceDownHandle"
-    @keyup.space.exact="spaceUpHandle"
-    @drop="dropHandle"
-    @dragover.prevent="noop")
-    TemplateContextmenu(:scale="scale")
-    TemplateArea(:scale="scale" @area="area")
-    TemplateMarkLine(v-for="item of markLine"
-      :key="item.type"
-      :position="item.position"
-      :direction="item.direction"
-      :visible="item.visible")
-    TemplateControl(v-for="component of store.componentsData"
-      v-model="component.visible"
-      :key="component.id"
-      :scale="scale"
-      :lock="component.props.lock"
-      :zIndex="component.props.zIndex"
-      :position.sync="component.props.position"
-      :size.sync="component.props.size"
-      @moveStart="moveStart(component)"
-      @move="move(component)"
-      @moveEnd="moveEnd(component)"
-      @resizeStart="resizeStart(component)"
-      @resize="resize(component)"
-      @resizeEnd="resizeEnd(component)"
-      @select="selectComponent(component)")
-      component(
-        top
-        group
-        ref="builtinGroupComponentRef"
-        :is="component.name"
-        :children="component.children"
-        v-bind="component.props"
-        v-if="component.name === 'builtin-group'")
-      component(
-        ref="builtinComponentRef"
-        :is="component.name"
-        v-bind="component.props"
-        v-else)
+.template-stage(
+  tabindex="-1"
+  :style="stageStyle"
+  @pointerdown="unSelectComponent"
+  @keydown.delete="deleteComponent"
+  @drop="dropHandle"
+  @dragover.prevent="noop")
+  TemplateContextmenu(:scale="scale")
+  TemplateArea(:scale="scale" @area="area")
+  TemplateMarkLine(v-for="item of markLine"
+    :key="item.type"
+    :position="item.position"
+    :direction="item.direction"
+    :visible="item.visible")
+  TemplateControl(v-for="component of store.componentsData"
+    v-model="component.visible"
+    :key="component.id"
+    :scale="scale"
+    :lock="component.props.lock"
+    :zIndex="component.props.zIndex"
+    :position.sync="component.props.position"
+    :size.sync="component.props.size"
+    @moveStart="moveStart(component)"
+    @move="move(component)"
+    @moveEnd="moveEnd(component)"
+    @resizeStart="resizeStart(component)"
+    @resize="resize(component)"
+    @resizeEnd="resizeEnd(component)"
+    @select="selectComponent(component)")
+    component(
+      top
+      group
+      ref="builtinGroupComponentRef"
+      :is="component.name"
+      :children="component.children"
+      v-bind="component.props"
+      v-if="component.name === 'builtin-group'")
+    component(
+      ref="builtinComponentRef"
+      :is="component.name"
+      v-bind="component.props"
+      v-else)
 </template>
 
 <script>
 import { inject } from 'vue'
-import { builtinComponent } from '../components/builtin'
+import { builtinComponent } from '@/views/template/components/builtin'
 import { storeSymbol, templateChannel } from '@/views/template/constant'
 import { useMarkLine } from '@/views/template/hooks/useMarkLine'
 import { TemplateEvent, shapeLocation } from '@/views/template/utils'
@@ -68,9 +66,20 @@ export default {
     scale: {
       type: Number,
       required: true
+    },
+    position: {
+      type: Object,
+      required: true
+    },
+    spaceDown: {
+      type: Boolean,
+      required: true
+    },
+    scaleManual: {
+      type: Boolean,
+      required: false
     }
   },
-  inject: ['editorInstance'],
   provide() {
     return {
       stageInstance: this
@@ -85,16 +94,6 @@ export default {
 
     return { store, markLine }
   },
-  data() {
-    return {
-      /** 空格是否按下 */
-      spaceDown: false,
-      /** 相对父级偏移量 */
-      position: { x: 0, y: 0 },
-      /** 暂存偏移量 */
-      stashPosition: null
-    }
-  },
   computed: {
     stageStyle() {
       return {
@@ -106,85 +105,12 @@ export default {
         height: this.store.size.height + 'px',
         left: this.position.x + 'px',
         top: this.position.y + 'px',
+        transformOrigin: this.scaleManual ? 'center' : 'left top',
         transform: `scale3d(${this.scale / 100}, ${this.scale / 100}, 1)`
       }
     }
   },
-  mounted() {
-    const context = this
-    /**
-     * @param {PointerEvent} e
-     */
-    const pointerdown = function (e) {
-      if (context.spaceDown && e.button === 0) {
-        /**
-         * @type {HTMLDivElement}
-         */
-        const currentTarget = e.currentTarget
-        context.stashPosition = {
-          x: e.clientX - currentTarget.offsetLeft,
-          y: e.clientY - currentTarget.offsetTop
-        }
-      }
-    }
-
-    /**
-     * @param {PointerEvent} e
-     */
-    const pointermove = function (e) {
-      if (context.spaceDown && context.stashPosition) {
-        context.position.x = e.clientX - context.stashPosition.x
-        context.position.y = e.clientY - context.stashPosition.y
-      }
-    }
-
-    /**
-     * @param {PointerEvent} e
-     */
-    const pointerup = function (e) {
-      context.stashPosition = null
-    }
-
-    /**
-     * @param {Event} e
-     */
-    const resize = function (e) {
-      context.init()
-    }
-
-    this.$el.addEventListener('pointerdown', pointerdown)
-    window.addEventListener('pointermove', pointermove)
-    window.addEventListener('pointerup', pointerup)
-    window.addEventListener('resize', resize)
-
-    this.$once('hook:beforeDestroy', function () {
-      context.$el.removeEventListener('pointerdown', pointerdown)
-      window.removeEventListener('pointermove', pointermove)
-      window.removeEventListener('pointerup', pointerup)
-      window.removeEventListener('resize', resize)
-    })
-
-    window.dispatchEvent(new Event('resize'))
-  },
   methods: {
-    /**
-     * 初始化 画布位置
-     */
-    init() {
-      const x = (this.editorInstance.$refs.canvas.offsetWidth - this.store.size.width) / 2
-      const y = (this.editorInstance.$refs.canvas.offsetHeight - this.store.size.height) / 2
-
-      this.position.x = x
-      this.position.y = y
-    },
-    spaceDownHandle() {
-      this.$el.style.cursor = 'grab'
-      this.spaceDown = true
-    },
-    spaceUpHandle() {
-      this.$el.style.cursor = 'default'
-      this.spaceDown = false
-    },
     /**
      * @param {DragEvent} e
      */

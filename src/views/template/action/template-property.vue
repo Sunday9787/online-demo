@@ -1,102 +1,102 @@
 <template lang="pug">
-  aside.template-property
-    section.template-property-container(@pointerdown.stop="noop" v-if="currentComponent")
-      div.template-property-item
-        section.flex1
-          h1 字体
-          div.template-property-item
-            el-select.flex1(
-              v-model="current.property.fontFamily.value"
-              :popper-append-to-body="false"
-              size="mini"
-              @change="componentFontChange(currentComponent)")
-              el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
-            el-select(
-              v-model="current.property.fontSize.value"
-              :popper-append-to-body="false"
-              size="mini"
-              style="width: 74px"
-              @change="componentFontSizeChange(currentComponent)")
-              el-option(v-for="(fontSiz, k) in fontSizes" :key="k" :label="fontSiz.label" :value="fontSiz.value")
+aside.template-property
+  section.template-property-container(@pointerdown.stop="noop" v-if="currentComponent")
+    .template-property-item
+      section.flex1
+        h1 字体
+        .template-property-item
+          el-select.flex1(
+            v-model="current.property.fontFamily.value"
+            :popper-append-to-body="false"
+            size="mini"
+            @change="componentFontChange(currentComponent)")
+            el-option(v-for="(font, k) in fonts" :key="k" :label="font.label" :value="font.value")
+          el-select(
+            v-model="current.property.fontSize.value"
+            :popper-append-to-body="false"
+            size="mini"
+            style="width: 74px"
+            @change="componentFontSizeChange(currentComponent)")
+            el-option(v-for="(fontSiz, k) in fontSizes" :key="k" :label="fontSiz.label" :value="fontSiz.value")
 
-      div.template-property-item
-        label 控件名称
-        span {{ current.label }}
-      div.template-property-item
-        label 位置
-        ol.template-property-grid.flex1
-          li.template-property-list-item
-            el-input-number.flex1(
-              size="mini"
-              :disabled="current.lock"
-              :min="0"
-              :precision="0"
-              :controls="false"
-              v-model="current.position.x"
-              @change="componentMove(currentComponent)")
-            span X
-          li.template-property-list-item
-            el-input-number.flex1(
-              size="mini"
-              :disabled="current.lock"
-              :min="0"
-              :precision="0"
-              :controls="false"
-              v-model="current.position.y"
-              @change="componentMove(currentComponent)")
-            span Y
-      div.template-property-item
-        label 大小
-        ol.template-property-grid.flex1
-          li.template-property-list-item
-            el-input-number.flex1(
-              size="mini"
-              :min="0"
-              :precision="0"
-              :controls="false"
-              v-model="current.size.w"
-              @change="componentSizeChange(currentComponent)")
-            span W
-          li.template-property-list-item
-            el-input-number.flex1(
-              size="mini"
-              :min="0"
-              :precision="0"
-              :controls="false"
-              v-model="current.size.h"
-              @change="componentSizeChange(currentComponent)")
-            span H
+    .template-property-item
+      label 控件名称
+      span {{ current.label }}
+    .template-property-item
+      label 位置
+      ol.template-property-grid.flex1
+        li.template-property-list-item
+          el-input-number.flex1(
+            size="mini"
+            :disabled="current.lock"
+            :min="0"
+            :precision="0"
+            :controls="false"
+            v-model="current.position.x"
+            @change="componentMove(currentComponent)")
+          span X
+        li.template-property-list-item
+          el-input-number.flex1(
+            size="mini"
+            :disabled="current.lock"
+            :min="0"
+            :precision="0"
+            :controls="false"
+            v-model="current.position.y"
+            @change="componentMove(currentComponent)")
+          span Y
+    .template-property-item
+      label 大小
+      ol.template-property-grid.flex1
+        li.template-property-list-item
+          el-input-number.flex1(
+            size="mini"
+            :min="0"
+            :precision="0"
+            :controls="false"
+            v-model="current.size.w"
+            @change="componentSizeChange(currentComponent)")
+          span W
+        li.template-property-list-item
+          el-input-number.flex1(
+            size="mini"
+            :min="0"
+            :precision="0"
+            :controls="false"
+            v-model="current.size.h"
+            @change="componentSizeChange(currentComponent)")
+          span H
 
-      div.template-property-item(v-if="property")
-        label 设置
-        ol.template-property-list.flex1
-          li.template-property-list-item(v-for="item of property.setting" :key="item.type")
-            el-checkbox(
-              :label="item.value"
-              v-model="current.lock"
-              v-if="item.type === 'lock'") {{ item.label }}
-            el-checkbox(
-              :label="item.value"
-              v-model="current.property.underline"
-              v-if="item.type === 'underline'") {{ item.label }}
-            el-checkbox(
-              :label="item.value"
-              v-model="current.property.dashed"
-              v-if="item.type === 'dash' && current.property.underline") {{ item.label }}
-            el-checkbox(
-              :label="item.value"
-              v-model="current.required"
-              v-if="item.type === 'required'") {{ item.label }}
+    .template-property-item(v-if="property")
+      label 设置
+      ol.template-property-list.flex1
+        li.template-property-list-item(v-for="item of property.setting" :key="item.type")
+          el-checkbox(
+            :label="item.value"
+            v-model="current.lock"
+            v-if="item.type === 'lock'") {{ item.label }}
+          el-checkbox(
+            :label="item.value"
+            v-model="current.property.underline"
+            v-if="item.type === 'underline'") {{ item.label }}
+          el-checkbox(
+            :label="item.value"
+            v-model="current.property.dashed"
+            v-if="item.type === 'dash' && current.property.underline") {{ item.label }}
+          el-checkbox(
+            :label="item.value"
+            v-model="current.required"
+            v-if="item.type === 'required'") {{ item.label }}
 
-      TemplatePropertyOption(v-if="property && property.option" :option="property.option" :current="current")
+    TemplatePropertyOption(v-if="property && property.option" :option="property.option" :current="current")
 
-    div.flex1
+  .flex1
 
-    section.template-property-action
-      div
-        el-button.fluid(type="primary" size="small" @click="print()") 打印预览
-      div
-        el-button.fluid(type="primary" size="small" @click="save()") 保存并导出
+  section.template-property-action
+    div
+      el-button.fluid(type="primary" size="small" @click="print()") 打印预览
+    div
+      el-button.fluid(type="primary" size="small" @click="save()") 保存并导出
 </template>
 
 <script>

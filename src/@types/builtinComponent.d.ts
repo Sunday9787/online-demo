@@ -28,7 +28,7 @@ declare namespace Template {
 
   type EventTarget = 'stage'|'property'|'toolbar'
 
-  interface Event<T = null, T extends unknown> {
+  interface Event<T = null> {
     target: EventTarget
     detail: T
     timestamp: number
@@ -37,7 +37,7 @@ declare namespace Template {
 
   type TemplatePropertyValue = Pick<TemplateProperty, 'value'>
 
-  declare class TemplateProperty {
+   class TemplateProperty {
     constructor(opt: TemplateProperty)
     static format(this: TemplateProperty): string
     static options: TemplateProperty
@@ -149,7 +149,6 @@ declare namespace Template {
   interface Store {
     name: string
     get changes(): number
-    set changes(): number
     get size(): Size
     direction: 'vertical' | 'horizontal'
     padding: Padding
@@ -163,7 +162,7 @@ declare namespace Template {
   }
 }
 
-declare namespace Document {
+declare namespace TemplateDocument {
   /**
    * `init` 初始化 `document` 模板数据 `normal` 普通初始化
    */
@@ -171,7 +170,7 @@ declare namespace Document {
 
   interface Data {
     size: 'A4'|'A5'
-    padding: Padding
+    padding: Template.Padding
     components: BuiltinComponent[]
   }
 
@@ -192,7 +191,7 @@ declare namespace Document {
     [key: string]: Template.TemplateProperty
   }
 
-  interface BuiltinComponent extends Omit<Template.BuiltinComponent, 'props'> {
+  interface BuiltinComponent extends Omit<Template.BuiltinComponent, 'props'|'children'> {
     props: BuiltinComponentProps
     children?: BuiltinComponent[]
   }

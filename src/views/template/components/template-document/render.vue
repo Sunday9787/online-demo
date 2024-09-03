@@ -7,7 +7,7 @@ el-dialog(
   :show-close="false"
   :width="store.size.width + 50 + 'px'")
   section(:style="{ height: '55vh', overflowY: 'auto' }" style="background-color: #fff;")
-    div.template-document(:style="documentStyle")
+    .template-document(:style="documentStyle")
       template(v-for="component of store.componentsData")
         component(
           group

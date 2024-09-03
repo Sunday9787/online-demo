@@ -1,4 +1,4 @@
-namespace Patient {
+declare namespace Patient {
   interface List {
     id: string
     patientName: string
@@ -9,7 +9,7 @@ namespace Patient {
   }
 }
 
-namespace Three {
+declare namespace Three {
   export interface Map {
     type: string
     features: Feature[]

@@ -14,32 +14,20 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      // "webpack-env",
-      // "jest"
-    ],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
     "./*.json",
     "./*.config.js",
     "./src/**/*.d.ts",
     "./src/**/*.js",
-    "./src/**/*.json",
     "./src/**/*.jsx",
     "./src/**/*.vue",
     "./tests/**/*.js",
     "./tests/**/*.jsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "dist"]
 }

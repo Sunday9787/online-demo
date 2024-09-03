@@ -22,3 +22,13 @@ export function last(data) {
 export function radian(angle) {
   return (Math.PI / 180) * angle
 }
+
+/**
+ * @param {TemplateDocument.BuiltinComponent} time
+ * @returns {Promise<void>}
+ */
+export function sleep(time) {
+  return new Promise(function (resolve) {
+    window.setTimeout(resolve, time)
+  })
+}

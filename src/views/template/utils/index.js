@@ -138,7 +138,7 @@ const defaultProperty = {
 }
 
 /**
- * @param {Document.BuiltinComponentProps} props
+ * @param {TemplateDocument.BuiltinComponentProps} props
  * @param {Template.BuiltinComponentName} name
  * @param {'init'|'document'|'normal'} type `init` 初始化 `document` 模板数据 `normal` 普通初始化
  */
@@ -185,11 +185,11 @@ export function initBuiltinComponentProps(props, name, type) {
 }
 
 /**
- * @param {Document.Property} property
+ * @param {TemplateDocument.Property} property
  */
 export function initBuiltinComponentProperty(property) {
   /**
-   * @type {Document.Property}
+   * @type {TemplateDocument.Property}
    */
   const result = {
     get dashed() {
@@ -214,7 +214,7 @@ export function initBuiltinComponentProperty(property) {
 }
 
 /**
- * @param {Document.BuiltinComponent} data
+ * @param {TemplateDocument.BuiltinComponent} data
  * @param {'init'|'document'|'normal'} type `init` 初始化 `document` 模板数据 `normal` 普通初始化
  */
 export function createBuiltinComponent(data, type = 'normal') {
@@ -238,20 +238,20 @@ export function createBuiltinComponent(data, type = 'normal') {
 }
 
 /**
- * @param {[Document.BuiltinComponent, Document.BuiltinComponent[], Document.CreateBuiltinComponentType]|
- * [Document.BuiltinComponent[], Document.CreateBuiltinComponentType]} args
+ * @param {[TemplateDocument.BuiltinComponent, TemplateDocument.BuiltinComponent[], TemplateDocument.CreateBuiltinComponentType]|
+ * [TemplateDocument.BuiltinComponent[], TemplateDocument.CreateBuiltinComponentType]} args
  */
 export function createBuiltinComponentGroup(...args) {
   /**
-   * @type {Document.CreateBuiltinComponentType}
+   * @type {TemplateDocument.CreateBuiltinComponentType}
    */
   let type = 'normal'
   /**
-   * @type {Document.BuiltinComponent}
+   * @type {TemplateDocument.BuiltinComponent}
    */
   let group = null
   /**
-   * @type {Document.BuiltinComponent[]}
+   * @type {TemplateDocument.BuiltinComponent[]}
    */
   let children = []
 

@@ -1,16 +1,16 @@
 <template lang="pug">
-  aside.template-aside
-    section.template-aside-container(v-for="(value, k) in builtinComponent" :key="k")
-      h1.template-aside-title {{ value.label }}：
-      ol.template-component-group
-        li.template-component-item(
-          v-for="item of value.items"
-          :key="item.id"
-          :class="{ used: item.used }"
-          :draggable="!item.used"
-          @dragstart="dragstartHandle($event, item)"
-          @dragend="dragendHandle($event)"
-          @drag="dragHandle($event)") {{item.label}}
+aside.template-aside
+  section.template-aside-container(v-for="(value, k) in builtinComponent" :key="k")
+    h1.template-aside-title {{ value.label }}：
+    ol.template-component-group
+      li.template-component-item(
+        v-for="item of value.items"
+        :key="item.id"
+        :class="{ used: item.used }"
+        :draggable="!item.used"
+        @dragstart="dragstartHandle($event, item)"
+        @dragend="dragendHandle($event)"
+        @drag="dragHandle($event)") {{item.label}}
 </template>
 
 <script>

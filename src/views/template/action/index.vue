@@ -1,10 +1,10 @@
 <template lang="pug">
-  main.template-container
-    TemplateToolbar
-    el-container.template-main
-      TemplateAside
-      TemplateEditor
-      TemplateProperty
+main.template-container
+  TemplateToolbar
+  el-container.template-main
+    TemplateAside
+    TemplateEditor
+    TemplateProperty
 </template>
 
 <script>

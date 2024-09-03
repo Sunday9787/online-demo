@@ -1,15 +1,10 @@
 <template lang="pug">
 .three-container
-  el-progress(
-    :percentage="percentage"
-    :stroke-width="26"
-    style=`
-      position: absolute;
-      width: 45%;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);`
-      v-if="!hideProgressBar")
+  .absolute(class="left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 w-5/12" v-if="!hideProgressBar")
+    el-progress(
+      text-inside
+      :percentage="percentage"
+      :stroke-width="26")
 </template>
 
 <script>
@@ -17,6 +12,7 @@ import * as THREE from 'three'
 import gsap from 'gsap'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Status from 'three/examples/jsm/libs/stats.module'
+import { sleep } from '@/utils'
 
 export default {
   name: 'ThreeEarth',
@@ -110,7 +106,8 @@ export default {
       textureLoader.loadAsync(cloudMapUrl.href),
       textureLoader.loadAsync(terrainMapUrl.href),
       textureLoader.loadAsync(starMapUrl.href)
-    ]).then(function ([earthTexture, cloudTexture, terrainTexture, starTexture]) {
+    ]).then(async function ([earthTexture, cloudTexture, terrainTexture, starTexture]) {
+      await sleep(500)
       vm.hideProgressBar = true
 
       const createSpace = function () {
