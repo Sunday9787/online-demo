@@ -66,20 +66,18 @@ export default {
         rect.w = w
         rect.h = h
 
-        store.components.forEach(function (item) {
-          const component = store.components.get(item.uid)
-
+        for (const [, component] of store.components) {
           if (
-            item.props.position.x >= rect.x &&
-            item.props.position.x <= rect.x + rect.w &&
-            item.props.position.y >= rect.y &&
-            item.props.position.y <= rect.y + rect.h
+            component.props.position.x >= rect.x &&
+            component.props.position.x <= rect.x + rect.w &&
+            component.props.position.y >= rect.y &&
+            component.props.position.y <= rect.y + rect.h
           ) {
             if (!components.has(component.uid)) {
               components.set(component.uid, component)
             }
           }
-        })
+        }
       }
     }
 

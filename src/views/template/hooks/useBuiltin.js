@@ -54,7 +54,10 @@ export function useBuiltinComponent() {
    */
   const componentAdd = function (e) {
     const item = builtinComponentMap.get(e.detail.shapeId)
-    item.used = true
+
+    if (item) {
+      item.used = true
+    }
   }
 
   /**
@@ -62,7 +65,10 @@ export function useBuiltinComponent() {
    */
   const componentDel = function (e) {
     const item = builtinComponentMap.get(e.detail.shapeId)
-    item.used = false
+
+    if (item) {
+      item.used = true
+    }
   }
 
   onMounted(function () {

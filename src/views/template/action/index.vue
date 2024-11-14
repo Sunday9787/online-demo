@@ -182,9 +182,9 @@ export default {
     const groupPack = function (e) {
       const groupComponent = createBuiltinComponentGroup(e.detail)
 
-      groupComponent.children.forEach(item => {
+      for (const item of groupComponent.children) {
         store.components.delete(item.uid)
-      })
+      }
 
       const event = new TemplateEvent(templateChannel.componentAdd, { detail: groupComponent, target: 'stage' })
 
@@ -198,10 +198,10 @@ export default {
     const groupUn = function (e) {
       const components = removeGroupComponent(e.detail)
 
-      components.forEach(item => {
+      for (const item of components) {
         const event = new TemplateEvent(templateChannel.componentAdd, { detail: item, target: 'stage' })
         eventBus.$emit(templateChannel.componentAdd, event, false)
-      })
+      }
 
       eventBus.$emit(recordChannel.groupUn, e)
       eventBus.$emit(templateChannel.componentDel, e, false)

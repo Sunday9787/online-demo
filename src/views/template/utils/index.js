@@ -89,9 +89,9 @@ export function getRect(component) {
  * @returns {[number, number]}
  */
 export function shapeLocation(option, scale) {
-  const [offsetLeft, offsetTop] = getBorderSize(option.el)
+  const [borderLeft, borderTop] = getBorderSize(option.el)
   const rect = option.el.getBoundingClientRect()
-  return [(option.x - rect.left - offsetLeft * scale) / scale, (option.y - rect.top - offsetTop * scale) / scale]
+  return [(option.x - rect.left - borderLeft * scale) / scale, (option.y - rect.top - borderTop * scale) / scale]
 }
 
 /**
@@ -99,19 +99,7 @@ export function shapeLocation(option, scale) {
  * @returns {[number, number]}
  */
 export function getBorderSize(el) {
-  const reg = /(?<width>\d+\.?\d+)\w+/
-  const style = window.getComputedStyle(el)
-  const borderLeftWidthMatch = reg.exec(style.borderLeftWidth)
-  const borderTopWidthMatch = reg.exec(style.borderTopWidth)
-
-  if (borderLeftWidthMatch && borderTopWidthMatch) {
-    const w = Number(borderLeftWidthMatch.groups.width)
-    const h = Number(borderTopWidthMatch.groups.width)
-
-    return [w, h]
-  }
-
-  return [0, 0]
+  return [el.offsetWidth - el.clientWidth, el.offsetHeight - el.clientHeight].map(val => val / 2)
 }
 
 const { font } = useFont()

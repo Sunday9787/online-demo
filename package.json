@@ -43,6 +43,7 @@
     "@vue/babel-helper-vue-jsx-merge-props": "^1.4.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-standard": "^8.0.1",
+    "@vue/language-plugin-pug": "^2.1.10",
     "autoprefixer": "^10.4.16",
     "commitizen": "^4.3.0",
     "cssnano": "^5.1.15",
